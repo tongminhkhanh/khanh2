@@ -15,7 +15,10 @@ const mediaSchema = new mongoose.Schema({
     },
     size: {
         type: Number,
-        required: true
+        default: 0
+    },
+    cloudinaryId: {
+        type: String
     },
     uploadedBy: {
         type: mongoose.Schema.Types.ObjectId,

@@ -6,6 +6,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 require('dotenv').config();
 
 const Subscription = require('./models/Subscription');
@@ -33,15 +35,36 @@ if (process.env.NODE_ENV !== 'production') {
     }
 }
 
-// Multer Storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
+// Cloudinary Configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+// Multer Storage - Use Cloudinary in production, local disk in development
+let storage;
+if (process.env.NODE_ENV === 'production' || process.env.CLOUDINARY_CLOUD_NAME) {
+    // Cloudinary Storage for production
+    storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'school-news',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+            transformation: [{ width: 1200, height: 800, crop: 'limit' }]
+        }
+    });
+} else {
+    // Local disk storage for development
+    storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, 'uploads/');
+        },
+        filename: function (req, file, cb) {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+}
 const upload = multer({ storage: storage });
 
 // Middleware
@@ -138,12 +161,18 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/upload', authenticateToken, upload.single('file'), async (req, res) => {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
 
+    // Cloudinary returns path in req.file.path, local multer returns filename
+    const isCloudinary = req.file.path && req.file.path.includes('cloudinary');
+    const filePath = isCloudinary ? req.file.path : `/uploads/${req.file.filename}`;
+    const fileName = isCloudinary ? req.file.filename : req.file.filename;
+
     const media = new Media({
-        filename: req.file.filename,
-        path: `/uploads/${req.file.filename}`,
+        filename: fileName,
+        path: filePath,
         mimetype: req.file.mimetype,
-        size: req.file.size,
-        uploadedBy: req.user._id
+        size: req.file.size || 0,
+        uploadedBy: req.user._id,
+        cloudinaryId: req.file.filename // Store Cloudinary public_id for deletion
     });
 
     try {
@@ -185,11 +214,21 @@ app.delete('/api/media/:id', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'Media not found' });
         }
 
-        // Delete file from filesystem
-        const fs = require('fs');
-        const filePath = path.join(__dirname, 'public', media.path);
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
+        // Check if it's a Cloudinary file or local file
+        if (media.path && media.path.includes('cloudinary')) {
+            // Delete from Cloudinary
+            try {
+                const publicId = media.cloudinaryId || media.filename;
+                await cloudinary.uploader.destroy(publicId);
+            } catch (cloudErr) {
+                console.log('Cloudinary delete error:', cloudErr.message);
+            }
+        } else {
+            // Delete file from local filesystem
+            const localPath = path.join(__dirname, media.path);
+            if (fs.existsSync(localPath)) {
+                fs.unlinkSync(localPath);
+            }
         }
 
         // Delete from database
