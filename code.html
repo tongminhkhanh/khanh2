@@ -259,129 +259,53 @@
                     Tin mới nhất
                 </h3>
                 <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Card 1 -->
+                    <!-- Skeleton Loading Cards - will be replaced by API data -->
                     <article
-                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
-                        <div class="relative h-48 overflow-hidden">
-                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                data-alt="Elementary school student studying"
-                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA8mOVs9nRFj8DzQTFPshoSjwifBwUzx1vvv4cPnHbxqasaqHXjTpZeuV4-MV2fVNq6vRKabYsAcHTVWRwXNGjzHrhMAidSGDn4LTrvKDzCA6X-hfU10376mrS61NOaoMDtLsjO3NRvmULBpRSR6NjE1Yt5IYKjJihrG36OLKYPM1SmOu5Gfn2PeKRijUweB8g0DkgZycMiVVynH8Mc7RX0hkR9WcF6wa8tn284vD02ZMVLDhsTaHz-zFGPu8_7JVACRLhZqrdGklkc");'>
-                            </div>
-                            <span
-                                class="absolute top-3 left-3 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded border border-yellow-200">
-                                Thành tích
-                            </span>
-                        </div>
+                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
                         <div class="p-5 flex flex-col flex-1">
-                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                                14/10/2023
-                            </div>
-                            <h3
-                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
-                                <a href="#">Học sinh lớp 5A đạt giải Nhất Toán cấp Quận</a>
-                            </h3>
-                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
-                                Chúc mừng em Nguyễn Văn An đã xuất sắc vượt qua các vòng thi để mang về thành tích
-                                cao
-                                cho nhà trường.
-                            </p>
-                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
-                                Xem chi tiết
-                            </a>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
                         </div>
                     </article>
-                    <!-- Card 2 -->
                     <article
-                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
-                        <div class="relative h-48 overflow-hidden">
-                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                data-alt="Children visiting a farm on a field trip"
-                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBRGH3dgl8Vf44OFjKf9_9uMqB3IwdsHTZxbhTpS_SNSWnxPNemwofc9X-v67xv30ooWzvYyhrmiAelycgsdfWppbn75BVVfZK1Mq5hrZQ6uvxszcQ9IqabcLCBuV5OjVWInkuni4_va2XHZQuOhjtj5kC70J-9SlyKajwuoUHEyHMqn23WTO6zRh1s-u2_580Sv9mvce65FFHwojyRaFOpOZwIejfEIMmATWKNT5L6KwwPvs2RDLgrlEy5dxY88AcuMRJCCLznHyWb");'>
-                            </div>
-                            <span
-                                class="absolute top-3 left-3 bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded border border-green-200">
-                                Hoạt động
-                            </span>
-                        </div>
+                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
                         <div class="p-5 flex flex-col flex-1">
-                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                                10/10/2023
-                            </div>
-                            <h3
-                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
-                                <a href="#">Chuyến đi thực tế tại Nông trại Giáo dục Erahouse</a>
-                            </h3>
-                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
-                                Một ngày trải nghiệm thú vị của các em học sinh khối 3, học cách trồng rau và chăm
-                                sóc
-                                vật nuôi.
-                            </p>
-                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
-                                Xem chi tiết
-                            </a>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
                         </div>
                     </article>
-                    <!-- Card 3 -->
                     <article
-                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
-                        <div class="relative h-48 overflow-hidden">
-                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                data-alt="School hallway with bulletin board"
-                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBREgLKE4zVtyQF7kdCaDUTUbz9baJEcO-p-5b0j2cdM_Cb9sXrylEyTWBS2G_L-QisgKMpsflafqqM0K9VroewydYgrwwpgQYH-T73F4OHEfGZsbbWzxZMJaMxYweONLpd9K5AiAfGIK6POcBsOB_fluKVd5yAdo9lC7Hh8UrBO5LsEvwfReBTH_XPxPEmeHNmK0r-tl50POSy55xi9cjA4V7x2V5Cy-CYPjV3G2vAh0ozHfWvkG-GI4vDbQhb7JDBlLzm5hkvfxnM");'>
-                            </div>
-                            <span
-                                class="absolute top-3 left-3 bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded border border-red-200">
-                                Thông báo
-                            </span>
-                        </div>
+                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
                         <div class="p-5 flex flex-col flex-1">
-                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                                05/10/2023
-                            </div>
-                            <h3
-                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
-                                <a href="#">Thông báo lịch nghỉ lễ Quốc khánh</a>
-                            </h3>
-                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
-                                Nhà trường thông báo lịch nghỉ lễ và kế hoạch học bù cho toàn thể học sinh và giáo
-                                viên.
-                            </p>
-                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
-                                Xem chi tiết
-                            </a>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
                         </div>
                     </article>
-                    <!-- Card 4 -->
                     <article
-                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
-                        <div class="relative h-48 overflow-hidden">
-                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                data-alt="Art supplies and children drawing"
-                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLP6D4VNtzZ14bakKa0o8TuCq6Uxm7N4CbcqtJVzep2T3YIbXfogjtxpMkDuTpnoHNmsXXeVibx2qymZS7mFGTd-uOVQB0VKmwEjP7GHu3xbQdaB1Gn8YoFefOea_X4ks2p1sjUiik323xiTDT4rhr4qGslFrVzZl0dELjccYul_xWtOxihTA7yHrP9YF8H1si4hfg5IQDxp5uUgFwyh0oMByHiQjexIHqwmwKceaEUqzhwn39S9MsgsAJdNsr9Tcyp7-twhgJDf_t");'>
-                            </div>
-                            <span
-                                class="absolute top-3 left-3 bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded border border-purple-200">
-                                Sự kiện
-                            </span>
-                        </div>
+                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
                         <div class="p-5 flex flex-col flex-1">
-                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                                01/10/2023
-                            </div>
-                            <h3
-                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
-                                <a href="#">Hội diễn văn nghệ Chào mừng 20/11</a>
-                            </h3>
-                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
-                                Mời quý phụ huynh đăng ký tiết mục tham gia hội diễn văn nghệ cùng các con.
-                            </p>
-                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
-                                Xem chi tiết
-                            </a>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
                         </div>
                     </article>
                 </div>
