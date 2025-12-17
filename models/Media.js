@@ -30,4 +30,9 @@ const mediaSchema = new mongoose.Schema({
     }
 });
 
+// Indexes for optimizing read queries
+mediaSchema.index({ createdAt: -1 }); // For sorted listing
+mediaSchema.index({ path: 1 }); // For path lookup
+mediaSchema.index({ uploadedBy: 1, createdAt: -1 }); // For user's media
+
 module.exports = mongoose.model('Media', mediaSchema);

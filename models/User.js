@@ -36,4 +36,8 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+// Indexes (username and email already have unique indexes)
+userSchema.index({ role: 1 }); // For filtering users by role
+userSchema.index({ createdAt: -1 }); // For listing users
+
 module.exports = mongoose.model('User', userSchema);
