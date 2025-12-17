@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tin tức và Sự kiện - Trường Tiểu học Ít Ong</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b8cee",
+                        "primary-dark": "#1a6bb8",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c2a36",
+                        "text-main": "#0d141b",
+                        "text-secondary": "#4c739a",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased flex flex-col min-h-screen overflow-x-hidden">
+    <!-- TopNavBar -->
+    <header
+        class="sticky top-0 z-50 bg-surface-light dark:bg-surface-dark border-b border-[#e7edf3] dark:border-gray-700 shadow-sm">
+        <div class="px-4 lg:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-4 text-text-main dark:text-white">
+                    <img src="/logo.jpg" alt="Logo Truong Tieu hoc It Ong" class="h-10 w-10 rounded-full object-cover">
+                    <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] hidden md:block">Trường Tiểu học Ít
+                        Ong</h2>
+                </div>
+                <nav class="hidden lg:flex items-center gap-9">
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
+                        href="/">Trang chủ</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
+                        href="/gioi-thieu">Giới thiệu</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
+                        href="/thong-bao">Thông báo</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
+                        href="/hoat-dong">Hoạt động</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
+                        href="/thanh-tich">Thành tích</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
+                        href="/su-kien">Sự kiện</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
+                        href="http://thitong.site" target="_blank">Trợ lý AI</a>
+                    <div class="relative">
+                        <input type="text" id="nav-search" placeholder="Tìm kiếm..."
+                            class="text-sm px-3 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:border-primary w-40"
+                            onkeypress="if(event.key==='Enter') searchArticles()">
+                        <button onclick="searchArticles()"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary">
+                            <span class="material-symbols-outlined text-base">search</span>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="lg:hidden text-text-main dark:text-white">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="hidden md:flex items-center justify-end gap-8">
+                    <a href="/admin"
+                        class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300">Đăng
+                        nhập</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Urgent Notice Bar -->
+    <div id="urgent-notice-container" class="hidden w-full py-2">
+        <div class="max-w-[1200px] mx-auto px-4">
+            <div
+                class="bg-gradient-to-r from-red-600 to-red-500 text-white py-2.5 px-6 rounded-xl flex items-center justify-center gap-3 flex-wrap shadow-md">
+                <span class="material-symbols-outlined text-xl animate-pulse">warning</span>
+                <p id="urgent-notice-content" class="text-sm font-medium text-center"></p>
+                <a id="urgent-notice-link" href="#"
+                    class="hidden bg-white text-red-600 px-4 py-1 rounded-full text-sm font-bold hover:bg-red-100 transition-colors whitespace-nowrap">Xem
+                    thêm</a>
+            </div>
+        </div>
+    </div>
+    <!-- Image Slider Banner -->
+    <div id="image-slider-container"
+        class="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 py-4 overflow-hidden">
+        <div class="max-w-[1200px] mx-auto px-4">
+            <div class="relative overflow-hidden rounded-xl">
+                <div id="image-slider" class="flex gap-4">
+                    <!-- Images will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        #image-slider-container {
+            min-height: 180px;
+        }
+
+        #image-slider {
+            display: flex;
+            gap: 16px;
+        }
+
+        #image-slider img {
+            height: 160px;
+            width: 280px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #image-slider img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .slider-animate {
+            animation: scroll-left 30s linear infinite;
+        }
+
+        #image-slider-container:hover .slider-animate {
+            animation-play-state: paused;
+        }
+    </style>
+    <script>
+        // Load images for slider
+        async function loadSliderImages() {
+            try {
+                let images = [];
+                // Try load from settings first
+                const resS = await fetch('/api/settings/slider_images');
+                if (resS.ok) {
+                    const s = await resS.json();
+                    if (s.value && s.value.images && s.value.images.length > 0) images = s.value.images;
+                }
+                // Fallback to all media
+                if (images.length === 0) {
+                    const resM = await fetch('/api/public/media');
+                    const media = await resM.json();
+                    images = media.map(m => m.path);
+                }
+                const slider = document.getElementById('image-slider');
+                if (images.length > 0) {
+                    let html = '';
+                    images.forEach(p => { html += `<img src="${p}" alt="Slider">`; });
+                    slider.innerHTML = html + html;
+                    slider.classList.add('slider-animate');
+                } else {
+                    document.getElementById('image-slider-container').classList.add('hidden');
+                }
+            } catch (err) {
+                console.error('Error loading slider:', err);
+                document.getElementById('image-slider-container').classList.add('hidden');
+            }
+        }
+        loadSliderImages();
+    </script>
+    <!-- Main Content -->
+    <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8 flex flex-col gap-10">
+        <!-- Hero Section -->
+        <section id="featured-section"
+            class="hidden flex flex-col lg:flex-row gap-6 lg:gap-10 items-stretch bg-surface-light dark:bg-surface-dark rounded-xl p-4 lg:p-6 shadow-sm border border-[#cfdbe7] dark:border-gray-800">
+            <!-- Main Featured Article -->
+            <div id="featured-main"
+                class="w-full lg:w-3/5 relative group cursor-pointer overflow-hidden rounded-lg aspect-video lg:aspect-auto min-h-[300px]"
+                onclick="">
+                <div id="featured-main-bg"
+                    class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                    style='background-image: url("");'>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-6 flex flex-col gap-2">
+                    <span id="featured-main-category"
+                        class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-primary text-white text-xs font-bold w-fit mb-2">
+                        Tiêu điểm
+                    </span>
+                    <h1 id="featured-main-title"
+                        class="text-white text-2xl lg:text-3xl font-bold leading-tight drop-shadow-md">
+                        <!-- Title -->
+                    </h1>
+                </div>
+            </div>
+            <!-- Side Featured Articles -->
+            <div class="w-full lg:w-2/5 flex flex-col justify-center gap-6">
+                <div>
+                    <h2 id="principal-message-title" class="text-text-main dark:text-white text-xl font-bold mb-3">
+                        Thông
+                        điệp từ Hiệu Trưởng</h2>
+                    <p id="principal-message-content"
+                        class="text-text-secondary dark:text-gray-400 text-base leading-relaxed">
+                        Hân hoan chào đón các em học sinh bước vào năm học mới với nhiều niềm vui và hứng khởi. Cùng
+                        nhìn lại những khoảnh khắc đáng nhớ trong ngày hội đến trường, nơi ươm mầm những ước mơ
+                        xanh.
+                    </p>
+                </div>
+                <div id="featured-side-list"
+                    class="flex flex-col gap-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <!-- Side items injected here -->
+                </div>
+                <button onclick="window.location.href='/thong-bao'"
+                    class="mt-2 w-fit flex items-center gap-2 text-primary font-bold hover:text-primary-dark transition-colors group">
+                    Xem tất cả tiêu điểm
+                    <span
+                        class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </button>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Left Column: News Grid (8 cols) -->
+            <div class="lg:col-span-8 flex flex-col gap-8">
+                <h3 class="text-xl font-bold text-text-main dark:text-white flex items-center gap-2">
+                    <span class="w-1 h-6 bg-primary rounded-full"></span>
+                    Tin mới nhất
+                </h3>
+                <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card 1 -->
+                    <article
+                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                        <div class="relative h-48 overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                data-alt="Elementary school student studying"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA8mOVs9nRFj8DzQTFPshoSjwifBwUzx1vvv4cPnHbxqasaqHXjTpZeuV4-MV2fVNq6vRKabYsAcHTVWRwXNGjzHrhMAidSGDn4LTrvKDzCA6X-hfU10376mrS61NOaoMDtLsjO3NRvmULBpRSR6NjE1Yt5IYKjJihrG36OLKYPM1SmOu5Gfn2PeKRijUweB8g0DkgZycMiVVynH8Mc7RX0hkR9WcF6wa8tn284vD02ZMVLDhsTaHz-zFGPu8_7JVACRLhZqrdGklkc");'>
+                            </div>
+                            <span
+                                class="absolute top-3 left-3 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded border border-yellow-200">
+                                Thành tích
+                            </span>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                14/10/2023
+                            </div>
+                            <h3
+                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
+                                <a href="#">Học sinh lớp 5A đạt giải Nhất Toán cấp Quận</a>
+                            </h3>
+                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
+                                Chúc mừng em Nguyễn Văn An đã xuất sắc vượt qua các vòng thi để mang về thành tích
+                                cao
+                                cho nhà trường.
+                            </p>
+                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </article>
+                    <!-- Card 2 -->
+                    <article
+                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                        <div class="relative h-48 overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                data-alt="Children visiting a farm on a field trip"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBRGH3dgl8Vf44OFjKf9_9uMqB3IwdsHTZxbhTpS_SNSWnxPNemwofc9X-v67xv30ooWzvYyhrmiAelycgsdfWppbn75BVVfZK1Mq5hrZQ6uvxszcQ9IqabcLCBuV5OjVWInkuni4_va2XHZQuOhjtj5kC70J-9SlyKajwuoUHEyHMqn23WTO6zRh1s-u2_580Sv9mvce65FFHwojyRaFOpOZwIejfEIMmATWKNT5L6KwwPvs2RDLgrlEy5dxY88AcuMRJCCLznHyWb");'>
+                            </div>
+                            <span
+                                class="absolute top-3 left-3 bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded border border-green-200">
+                                Hoạt động
+                            </span>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                10/10/2023
+                            </div>
+                            <h3
+                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
+                                <a href="#">Chuyến đi thực tế tại Nông trại Giáo dục Erahouse</a>
+                            </h3>
+                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
+                                Một ngày trải nghiệm thú vị của các em học sinh khối 3, học cách trồng rau và chăm
+                                sóc
+                                vật nuôi.
+                            </p>
+                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </article>
+                    <!-- Card 3 -->
+                    <article
+                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                        <div class="relative h-48 overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                data-alt="School hallway with bulletin board"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBREgLKE4zVtyQF7kdCaDUTUbz9baJEcO-p-5b0j2cdM_Cb9sXrylEyTWBS2G_L-QisgKMpsflafqqM0K9VroewydYgrwwpgQYH-T73F4OHEfGZsbbWzxZMJaMxYweONLpd9K5AiAfGIK6POcBsOB_fluKVd5yAdo9lC7Hh8UrBO5LsEvwfReBTH_XPxPEmeHNmK0r-tl50POSy55xi9cjA4V7x2V5Cy-CYPjV3G2vAh0ozHfWvkG-GI4vDbQhb7JDBlLzm5hkvfxnM");'>
+                            </div>
+                            <span
+                                class="absolute top-3 left-3 bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded border border-red-200">
+                                Thông báo
+                            </span>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                05/10/2023
+                            </div>
+                            <h3
+                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
+                                <a href="#">Thông báo lịch nghỉ lễ Quốc khánh</a>
+                            </h3>
+                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
+                                Nhà trường thông báo lịch nghỉ lễ và kế hoạch học bù cho toàn thể học sinh và giáo
+                                viên.
+                            </p>
+                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </article>
+                    <!-- Card 4 -->
+                    <article
+                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                        <div class="relative h-48 overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                data-alt="Art supplies and children drawing"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLP6D4VNtzZ14bakKa0o8TuCq6Uxm7N4CbcqtJVzep2T3YIbXfogjtxpMkDuTpnoHNmsXXeVibx2qymZS7mFGTd-uOVQB0VKmwEjP7GHu3xbQdaB1Gn8YoFefOea_X4ks2p1sjUiik323xiTDT4rhr4qGslFrVzZl0dELjccYul_xWtOxihTA7yHrP9YF8H1si4hfg5IQDxp5uUgFwyh0oMByHiQjexIHqwmwKceaEUqzhwn39S9MsgsAJdNsr9Tcyp7-twhgJDf_t");'>
+                            </div>
+                            <span
+                                class="absolute top-3 left-3 bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded border border-purple-200">
+                                Sự kiện
+                            </span>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                01/10/2023
+                            </div>
+                            <h3
+                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
+                                <a href="#">Hội diễn văn nghệ Chào mừng 20/11</a>
+                            </h3>
+                            <p class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
+                                Mời quý phụ huynh đăng ký tiết mục tham gia hội diễn văn nghệ cùng các con.
+                            </p>
+                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="#">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </article>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <button id="load-more-btn" onclick="loadMoreArticles()"
+                        class="px-6 py-2 border border-[#cfdbe7] dark:border-gray-700 rounded-lg text-text-secondary dark:text-gray-300 font-medium hover:bg-white dark:hover:bg-gray-800 transition-colors">
+                        Xem thêm tin cũ hơn
+                    </button>
+                </div>
+            </div>
+            <!-- Right Column: Sidebar (4 cols) -->
+            <aside class="lg:col-span-4 flex flex-col gap-8">
+                <!-- Upcoming Events Widget -->
+                <div
+                    class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 border border-[#cfdbe7] dark:border-gray-800 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-text-main dark:text-white">Sự kiện sắp tới</h3>
+                        <a class="text-xs text-primary font-bold hover:underline" href="/su-kien">Xem lịch</a>
+                    </div>
+                    <div id="upcoming-events-list" class="flex flex-col gap-4">
+                        <!-- Events will be loaded dynamically -->
+                        <p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Đang tải sự
+                            kiện...
+                        </p>
+                    </div>
+                </div>
+                <script>
+                    // Load upcoming events
+                    async function loadUpcomingEvents() {
+                        try {
+                            const res = await fetch('/api/events');
+                            const events = await res.json();
+                            const container = document.getElementById('upcoming-events-list');
+
+                            // Filter only future events and sort by date
+                            const now = new Date();
+                            const upcomingEvents = events
+                                .filter(event => new Date(event.startDate) >= now && event.isPublished)
+                                .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+                                .slice(0, 5); // Show only 5 upcoming events
+
+                            if (upcomingEvents.length === 0) {
+                                container.innerHTML = '<p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Không có sự kiện sắp tới</p>';
+                                return;
+                            }
+
+                            container.innerHTML = upcomingEvents.map(event => {
+                                const startDate = new Date(event.startDate);
+                                const endDate = new Date(event.endDate);
+                                const day = startDate.getDate();
+                                const month = 'T' + (startDate.getMonth() + 1);
+
+                                // Format time
+                                const startTime = startDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                                const endTime = endDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+                                // Check if all day event (same time or more than 12 hours)
+                                const duration = (endDate - startDate) / (1000 * 60 * 60);
+                                const timeDisplay = duration >= 12 ? 'Cả ngày' : startTime + ' - ' + endTime;
+                                const locationDisplay = event.location || 'Trường học';
+
+                                return `
+                                    <div class="flex gap-3 group cursor-pointer" onclick="window.location.href='/su-kien'">
+                                        <div class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 w-12 h-14 rounded-lg shrink-0 border border-blue-100 dark:border-blue-800">
+                                            <span class="text-xs text-primary font-bold uppercase pt-1">${month}</span>
+                                            <span class="text-lg font-black text-text-main dark:text-white leading-none pb-1">${day}</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-bold text-text-main dark:text-white group-hover:text-primary transition-colors">
+                                                ${event.title}
+                                            </h4>
+                                            <p class="text-xs text-text-secondary dark:text-gray-400 mt-1">${timeDisplay} | ${locationDisplay}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        } catch (err) {
+                            console.error('Error loading events:', err);
+                            document.getElementById('upcoming-events-list').innerHTML =
+                                '<p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Không thể tải sự kiện</p>';
+                        }
+                    }
+                    loadUpcomingEvents();
+                </script>
+                <!-- Newsletter Signup -->
+                <div class="bg-primary/10 dark:bg-primary/5 rounded-xl p-6 border border-primary/20">
+                    <div class="flex items-center gap-3 mb-3 text-primary">
+                        <span class="material-symbols-outlined text-3xl">mark_email_unread</span>
+                        <h3 class="text-lg font-bold text-text-main dark:text-white">Đăng ký bản tin</h3>
+                    </div>
+                    <p class="text-sm text-text-secondary dark:text-gray-300 mb-4">
+                        Nhận thông báo mới nhất về hoạt động và sự kiện của trường qua email hàng tuần.
+                    </p>
+                    <form class="flex flex-col gap-3" id="newsletter-form">
+                        <input
+                            class="w-full h-10 px-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                            id="newsletter-email" placeholder="Email của phụ huynh" type="email" required />
+                        <button
+                            class="w-full h-10 bg-primary hover:bg-primary-dark text-white text-sm font-bold rounded-lg transition-colors shadow-sm"
+                            type="submit">
+                            Đăng ký ngay
+                        </button>
+                    </form>
+                    <script>
+                        document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const email = document.getElementById('newsletter-email').value;
+
+                            try {
+                                const response = await fetch('/api/subscribe', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ email })
+                                });
+
+                                const data = await response.json();
+
+                                if (data.success) {
+                                    alert(data.message);
+                                    document.getElementById('newsletter-email').value = '';
+                                } else {
+                                    alert('Có lỗi xảy ra: ' + data.message);
+                                }
+                            } catch (error) {
+                                console.error('Error:', error);
+                                alert('Có lỗi xảy ra khi đăng ký.');
+                            }
+                        });
+                    </script>
+                </div>
+                <!-- Quick Links -->
+                <div
+                    class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 border border-[#cfdbe7] dark:border-gray-800 shadow-sm">
+                    <h3 class="text-lg font-bold text-text-main dark:text-white mb-4">Liên kết nhanh</h3>
+                    <ul class="flex flex-col gap-2">
+                        <li>
+                            <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
+                                href="#">
+                                <span class="material-symbols-outlined text-base">chevron_right</span>
+                                Thời khóa biểu
+                            </a>
+                        </li>
+                        <li>
+                            <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
+                                href="#">
+                                <span class="material-symbols-outlined text-base">chevron_right</span>
+                                Thư viện ảnh
+                            </a>
+                        </li>
+                        <li>
+                            <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
+                                href="#">
+                                <span class="material-symbols-outlined text-base">chevron_right</span>
+                                Văn bản &amp; Biểu mẫu
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-[#151f2b] border-t border-[#e7edf3] dark:border-gray-700 mt-auto">
+        <div class="max-w-[1200px] mx-auto px-4 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="size-6 text-primary">
+                            <svg class="w-full h-full" fill="none" viewbox="0 0 48 48"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path clip-rule="evenodd"
+                                    d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z"
+                                    fill="currentColor" fill-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <span class="font-bold text-lg text-text-main dark:text-white">Ít Ong</span>
+                    </div>
+                    <p class="text-sm text-text-secondary dark:text-gray-400">
+                        Nơi ươm mầm tài năng và nhân cách, xây dựng nền tảng vững chắc cho tương lai.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-text-main dark:text-white mb-4">Về Nhà Trường</h4>
+                    <ul class="space-y-2 text-sm text-text-secondary dark:text-gray-400">
+                        <li><a class="hover:text-primary" href="#">Lịch sử hình thành</a></li>
+                        <li><a class="hover:text-primary" href="#">Đội ngũ giáo viên</a></li>
+                        <li><a class="hover:text-primary" href="#">Cơ sở vật chất</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-text-main dark:text-white mb-4">Tuyển Sinh</h4>
+                    <ul class="space-y-2 text-sm text-text-secondary dark:text-gray-400">
+                        <li><a class="hover:text-primary" href="#">Thông báo tuyển sinh</a></li>
+                        <li><a class="hover:text-primary" href="#">Hồ sơ nhập học</a></li>
+                        <li><a class="hover:text-primary" href="#">Học phí &amp; Chính sách</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-text-main dark:text-white mb-4">Liên Hệ</h4>
+                    <ul class="space-y-2 text-sm text-text-secondary dark:text-gray-400">
+                        <li class="flex items-start gap-2">
+                            <span class="material-symbols-outlined text-base mt-0.5">location_on</span>
+                            Tiểu khu 1, xã Mường La, tỉnh Sơn La
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">call</span>
+                            (84) 326 439774
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">mail</span>
+                            khanhtm.muongla@sonla.gov.vn
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="border-t border-[#e7edf3] dark:border-gray-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-text-secondary dark:text-gray-500">© 2023 Trường Tiểu học Ít Ong. All rights
+                    reserved.</p>
+                <div class="flex gap-4">
+                    <a class="text-text-secondary dark:text-gray-400 hover:text-primary" href="#"><span
+                            class="material-symbols-outlined">public</span></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const newsGrid = document.getElementById('news-grid');
+
+            // Fetch Urgent Notice
+            try {
+                const response = await fetch('/api/settings/urgent_notice');
+                if (response.ok) {
+                    const setting = await response.json();
+                    const data = setting.value || {};
+
+                    if (data.isEnabled) {
+                        document.getElementById('urgent-notice-container').classList.remove('hidden');
+                        document.getElementById('urgent-notice-content').innerText = data.content;
+
+                        if (data.link) {
+                            const linkBtn = document.getElementById('urgent-notice-link');
+                            linkBtn.classList.remove('hidden');
+                            linkBtn.onclick = () => window.location.href = data.link;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching urgent notice:', error);
+            }
+
+            // Fetch Principal Message
+            try {
+                const response = await fetch('/api/settings/principal_message');
+                if (response.ok) {
+                    const setting = await response.json();
+                    const data = setting.value || {};
+                    if (data.title) document.getElementById('principal-message-title').innerText = data.title;
+                    if (data.content) document.getElementById('principal-message-content').innerText = data.content;
+                }
+            } catch (error) {
+                console.error('Error fetching principal message:', error);
+            }
+
+            try {
+                const response = await fetch('/api/articles');
+                const articles = await response.json();
+
+                if (articles.length > 0) {
+                    // Populate Featured Section
+                    const featuredSection = document.getElementById('featured-section');
+                    const mainArticle = articles[0];
+                    const sideArticles = articles.slice(1, 3);
+
+                    if (mainArticle) {
+                        featuredSection.classList.remove('hidden');
+                        document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${mainArticle._id}`;
+                        document.getElementById('featured-main-bg').style.backgroundImage = `url("${mainArticle.image || 'https://via.placeholder.com/800x400'}")`;
+                        document.getElementById('featured-main-title').innerText = mainArticle.title;
+                        document.getElementById('featured-main-category').innerText = mainArticle.category || 'Tiêu điểm';
+                    }
+
+                    const sideList = document.getElementById('featured-side-list');
+                    sideList.innerHTML = '';
+                    sideArticles.forEach(article => {
+                        const html = `
+                            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='/bai-viet/${article._id}'">
+                                <div class="w-20 h-14 rounded-md bg-cover bg-center shrink-0"
+                                    style='background-image: url("${article.image || 'https://via.placeholder.com/100x100'}");'>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-primary font-semibold mb-1">${article.category || 'Tin tức'}</p>
+                                    <h3 class="text-sm font-bold text-text-main dark:text-white group-hover:text-primary transition-colors line-clamp-2">
+                                        ${article.title}
+                                    </h3>
+                                </div>
+                            </div>
+                        `;
+                        sideList.innerHTML += html;
+                    });
+
+                    // Populate Grid (skip first 3 if you want distinct featured, or show all)
+                    // Showing all in grid for now as per usual news site pattern or skipping featured?
+                    // Let's skip the main one at least to avoid duplication if desired, but user didn't specify.
+                    // I'll display ALL in grid for completeness, or maybe slice(3). 
+                    // Let's display ALL in grid for now to ensure nothing is hidden, 
+                    // or maybe slice(0) is fine.
+
+                    newsGrid.innerHTML = ''; // Clear static content
+                    let articlesToShow = articles.slice(0, 4); // Show only 4 initially
+                    window.allArticles = articles; // Store all articles
+                    window.currentArticleIndex = 4;
+
+                    articlesToShow.forEach(article => {
+                        const date = new Date(article.createdAt).toLocaleDateString('vi-VN');
+                        const imageUrl = article.image || 'https://via.placeholder.com/400x200?text=No+Image';
+
+                        const articleHtml = `
+                            <article class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                                <div class="relative h-48 overflow-hidden">
+                                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                        style='background-image: url("${imageUrl}");'>
+                                    </div>
+                                    <span class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
+                                        ${article.category || 'Tin tức'}
+                                    </span>
+                                </div>
+                                <div class="p-5 flex flex-col flex-1">
+                                    <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                        ${date}
+                                    </div>
+                                    <h3 class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
+                                        <a href="/bai-viet/${article._id}">${article.title}</a>
+                                    </h3>
+                                    <div class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
+                                        ${article.content} 
+                                    </div>
+                                    <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article._id}">
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                            </article>
+                        `;
+                        newsGrid.innerHTML += articleHtml;
+                    });
+
+                    // Hide load more button if no more articles
+                    if (articles.length <= 4) {
+                        document.getElementById('load-more-btn').style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+            }
+        });
+
+        // Load more articles function
+        function loadMoreArticles() {
+            const newsGrid = document.getElementById('news-grid');
+            const articles = window.allArticles || [];
+            const start = window.currentArticleIndex || 4;
+            const end = start + 4;
+            const moreArticles = articles.slice(start, end);
+
+            moreArticles.forEach(article => {
+                const date = new Date(article.createdAt).toLocaleDateString('vi-VN');
+                const imageUrl = article.image || 'https://via.placeholder.com/400x200?text=No+Image';
+                const articleHtml = `
+                    <article class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                        <div class="relative h-48 overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                style='background-image: url("${imageUrl}");'>
+                            </div>
+                            <span class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
+                                ${article.category || 'Tin tức'}
+                            </span>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                ${date}
+                            </div>
+                            <h3 class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
+                                <a href="/bai-viet/${article._id}">${article.title}</a>
+                            </h3>
+                            <div class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
+                                ${article.content} 
+                            </div>
+                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article._id}">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </article>
+                `;
+                newsGrid.innerHTML += articleHtml;
+            });
+
+            window.currentArticleIndex = end;
+
+            // Hide button if no more articles
+            if (end >= articles.length) {
+                document.getElementById('load-more-btn').style.display = 'none';
+            }
+        }
+
+        // Search function
+        function searchArticles() {
+            const query = document.getElementById('nav-search').value.trim();
+            if (query) {
+                window.location.href = '/search?q=' + encodeURIComponent(query);
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>

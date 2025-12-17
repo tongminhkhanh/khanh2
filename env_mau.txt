@@ -1,0 +1,17 @@
+# --- CAU HINH KET NOI DATABASE ---
+
+# CACH 1: DUNG CHO ONLINE (MongoDB Atlas) - BAT BUOC DE DEPLOY
+# Ban hay xoa dong duoi day va dan chuoi ket noi cua ban vao (vi du: mongodb+srv://admin:123456@cluster0...)
+MONGODB_URI=mongodb+srv://tongminhkhanh_db_user:<bTq4BsHXGon5yTEK>@cluster0.drxwj28.mongodb.net/?appName=Cluster0
+
+# CACH 2: DUNG CHO MAY TINH CA NHAN (Localhost)
+# Khi nao muon chay o may nha thi bo dau # o dong duoi va them dau # o dong tren
+# MONGODB_URI=mongodb://localhost:27017/school-news
+
+# --- CAU HINH BAO MAT ---
+# Day la khoa bao mat toi da tao san cho ban, khong can sua
+JWT_SECRET=9884db9b52e783123a1b6980102d638f27a4681c0a05842a55cb1fd76bfb0bf6
+
+# --- CAU HINH KHAC ---
+PORT=3000
+NODE_ENV=production

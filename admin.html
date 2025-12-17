@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Truong Tieu hoc It Ong</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tiny.cloud/1/578ekeejgy5h2s9w9y4d8nkoj3xi278w7qgvd68lhmt1e53f/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .tox-tinymce {
+            border-radius: 0.375rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+            <h2 class="text-2xl font-bold mb-4 text-center">Dang nhap Admin</h2>
+            <form id="login-form" class="flex flex-col gap-4">
+                <input type="text" id="login-username" placeholder="Ten dang nhap" class="border p-2 rounded" required>
+                <input type="password" id="login-password" placeholder="Mat khau" class="border p-2 rounded" required>
+                <button type="submit" class="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Dang nhap</button>
+            </form>
+            <p id="auth-error" class="text-red-500 text-sm mt-2 hidden text-center"></p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 text-white flex flex-col">
+            <div class="p-4 border-b border-gray-700">
+                <h1 class="text-xl font-bold">Admin Panel</h1>
+            </div>
+            <nav class="flex-1 p-4">
+                <a href="#" id="nav-articles"
+                    class="flex items-center gap-2 px-4 py-2 rounded bg-blue-600 text-white mb-2">
+                    <span>Bai viet</span>
+                </a>
+                <a href="#" id="nav-events"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Su kien</span>
+                </a>
+                <a href="#" id="nav-media"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Thu vien anh</span>
+                </a>
+                <a href="#" id="nav-pages"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Trang tinh</span>
+                </a>
+                <a href="#" id="nav-settings"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Cai dat</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold"
+                        id="user-avatar">A</div>
+                    <div>
+                        <p class="text-sm font-medium" id="user-name">Admin</p>
+                        <p class="text-xs text-gray-400" id="user-role">Administrator</p>
+                    </div>
+                </div>
+                <button id="logout-btn" class="mt-4 w-full text-sm text-red-400 hover:text-red-300 text-left">Dang
+                    xuat</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow z-10">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-2xl font-bold text-gray-900" id="page-title">Quan ly Bai viet</h1>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
+                <!-- Articles Section -->
+                <div id="section-articles">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Them bai viet moi</h2>
+                        <form id="article-form" class="space-y-4">
+                            <input type="hidden" id="article-id">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tieu de</label>
+                                    <input type="text" id="title"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Danh muc</label>
+                                    <select id="category"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="Tin tuc">Tin tuc</option>
+                                        <option value="Su kien">Su kien</option>
+                                        <option value="Hoat dong">Hoat dong</option>
+                                        <option value="Thong bao">Thong bao</option>
+                                        <option value="Thanh tich">Thanh tich</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Trang thai</label>
+                                    <select id="status"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="draft">Nhap</option>
+                                        <option value="pending">Cho duyet</option>
+                                        <option value="published">Da xuat ban</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tags</label>
+                                    <input type="text" id="tags"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        placeholder="tag1, tag2">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Hinh anh (URL)</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="image"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                    <button type="button" onclick="openMediaSelector('image')"
+                                        class="mt-1 bg-gray-200 px-3 rounded hover:bg-gray-300">Chon</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
+                                <textarea id="content" rows="10"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu bai
+                                    viet</button>
+                                <button type="button" id="cancel-edit"
+                                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hinh
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tieu de
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Danh muc
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trang
+                                        thai</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Hanh
+                                        dong</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articles-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Events Section -->
+                <div id="section-events" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Quan ly Su kien</h2>
+                        <form id="event-form" class="space-y-4">
+                            <input type="hidden" id="event-id">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tieu de su kien</label>
+                                    <input type="text" id="event-title"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Loai su kien</label>
+                                    <select id="event-type"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="public">Su kien chung</option>
+                                        <option value="class">Su kien lop</option>
+                                        <option value="teacher">Su kien giao vien</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Ngay bat dau</label>
+                                    <input type="datetime-local" id="event-start"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Ngay ket thuc</label>
+                                    <input type="datetime-local" id="event-end"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Dia diem</label>
+                                    <input type="text" id="event-location"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        placeholder="VD: Hoi truong, San truong...">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Mau sac</label>
+                                    <input type="color" id="event-color"
+                                        class="mt-1 block h-10 w-full border border-gray-300 rounded-md shadow-sm"
+                                        value="#3788d8">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Mo ta</label>
+                                <textarea id="event-description" rows="3"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="event-published"
+                                        class="form-checkbox h-5 w-5 text-blue-600" checked>
+                                    <span class="ml-2 text-gray-700">Xuat ban ngay</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu su
+                                    kien</button>
+                                <button type="button" id="cancel-event-edit"
+                                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tieu de
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Thoi
+                                        gian</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dia diem
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trang
+                                        thai</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Hanh
+                                        dong</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Media Section -->
+                <div id="section-media" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Thu vien Anh</h2>
+                            <label class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">
+                                <span>Tai anh len</span>
+                                <input type="file" id="media-upload" class="hidden" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="media-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+                    </div>
+                </div>
+
+                <!-- Pages Section -->
+                <div id="section-pages" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Quan ly Trang tinh</h2>
+                        <form id="page-form" class="space-y-4">
+                            <input type="hidden" id="page-id">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tieu de</label>
+                                    <input type="text" id="page-title-input"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required oninput="generateSlug()">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Slug (URL)</label>
+                                    <input type="text" id="page-slug"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-50"
+                                        required>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
+                                <textarea id="page-content-editor" rows="10"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="page-published"
+                                        class="form-checkbox h-5 w-5 text-blue-600">
+                                    <span class="ml-2 text-gray-700">Xuat ban ngay</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu
+                                    trang</button>
+                                <button type="button" id="cancel-page-edit"
+                                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tieu de
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trang
+                                        thai</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Hanh
+                                        dong</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pages-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="section-settings" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Cai dat chung</h2>
+                        <form id="urgent-notice-form" class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="urgent-enabled"
+                                        class="form-checkbox h-5 w-5 text-red-600">
+                                    <span class="ml-2 text-gray-700 font-bold">Bat thong bao khan</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung thong bao</label>
+                                <textarea id="urgent-content" rows="3"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Duong dan (tuy chon)</label>
+                                <input type="text" id="urgent-link"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                    placeholder="https://...">
+                            </div>
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu
+                                cai dat</button>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Thong diep tu Hieu Truong</h2>
+                        <form id="principal-message-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Tieu de</label>
+                                <input type="text" id="principal-title"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
+                                <textarea id="principal-content" rows="5"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu
+                                thong diep</button>
+                        </form>
+                    </div>
+                    <!-- Slider Images Section -->
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-2">Anh Slider Trang Chu</h2>
+                        <p class="text-sm text-gray-600 mb-4">Chon cac anh se hien thi trong slider o trang chu. Bam vao
+                            anh de chon/bo chon.</p>
+                        <div id="slider-images-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-4">
+                            <p class="text-gray-400 text-sm col-span-full">Dang tai anh...</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-4">
+                            <p class="text-sm text-gray-500">Da chon: <span id="slider-count"
+                                    class="font-bold text-blue-600">0</span> anh</p>
+                            <button type="button" onclick="saveSliderImages()"
+                                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Luu cai dat
+                                slider</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Media Modal -->
+    <div id="media-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">Chon anh</h3>
+                <button onclick="closeMediaModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div id="modal-media-grid" class="grid grid-cols-4 gap-4"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+        let token = localStorage.getItem('admin-token');
+        let currentUser = null;
+
+        // TinyMCE Init
+        tinymce.init({
+            selector: '#content, #page-content-editor',
+            height: 400,
+            menubar: false,
+            plugins: 'lists link image code',
+            toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image | code',
+            file_picker_callback: function (cb) { openMediaSelector(null, cb); }
+        });
+
+        // Auth Functions
+        function showAuth() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            if (currentUser) {
+                document.getElementById('user-name').innerText = currentUser.username;
+                document.getElementById('user-role').innerText = currentUser.role.toUpperCase();
+                document.getElementById('user-avatar').innerText = currentUser.username.charAt(0).toUpperCase();
+            }
+            fetchArticles();
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('auth-error');
+            el.innerText = msg;
+            el.classList.remove('hidden');
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                const res = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('admin-token', data.token);
+                    token = data.token;
+                    currentUser = { username: data.username, role: data.role };
+                    showDashboard();
+                } else {
+                    showError(data.message);
+                }
+            } catch (err) {
+                showError('Loi ket noi server');
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('admin-token');
+            location.reload();
+        });
+
+        // Navigation
+        const navLinks = {
+            'nav-articles': 'section-articles',
+            'nav-events': 'section-events',
+            'nav-media': 'section-media',
+            'nav-pages': 'section-pages',
+            'nav-settings': 'section-settings'
+        };
+        const titles = {
+            'nav-articles': 'Quan ly Bai viet',
+            'nav-events': 'Quan ly Su kien',
+            'nav-media': 'Thu vien Anh',
+            'nav-pages': 'Trang tinh',
+            'nav-settings': 'Cai dat chung'
+        };
+
+        Object.keys(navLinks).forEach(id => {
+            document.getElementById(id).addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('aside nav a').forEach(l => l.classList.remove('bg-blue-600', 'text-white'));
+                document.querySelectorAll('aside nav a').forEach(l => l.classList.add('text-gray-300'));
+                e.currentTarget.classList.remove('text-gray-300');
+                e.currentTarget.classList.add('bg-blue-600', 'text-white');
+                Object.values(navLinks).forEach(s => document.getElementById(s).classList.add('hidden'));
+                document.getElementById(navLinks[id]).classList.remove('hidden');
+                document.getElementById('page-title').textContent = titles[id];
+                if (id === 'nav-articles') fetchArticles();
+                if (id === 'nav-events') fetchEvents();
+                if (id === 'nav-media') fetchMedia();
+                if (id === 'nav-pages') fetchPages();
+                if (id === 'nav-settings') { fetchSettings(); loadSliderImagesSelection(); }
+            });
+        });
+
+        // Articles
+        async function fetchArticles() {
+            try {
+                const res = await fetch(`${API_URL}/articles`);
+                const articles = await res.json();
+                const tbody = document.getElementById('articles-list');
+                tbody.innerHTML = articles.map(a => `
+                    <tr>
+                        <td class="px-6 py-4">${a.image ? `<img src="${a.image}" class="h-10 w-10 rounded object-cover">` : '<div class="h-10 w-10 rounded bg-gray-200"></div>'}</td>
+                        <td class="px-6 py-4 font-medium">${a.title}</td>
+                        <td class="px-6 py-4 text-gray-500">${a.category}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${a.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${a.status}</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        document.getElementById('article-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('article-id').value;
+            const article = {
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                image: document.getElementById('image').value,
+                content: tinymce.get('content').getContent(),
+                status: document.getElementById('status').value,
+                tags: document.getElementById('tags').value.split(',').map(t => t.trim()).filter(t => t)
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/articles/${id}` : `${API_URL}/articles`;
+            try {
+                const res = await fetch(url, {
+                    method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(article)
+                });
+                if (res.ok) { resetArticleForm(); fetchArticles(); alert('Da luu bai viet!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        window.editArticle = async (id) => {
+            const res = await fetch(`${API_URL}/articles`);
+            const articles = await res.json();
+            const a = articles.find(x => x._id === id);
+            if (a) {
+                document.getElementById('article-id').value = a._id;
+                document.getElementById('title').value = a.title;
+                document.getElementById('category').value = a.category;
+                document.getElementById('image').value = a.image || '';
+                document.getElementById('status').value = a.status || 'draft';
+                document.getElementById('tags').value = a.tags ? a.tags.join(', ') : '';
+                tinymce.get('content').setContent(a.content || '');
+                document.getElementById('cancel-edit').classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+        };
+
+        window.deleteArticle = async (id) => {
+            if (confirm('Ban co chac chan muon xoa?')) {
+                await fetch(`${API_URL}/articles/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                fetchArticles();
+            }
+        };
+
+        document.getElementById('cancel-edit').addEventListener('click', resetArticleForm);
+
+        function resetArticleForm() {
+            document.getElementById('article-form').reset();
+            document.getElementById('article-id').value = '';
+            tinymce.get('content').setContent('');
+            document.getElementById('cancel-edit').classList.add('hidden');
+        }
+
+        // Events
+        async function fetchEvents() {
+            try {
+                const res = await fetch(`${API_URL}/admin/events`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const events = await res.json();
+                const tbody = document.getElementById('events-list');
+                tbody.innerHTML = events.map(e => `
+                    <tr>
+                        <td class="px-6 py-4 font-medium">${e.title}</td>
+                        <td class="px-6 py-4 text-gray-500">${new Date(e.startDate).toLocaleString('vi-VN')}</td>
+                        <td class="px-6 py-4 text-gray-500">${e.location || '-'}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished ? 'Da xuat ban' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editEvent('${e._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        document.getElementById('event-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('event-id').value;
+            const event = {
+                title: document.getElementById('event-title').value,
+                description: document.getElementById('event-description').value,
+                startDate: document.getElementById('event-start').value,
+                endDate: document.getElementById('event-end').value,
+                type: document.getElementById('event-type').value,
+                location: document.getElementById('event-location').value,
+                color: document.getElementById('event-color').value,
+                isPublished: document.getElementById('event-published').checked
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/events/${id}` : `${API_URL}/events`;
+            try {
+                const res = await fetch(url, {
+                    method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(event)
+                });
+                if (res.ok) { resetEventForm(); fetchEvents(); alert('Da luu su kien!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        window.editEvent = async (id) => {
+            const res = await fetch(`${API_URL}/admin/events`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const events = await res.json();
+            const e = events.find(x => x._id === id);
+            if (e) {
+                document.getElementById('event-id').value = e._id;
+                document.getElementById('event-title').value = e.title;
+                document.getElementById('event-description').value = e.description || '';
+                document.getElementById('event-start').value = new Date(e.startDate).toISOString().slice(0, 16);
+                document.getElementById('event-end').value = new Date(e.endDate).toISOString().slice(0, 16);
+                document.getElementById('event-type').value = e.type || 'public';
+                document.getElementById('event-location').value = e.location || '';
+                document.getElementById('event-color').value = e.color || '#3788d8';
+                document.getElementById('event-published').checked = e.isPublished;
+                document.getElementById('cancel-event-edit').classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+        };
+
+        window.deleteEvent = async (id) => {
+            if (confirm('Ban co chac chan muon xoa su kien nay?')) {
+                await fetch(`${API_URL}/events/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                fetchEvents();
+            }
+        };
+
+        document.getElementById('cancel-event-edit').addEventListener('click', resetEventForm);
+
+        function resetEventForm() {
+            document.getElementById('event-form').reset();
+            document.getElementById('event-id').value = '';
+            document.getElementById('event-color').value = '#3788d8';
+            document.getElementById('event-published').checked = true;
+            document.getElementById('cancel-event-edit').classList.add('hidden');
+        }
+
+        // Media
+        document.getElementById('media-upload')?.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+                const res = await fetch(`${API_URL}/upload`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: formData });
+                if (res.ok) { fetchMedia(); alert('Tai anh len thanh cong!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        async function fetchMedia(forModal = false) {
+            try {
+                const res = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const media = await res.json();
+                const container = forModal ? document.getElementById('modal-media-grid') : document.getElementById('media-grid');
+                if (!container) return;
+                container.innerHTML = media.map(item => `
+                    <div class="relative group aspect-square bg-gray-100 rounded-lg overflow-hidden border hover:border-blue-500 ${forModal ? 'cursor-pointer' : ''}" ${forModal ? `onclick="selectMedia('${item.path}')"` : ''}>
+                        <img src="${item.path}" class="w-full h-full object-cover">
+                        ${!forModal ? `
+                            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 truncate">${item.filename}</div>
+                            <button onclick="deleteMedia('${item._id}', '${item.filename}')" class="absolute top-1 right-1 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-lg font-bold">&times;</button>
+                        ` : ''}
+                    </div>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        window.deleteMedia = async (id, filename) => {
+            if (!confirm(`Ban co chac chan muon xoa anh "${filename}"?`)) return;
+            try {
+                const res = await fetch(`${API_URL}/media/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                if (res.ok) { fetchMedia(); alert('Xoa anh thanh cong!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        };
+
+        let tinymceCallback = null;
+        let mediaTargetInput = null;
+
+        window.openMediaSelector = (inputId, callback = null) => {
+            mediaTargetInput = inputId;
+            tinymceCallback = callback;
+            document.getElementById('media-modal').classList.remove('hidden');
+            fetchMedia(true);
+        };
+
+        window.closeMediaModal = () => {
+            document.getElementById('media-modal').classList.add('hidden');
+            mediaTargetInput = null;
+            tinymceCallback = null;
+        };
+
+        window.selectMedia = (url) => {
+            if (tinymceCallback) tinymceCallback(url, { alt: 'Image' });
+            else if (mediaTargetInput) document.getElementById(mediaTargetInput).value = url;
+            closeMediaModal();
+        };
+
+        // Pages
+        window.generateSlug = () => {
+            const title = document.getElementById('page-title-input').value;
+            const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+            document.getElementById('page-slug').value = slug;
+        };
+
+        async function fetchPages() {
+            try {
+                const res = await fetch(`${API_URL}/admin/static-pages`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const pages = await res.json();
+                const tbody = document.getElementById('pages-list');
+                tbody.innerHTML = pages.map(p => `
+                    <tr>
+                        <td class="px-6 py-4 font-medium">${p.title}</td>
+                        <td class="px-6 py-4 text-gray-500">/${p.slug}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished ? 'Da xuat ban' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editPage('${p._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        document.getElementById('page-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('page-id').value;
+            const page = {
+                title: document.getElementById('page-title-input').value,
+                slug: document.getElementById('page-slug').value,
+                content: tinymce.get('page-content-editor').getContent(),
+                isPublished: document.getElementById('page-published').checked
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/admin/static-pages/${id}` : `${API_URL}/admin/static-pages`;
+            try {
+                const res = await fetch(url, {
+                    method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(page)
+                });
+                if (res.ok) { resetPageForm(); fetchPages(); alert('Da luu trang!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        window.editPage = async (id) => {
+            const res = await fetch(`${API_URL}/admin/static-pages`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const pages = await res.json();
+            const p = pages.find(x => x._id === id);
+            if (p) {
+                document.getElementById('page-id').value = p._id;
+                document.getElementById('page-title-input').value = p.title;
+                document.getElementById('page-slug').value = p.slug;
+                document.getElementById('page-published').checked = p.isPublished;
+                tinymce.get('page-content-editor').setContent(p.content || '');
+                document.getElementById('cancel-page-edit').classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+        };
+
+        window.deletePage = async (id) => {
+            if (confirm('Ban co chac chan muon xoa trang nay?')) {
+                await fetch(`${API_URL}/admin/static-pages/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                fetchPages();
+            }
+        };
+
+        document.getElementById('cancel-page-edit').addEventListener('click', resetPageForm);
+
+        function resetPageForm() {
+            document.getElementById('page-form').reset();
+            document.getElementById('page-id').value = '';
+            tinymce.get('page-content-editor').setContent('');
+            document.getElementById('cancel-page-edit').classList.add('hidden');
+        }
+
+        // Settings
+        async function fetchSettings() {
+            try {
+                const resU = await fetch(`${API_URL}/settings/urgent_notice`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (resU.ok) {
+                    const s = await resU.json();
+                    const d = s.value || {};
+                    document.getElementById('urgent-enabled').checked = d.isEnabled || false;
+                    document.getElementById('urgent-content').value = d.content || '';
+                    document.getElementById('urgent-link').value = d.link || '';
+                }
+                const resP = await fetch(`${API_URL}/settings/principal_message`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (resP.ok) {
+                    const s = await resP.json();
+                    const d = s.value || {};
+                    document.getElementById('principal-title').value = d.title || '';
+                    document.getElementById('principal-content').value = d.content || '';
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // Slider Images Management
+        let selectedSliderImages = [];
+        async function loadSliderImagesSelection() {
+            try {
+                const resMedia = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const media = await resMedia.json();
+                const resSlider = await fetch(`${API_URL}/settings/slider_images`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (resSlider.ok) { const s = await resSlider.json(); selectedSliderImages = (s.value && s.value.images) || []; }
+                else { selectedSliderImages = []; }
+                const grid = document.getElementById('slider-images-grid');
+                if (!grid) return;
+                if (media.length === 0) { grid.innerHTML = '<p class="text-gray-400 text-sm col-span-full">Chua co anh.</p>'; return; }
+                grid.innerHTML = media.map(item => {
+                    const sel = selectedSliderImages.includes(item.path);
+                    return `<div class="relative aspect-square rounded-lg overflow-hidden border-2 cursor-pointer ${sel ? 'border-green-500' : 'border-gray-200'}" onclick="toggleSliderImage('${item.path}',this)"><img src="${item.path}" class="w-full h-full object-cover">${sel ? '<div class="absolute top-1 right-1 w-5 h-5 bg-green-500 rounded-full text-white text-xs flex items-center justify-center">✓</div>' : ''}</div>`;
+                }).join('');
+                document.getElementById('slider-count').innerText = selectedSliderImages.length;
+            } catch (e) { console.error(e); }
+        }
+        window.toggleSliderImage = function (p, el) {
+            const i = selectedSliderImages.indexOf(p);
+            if (i > -1) { selectedSliderImages.splice(i, 1); el.classList.remove('border-green-500'); el.classList.add('border-gray-200'); const c = el.querySelector('.bg-green-500'); if (c) c.remove(); }
+            else { selectedSliderImages.push(p); el.classList.remove('border-gray-200'); el.classList.add('border-green-500'); el.insertAdjacentHTML('beforeend', '<div class="absolute top-1 right-1 w-5 h-5 bg-green-500 rounded-full text-white text-xs flex items-center justify-center">✓</div>'); }
+            document.getElementById('slider-count').innerText = selectedSliderImages.length;
+        };
+        window.saveSliderImages = async function () {
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/slider_images`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ value: { images: selectedSliderImages }, description: 'Slider' }) });
+                if (res.ok) alert('Da luu slider!'); else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (e) { console.error(e); }
+        };
+
+        document.getElementById('urgent-notice-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                isEnabled: document.getElementById('urgent-enabled').checked,
+                content: document.getElementById('urgent-content').value,
+                link: document.getElementById('urgent-link').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/urgent_notice`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Thong bao khan' })
+                });
+                if (res.ok) alert('Da luu cai dat!');
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        document.getElementById('principal-message-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('principal-title').value,
+                content: document.getElementById('principal-content').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/principal_message`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Thong diep Hieu Truong' })
+                });
+                if (res.ok) alert('Da luu thong diep!');
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        // Init
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                currentUser = payload;
+                showDashboard();
+            } catch (e) {
+                showAuth();
+            }
+        } else {
+            showAuth();
+        }
+    </script>
+</body>
+
+</html>

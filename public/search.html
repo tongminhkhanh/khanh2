@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim kiem - Truong Tieu hoc It Ong</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-[1200px] mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2">
+                <span class="text-2xl">🏫</span>
+                <span class="font-bold text-lg text-gray-800">Truong Tieu hoc It Ong</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="/" class="text-sm text-gray-600 hover:text-blue-600">Trang chu</a>
+                <a href="/gioi-thieu" class="text-sm text-gray-600 hover:text-blue-600">Gioi thieu</a>
+                <a href="/thong-bao" class="text-sm text-gray-600 hover:text-blue-600">Thong bao</a>
+                <a href="/hoat-dong" class="text-sm text-gray-600 hover:text-blue-600">Hoat dong</a>
+                <a href="/su-kien" class="text-sm text-gray-600 hover:text-blue-600">Su kien</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-[1200px] mx-auto px-4 py-8">
+        <!-- Search Box -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-800 mb-4">Tim kiem bai viet</h1>
+            <div class="flex gap-2 max-w-xl">
+                <input type="text" id="search-input" placeholder="Nhap tu khoa tim kiem..."
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="doSearch()"
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">search</span>
+                    Tim kiem
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div id="search-results">
+            <p id="search-status" class="text-gray-600 mb-4"></p>
+            <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- No Results -->
+        <div id="no-results" class="hidden text-center py-12">
+            <span class="material-symbols-outlined text-6xl text-gray-300">search_off</span>
+            <p class="text-gray-500 mt-4">Khong tim thay ket qua nao</p>
+            <p class="text-gray-400 text-sm mt-2">Thu tim kiem voi tu khoa khac</p>
+        </div>
+    </main>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialQuery = urlParams.get('q') || '';
+
+        document.getElementById('search-input').value = initialQuery;
+
+        if (initialQuery) {
+            doSearch();
+        }
+
+        async function doSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            if (!query) return;
+
+            const newUrl = window.location.pathname + '?q=' + encodeURIComponent(query);
+            window.history.pushState({}, '', newUrl);
+
+            try {
+                const res = await fetch('/api/search?q=' + encodeURIComponent(query));
+                const articles = await res.json();
+
+                const resultsGrid = document.getElementById('results-grid');
+                const noResults = document.getElementById('no-results');
+                const status = document.getElementById('search-status');
+
+                resultsGrid.innerHTML = '';
+
+                if (articles.length === 0) {
+                    noResults.classList.remove('hidden');
+                    status.textContent = 'Ket qua tim kiem cho "' + query + '"';
+                } else {
+                    noResults.classList.add('hidden');
+                    status.textContent = 'Tim thay ' + articles.length + ' ket qua cho "' + query + '"';
+
+                    articles.forEach(function (article) {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer';
+
+                        let imgHtml = '';
+                        if (article.image) {
+                            imgHtml = '<img src="' + article.image + '" class="w-full h-full object-cover">';
+                        } else {
+                            imgHtml = '<div class="w-full h-full flex items-center justify-center text-gray-400"><span class="material-symbols-outlined text-4xl">image</span></div>';
+                        }
+
+                        const dateStr = new Date(article.createdAt).toLocaleDateString('vi-VN');
+
+                        card.innerHTML = '<div class="h-40 bg-gray-200 overflow-hidden">' + imgHtml + '</div>' +
+                            '<div class="p-4">' +
+                            '<span class="text-xs text-blue-600 font-medium">' + article.category + '</span>' +
+                            '<h3 class="font-bold text-gray-800 mt-1 line-clamp-2">' + article.title + '</h3>' +
+                            '<p class="text-sm text-gray-500 mt-2">' + dateStr + '</p>' +
+                            '</div>';
+
+                        card.onclick = function () {
+                            window.location.href = '/bai-viet/' + article._id;
+                        };
+
+                        resultsGrid.appendChild(card);
+                    });
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') doSearch();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh mục - Trường Tiểu học Ít Ong</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='/'">
+                <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" alt="Logo" class="h-10 w-10">
+                <span class="text-xl font-bold text-blue-800">Tiểu học Ít Ong</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="/" class="text-gray-700 hover:text-blue-600 font-medium">Trang chủ</a>
+                <a href="/gioi-thieu" class="text-gray-700 hover:text-blue-600 font-medium">Giới thiệu</a>
+                <a href="/thong-bao" class="text-gray-700 hover:text-blue-600 font-medium">Thông báo</a>
+                <a href="/hoat-dong" class="text-gray-700 hover:text-blue-600 font-medium">Hoạt động</a>
+                <a href="/thanh-tich" class="text-gray-700 hover:text-blue-600 font-medium">Thành tích</a>
+                <a href="/su-kien" class="text-gray-700 hover:text-blue-600 font-medium">Sự kiện</a>
+                <a href="http://thitong.site" target="_blank" class="text-gray-700 hover:text-blue-600 font-medium">Trợ
+                    lý AI</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <h1 id="category-title" class="text-3xl font-bold text-gray-800 mb-2 border-b pb-4">Danh mục</h1>
+        <p id="category-desc" class="text-gray-600 mb-8"></p>
+
+        <div id="loading" class="text-center py-10">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p class="mt-4 text-gray-600">Đang tải bài viết...</p>
+        </div>
+
+        <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+            <!-- Articles injected here -->
+        </div>
+
+        <div id="no-articles" class="hidden text-center py-10 text-gray-500">
+            <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">article</span>
+            <p>Chưa có bài viết nào trong danh mục này.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-8 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Trường Tiểu học Ít Ong. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Category mapping: slug -> { category, title, description }
+        const categoryMap = {
+            '/thong-bao': {
+                category: 'Thong bao',
+                title: 'Thông báo nhà trường',
+                description: 'Các thông báo mới nhất từ Ban giám hiệu và nhà trường'
+            },
+            '/hoat-dong': {
+                category: 'Hoat dong',
+                title: 'Hoạt động ngoại khóa',
+                description: 'Các hoạt động văn nghệ, thể thao và ngoại khóa của trường'
+            },
+            '/thanh-tich': {
+                category: 'Thanh tich',
+                title: 'Gương sáng học đường',
+                description: 'Thành tích học tập và các gương mặt tiêu biểu của trường'
+            },
+            '/su-kien': {
+                category: 'Su kien',
+                title: 'Sự kiện sắp tới',
+                description: 'Lịch các sự kiện và hoạt động sắp diễn ra'
+            },
+            '/tin-tuc': {
+                category: 'Tin tuc',
+                title: 'Tin tức',
+                description: 'Tin tức mới nhất về trường và giáo dục'
+            }
+        };
+
+        // Also match Vietnamese category names
+        const categoryNameMap = {
+            'Thong bao': 'Thông báo',
+            'Hoat dong': 'Hoạt động',
+            'Thanh tich': 'Thành tích',
+            'Su kien': 'Sự kiện',
+            'Tin tuc': 'Tin tức'
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const path = window.location.pathname;
+
+            // Find matching category
+            let config = null;
+            for (const [slug, cfg] of Object.entries(categoryMap)) {
+                if (path.includes(slug)) {
+                    config = cfg;
+                    break;
+                }
+            }
+
+            if (!config) {
+                // Redirect to home if unknown category
+                window.location.href = '/';
+                return;
+            }
+
+            // Set page title and description
+            document.title = `${config.title} - Trường Tiểu học Ít Ong`;
+            document.getElementById('category-title').innerText = config.title;
+            document.getElementById('category-desc').innerText = config.description;
+
+            // Highlight current nav link
+            document.querySelectorAll('nav a').forEach(link => {
+                if (link.getAttribute('href') === path) {
+                    link.classList.add('text-blue-600', 'font-bold');
+                    link.classList.remove('text-gray-700');
+                }
+            });
+
+            try {
+                // Fetch articles - try both Vietnamese and non-accent category names
+                const res = await fetch(`/api/articles?category=${encodeURIComponent(config.category)}`);
+                let articles = await res.json();
+
+                // Also try Vietnamese name if no results
+                if (articles.length === 0 && categoryNameMap[config.category]) {
+                    const res2 = await fetch(`/api/articles?category=${encodeURIComponent(categoryNameMap[config.category])}`);
+                    articles = await res2.json();
+                }
+
+                // Filter only published articles
+                articles = articles.filter(a => a.status === 'published');
+
+                const newsGrid = document.getElementById('news-grid');
+                const loading = document.getElementById('loading');
+                const noArticles = document.getElementById('no-articles');
+
+                loading.classList.add('hidden');
+
+                if (articles.length > 0) {
+                    newsGrid.classList.remove('hidden');
+                    articles.forEach(article => {
+                        const date = new Date(article.createdAt).toLocaleDateString('vi-VN');
+                        const imageUrl = article.image || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=200&fit=crop';
+
+                        // Strip HTML tags for preview
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = article.content || '';
+                        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+
+                        const articleHtml = `
+                            <article class="flex flex-col bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 group">
+                                <div class="relative h-48 overflow-hidden">
+                                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                        style='background-image: url("${imageUrl}");'>
+                                    </div>
+                                    <span class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
+                                        ${article.category || 'Tin tức'}
+                                    </span>
+                                </div>
+                                <div class="p-5 flex flex-col flex-1">
+                                    <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                        ${date}
+                                    </div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-2 leading-tight group-hover:text-blue-600 transition-colors">
+                                        <a href="/bai-viet/${article._id}">${article.title}</a>
+                                    </h3>
+                                    <div class="text-gray-600 text-sm line-clamp-3 mb-4 flex-1">
+                                        ${textContent.substring(0, 150)}... 
+                                    </div>
+                                    <a class="inline-flex items-center text-blue-600 text-sm font-bold hover:underline" href="/bai-viet/${article._id}">
+                                        Xem chi tiết
+                                        <span class="material-symbols-outlined text-[16px] ml-1">arrow_forward</span>
+                                    </a>
+                                </div>
+                            </article>
+                        `;
+                        newsGrid.innerHTML += articleHtml;
+                    });
+                } else {
+                    noArticles.classList.remove('hidden');
+                }
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('no-articles').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
