@@ -48,7 +48,8 @@
         <div class="px-4 lg:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full">
             <div class="flex items-center gap-8">
                 <div class="flex items-center gap-4 text-text-main dark:text-white">
-                    <img src="/logo.jpg" alt="Logo Truong Tieu hoc It Ong" class="h-10 w-10 rounded-full object-cover">
+                    <img src="/logo.jpg" alt="Logo Truong Tieu hoc It Ong" class="h-10 w-10 rounded-full object-cover"
+                        onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IT+ONG&background=2b8cee&color=fff&size=40&rounded=true'">
                     <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] hidden md:block">Trường Tiểu học Ít
                         Ong</h2>
                 </div>
@@ -177,9 +178,18 @@
                 const slider = document.getElementById('image-slider');
                 if (images.length > 0) {
                     let html = '';
-                    images.forEach(p => { html += `<img src="${p}" alt="Slider">`; });
+                    images.forEach(p => {
+                        html += `<img src="${p}" alt="Slider" onerror="this.style.display='none'">`;
+                    });
                     slider.innerHTML = html + html;
                     slider.classList.add('slider-animate');
+                    // Check if any images loaded successfully
+                    setTimeout(() => {
+                        const visibleImages = slider.querySelectorAll('img:not([style*="display: none"])');
+                        if (visibleImages.length === 0) {
+                            document.getElementById('image-slider-container').classList.add('hidden');
+                        }
+                    }, 2000);
                 } else {
                     document.getElementById('image-slider-container').classList.add('hidden');
                 }
