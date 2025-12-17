@@ -843,7 +843,7 @@
                 const resMedia = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const media = await resMedia.json();
                 const resSlider = await fetch(`${API_URL}/settings/slider_images`, { headers: { 'Authorization': `Bearer ${token}` } });
-                if (resSlider.ok) { const s = await resSlider.json(); selectedSliderImages = (s.value && s.value.images) || []; }
+                if (resSlider.ok) { const s = await resSlider.json(); const savedImages = (s.value && s.value.images) || []; const mediaPathsSet = new Set(media.map(m => m.path)); selectedSliderImages = savedImages.filter(path => mediaPathsSet.has(path)); }
                 else { selectedSliderImages = []; }
                 const grid = document.getElementById('slider-images-grid');
                 if (!grid) return;
