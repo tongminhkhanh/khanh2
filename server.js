@@ -21,10 +21,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
-// Ensure uploads directory exists
+// Ensure uploads directory exists (skip on Vercel - read-only filesystem)
 const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
+if (process.env.NODE_ENV !== 'production') {
+    try {
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir);
+        }
+    } catch (err) {
+        console.log('Could not create uploads directory:', err.message);
+    }
 }
 
 // Multer Storage
