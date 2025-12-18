@@ -889,8 +889,34 @@
             } else {
                 selectedSliderImages.push(url);
             }
-            loadSliderImagesSelection();
+            // Update UI directly without re-fetching from server
+            updateSliderImagesUI();
         };
+
+        function updateSliderImagesUI() {
+            const grid = document.getElementById('slider-images-grid');
+            const images = grid.querySelectorAll('[onclick^="toggleSliderImage"]');
+            images.forEach(div => {
+                const imgSrc = div.querySelector('img').src;
+                const isSelected = selectedSliderImages.some(path => imgSrc.includes(path) || imgSrc.endsWith(path));
+                const img = div.querySelector('img');
+                const checkmark = div.querySelector('div');
+                
+                if (isSelected) {
+                    img.classList.add('ring-4', 'ring-blue-500');
+                    if (!checkmark) {
+                        const mark = document.createElement('div');
+                        mark.className = 'absolute top-1 right-1 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs';
+                        mark.textContent = '✓';
+                        div.appendChild(mark);
+                    }
+                } else {
+                    img.classList.remove('ring-4', 'ring-blue-500');
+                    if (checkmark) checkmark.remove();
+                }
+            });
+            document.getElementById('slider-count').textContent = selectedSliderImages.length;
+        }
 
         window.saveSliderImages = async function () {
             try {
