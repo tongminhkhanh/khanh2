@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "npx tailwindcss -i ./src/input.css -o ./public/styles.css --minify",
+    "watch:css": "npx tailwindcss -i ./src/input.css -o ./public/styles.css --watch"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +24,12 @@
     "mongoose": "^9.0.1",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.11",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
   }
 }
