@@ -1365,17 +1365,17 @@
 
                     if (mainArticle) {
                         featuredSection.classList.remove('hidden');
-                        document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${mainArticle._id}`;
                         document.getElementById('featured-main-bg').src = mainArticle.image || 'https://via.placeholder.com/800x400';
                         document.getElementById('featured-main-title').innerText = mainArticle.title;
                         document.getElementById('featured-main-category').innerText = mainArticle.category || 'Tiêu điểm';
+                        document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${mainArticle.slug || mainArticle._id}`;
                     }
 
                     const sideList = document.getElementById('featured-side-list');
                     sideList.innerHTML = '';
                     sideArticles.forEach(article => {
                         const html = `
-                            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='/bai-viet/${article._id}'">
+                            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='/bai-viet/${article.slug || article._id}'">
                                 <img src="${article.image || 'https://via.placeholder.com/100x100'}" alt="${article.title}" class="w-20 h-14 rounded-md object-cover shrink-0" loading="lazy">
                                 <div>
                                     <p class="text-xs text-primary font-semibold mb-1">${article.category || 'Tin tức'}</p>
@@ -1418,12 +1418,12 @@
                                         ${date}
                                     </div>
                                     <h3 class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
-                                        <a href="/bai-viet/${article._id}">${article.title}</a>
+                                        <a href="/bai-viet/${article.slug || article._id}">${article.title}</a>
                                     </h3>
                                     <div class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
                                         ${article.content} 
                                     </div>
-                                    <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article._id}">
+                                    <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article.slug || article._id}">
                                         Xem chi tiết
                                     </a>
                                 </div>
@@ -1491,12 +1491,12 @@
                                 ${date}
                             </div>
                             <h3 class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
-                                <a href="/bai-viet/${article._id}">${article.title}</a>
+                                <a href="/bai-viet/${article.slug || article._id}">${article.title}</a>
                             </h3>
                             <div class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
                                 ${article.content} 
                             </div>
-                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article._id}">
+                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article.slug || article._id}">
                                 Xem chi tiết
                             </a>
                         </div>

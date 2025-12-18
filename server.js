@@ -161,7 +161,7 @@ app.get('/sitemap.xml', async (req, res) => {
         // Articles
         articles.forEach(article => {
             const lastmod = article.updatedAt ? new Date(article.updatedAt).toISOString().split('T')[0] : new Date(article.createdAt).toISOString().split('T')[0];
-            xml += `  <url>\n    <loc>${baseUrl}/bai-viet/${article._id}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+            xml += `  <url>\n    <loc>${baseUrl}/bai-viet/${article.slug || article._id}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
         });
 
         // Dynamic static pages
@@ -192,7 +192,14 @@ app.get('/admin', (req, res) => {
 
 app.get('/bai-viet/:id', async (req, res) => {
     try {
-        const article = await Article.findById(req.params.id);
+        let article;
+        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+            article = await Article.findById(req.params.id);
+        }
+        if (!article) {
+            article = await Article.findOne({ slug: req.params.id });
+        }
+
         if (!article) {
             return res.sendFile(path.join(__dirname, 'article.html'));
         }
@@ -204,7 +211,7 @@ app.get('/bai-viet/:id', async (req, res) => {
         const title = article.title + ' - Trường Tiểu học Ít Ong';
         const description = article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : 'Bài viết từ Trường Tiểu học Ít Ong';
         const image = article.image || 'https://thitong.io.vn/public/logo_school.jpg';
-        const url = `https://thitong.io.vn/bai-viet/${article._id}`;
+        const url = `https://thitong.io.vn/bai-viet/${article.slug || article._id}`;
 
         // Replace title tag
         html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
@@ -407,7 +414,14 @@ app.get('/api/search', async (req, res) => {
 
 app.get('/api/articles/:id', async (req, res) => {
     try {
-        const article = await Article.findById(req.params.id);
+        let article;
+        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+            article = await Article.findById(req.params.id);
+        }
+        if (!article) {
+            article = await Article.findOne({ slug: req.params.id });
+        }
+
         if (!article) return res.status(404).json({ message: 'Article not found' });
         res.json(article);
     } catch (error) {
