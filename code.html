@@ -52,7 +52,8 @@
     class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased flex flex-col min-h-screen overflow-x-hidden">
     <!-- Enhanced TopNavBar -->
     <header id="main-header"
-        class="sticky top-0 z-50 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-[#e7edf3] dark:border-gray-700 shadow-sm transition-all duration-300">
+        class="sticky top-0 z-50 backdrop-blur-md border-b border-white/30 dark:border-gray-700 shadow-lg transition-all duration-300"
+        style="background: linear-gradient(135deg, rgba(135, 206, 235, 0.95) 0%, rgba(255, 182, 193, 0.95) 50%, rgba(230, 230, 250, 0.95) 100%);">
         <div class="px-4 lg:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full transition-all duration-300"
             id="header-inner">
             <!-- Logo & Brand -->
@@ -158,6 +159,14 @@
     </header>
 
     <style>
+        /* ===== PASTEL GRADIENT NAVIGATION THEME ===== */
+        /* Sky Blue (#87CEEB) → Cotton Candy Pink (#FFB6C1) → Lavender Purple (#E6E6FA) */
+
+        /* Dark mode header */
+        .dark #main-header {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.98) 0%, rgba(60, 40, 60, 0.98) 50%, rgba(45, 45, 75, 0.98) 100%) !important;
+        }
+
         /* Navigation Link Styles */
         .nav-link {
             display: flex;
@@ -166,43 +175,103 @@
             padding: 0.5rem 0.875rem;
             border-radius: 9999px;
             font-size: 0.875rem;
-            font-weight: 500;
-            color: #4c739a;
-            transition: all 0.2s ease;
+            font-weight: 600;
+            color: #1e3a5f;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
         }
 
         .dark .nav-link {
-            color: #9ca3af;
+            color: #e5e7eb;
+            text-shadow: none;
         }
 
         .nav-link:hover {
-            background: rgba(43, 140, 238, 0.1);
-            color: #2b8cee;
+            background: rgba(255, 255, 255, 0.4);
+            color: #1e3a5f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(135, 206, 235, 0.3);
+        }
+
+        .dark .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
         }
 
         .nav-link.active {
-            background: linear-gradient(135deg, #2b8cee 0%, #1a6bb8 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(43, 140, 238, 0.3);
+            background: linear-gradient(135deg, #87CEEB 0%, #FFB6C1 50%, #E6E6FA 100%);
+            color: #1e3a5f;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4), 0 0 20px rgba(135, 206, 235, 0.3);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .dark .nav-link.active {
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(255, 182, 193, 0.8) 50%, rgba(230, 230, 250, 0.8) 100%);
+            color: #1e3a5f;
         }
 
         .nav-link .nav-icon {
             font-size: 18px;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .nav-link:hover .nav-icon {
-            transform: scale(1.1);
+            transform: scale(1.15) rotate(-5deg);
         }
 
         .nav-link.external {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(230, 230, 250, 0.5) 0%, rgba(255, 182, 193, 0.3) 100%);
         }
 
         .nav-link.external:hover {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-            color: #764ba2;
+            background: linear-gradient(135deg, rgba(230, 230, 250, 0.7) 0%, rgba(255, 182, 193, 0.5) 100%);
+            color: #6b4c7a;
+        }
+
+        /* Login button pastel style */
+        #main-header a[href="/admin"] {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 100%) !important;
+            color: #1e3a5f !important;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        #main-header a[href="/admin"]:hover {
+            background: linear-gradient(135deg, #FFB6C1 0%, #E6E6FA 100%) !important;
+            color: #1e3a5f !important;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+        }
+
+        .dark #main-header a[href="/admin"] {
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark #main-header a[href="/admin"]:hover {
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.5) 0%, rgba(255, 182, 193, 0.5) 100%) !important;
+        }
+
+        /* Search bar pastel style */
+        #nav-search {
+            background: rgba(255, 255, 255, 0.7) !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        #nav-search:focus {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-color: #FFB6C1 !important;
+            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.3);
+        }
+
+        .dark #nav-search {
+            background: rgba(30, 30, 50, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* Header shrink animation */
+        #main-header.scrolled {
+            box-shadow: 0 8px 32px rgba(135, 206, 235, 0.3), 0 4px 16px rgba(255, 182, 193, 0.2);
         }
 
         /* Hamburger Menu Animation */
