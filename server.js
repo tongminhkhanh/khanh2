@@ -73,10 +73,36 @@ app.use(express.json());
 app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Could not connect to MongoDB:', err));
+// Connect to MongoDB with Pooling for Serverless
+let cachedDb = null;
+
+async function connectToDatabase() {
+    if (cachedDb && mongoose.connection.readyState === 1) {
+        return cachedDb;
+    }
+
+    try {
+        await mongoose.connect(process.env.MONGODB_URI);
+        cachedDb = mongoose.connection;
+        console.log('Connected to MongoDB (New Connection)');
+        return cachedDb;
+    } catch (err) {
+        console.error('Could not connect to MongoDB:', err);
+        throw err;
+    }
+}
+
+// Ensure connection is established before handling requests
+app.use(async (req, res, next) => {
+    if (mongoose.connection.readyState !== 1) {
+        try {
+            await connectToDatabase();
+        } catch (err) {
+            return res.status(500).json({ message: 'Database connection error' });
+        }
+    }
+    next();
+});
 
 // Auth Middleware
 const authenticateToken = (req, res, next) => {
@@ -191,6 +217,7 @@ app.post('/api/upload', authenticateToken, upload.single('file'), async (req, re
 app.get('/api/public/media', async (req, res) => {
     try {
         const media = await Media.find().sort({ createdAt: -1 }).limit(20);
+        res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=59');
         res.json(media);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -245,6 +272,7 @@ app.get('/api/articles', async (req, res) => {
         const { category } = req.query;
         const filter = category ? { category } : {};
         const articles = await Article.find(filter).sort({ createdAt: -1 });
+        res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=59');
         res.json(articles);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -455,10 +483,24 @@ app.get('/:slug', (req, res, next) => {
 app.get('/api/settings/:key', async (req, res) => {
     try {
         const setting = await Setting.findOne({ key: req.params.key });
-        if (!setting) return res.status(404).json({ message: 'Setting not found' });
+        if (!setting) {
+            // Return default empty setting instead of 404 to prevent frontend errors
+            return res.json({
+                key: req.params.key,
+                value: null,
+                description: 'Not configured'
+            });
+        }
+        res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=59');
         res.json(setting);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error(`Error fetching setting ${req.params.key}:`, error.message);
+        // Return empty setting on error to prevent frontend crash
+        res.json({
+            key: req.params.key,
+            value: null,
+            error: error.message
+        });
     }
 });
 
@@ -526,6 +568,7 @@ app.get('/api/events', async (req, res) => {
             .populate('createdBy', 'username fullName')
             .sort({ startDate: 1 });
 
+        res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=59');
         res.json(events);
     } catch (error) {
         res.status(500).json({ message: error.message });
