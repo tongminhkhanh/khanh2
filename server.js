@@ -239,6 +239,35 @@ app.get('/bai-viet/:id', async (req, res) => {
     <meta name="twitter:title" content="${title.replace(/"/g, '&quot;')}" />
     <meta name="twitter:description" content="${description.replace(/"/g, '&quot;')}" />
     <meta name="twitter:image" content="${image}" />
+    
+    <!-- Schema.org NewsArticle Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": "${article.title.replace(/"/g, '\\"')}",
+      "image": ["${image}"],
+      "datePublished": "${article.createdAt ? new Date(article.createdAt).toISOString() : new Date().toISOString()}",
+      "dateModified": "${article.updatedAt ? new Date(article.updatedAt).toISOString() : new Date(article.createdAt).toISOString()}",
+      "author": {
+        "@type": "Organization",
+        "name": "Trường Tiểu học Ít Ong",
+        "url": "https://thitong.io.vn"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Trường Tiểu học Ít Ong",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://thitong.io.vn/public/logo_school.jpg"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "${url}"
+      }
+    }
+    </script>
 `;
 
         html = html.replace('<head>', '<head>' + ogTags);
