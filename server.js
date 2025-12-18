@@ -71,6 +71,7 @@ const upload = multer({ storage: storage });
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
+app.use('/public', express.static(path.join(__dirname, 'public'))); // Serve public folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
 
 // Connect to MongoDB with Pooling for Serverless
