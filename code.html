@@ -14,7 +14,13 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://res.cloudinary.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" defer></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -48,7 +54,8 @@
         <div class="px-4 lg:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full">
             <div class="flex items-center gap-8">
                 <div class="flex items-center gap-4 text-text-main dark:text-white">
-                    <img src="/logo.jpg" alt="Logo Truong Tieu hoc It Ong" class="h-10 w-10 rounded-full object-cover"
+                    <img src="/public/logo_school.jpg" alt="Logo Truong Tieu hoc It Ong"
+                        class="h-10 w-10 rounded-full object-cover" loading="lazy"
                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IT+ONG&background=2b8cee&color=fff&size=40&rounded=true'">
                     <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] hidden md:block">Trường Tiểu học Ít
                         Ong</h2>
@@ -110,12 +117,75 @@
         <div class="max-w-[1200px] mx-auto px-4">
             <div class="relative overflow-hidden rounded-xl">
                 <div id="image-slider" class="flex gap-4">
-                    <!-- Images will be loaded dynamically -->
+                    <!-- Skeleton loading for slider -->
+                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
+                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
+                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
+                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
                 </div>
             </div>
         </div>
     </div>
     <style>
+        /* Skeleton Loading Animation */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .skeleton-shimmer {
+            background: linear-gradient(90deg,
+                    rgba(200, 200, 200, 0.2) 25%,
+                    rgba(200, 200, 200, 0.5) 50%,
+                    rgba(200, 200, 200, 0.2) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+
+        .dark .skeleton-shimmer {
+            background: linear-gradient(90deg,
+                    rgba(100, 100, 100, 0.2) 25%,
+                    rgba(100, 100, 100, 0.5) 50%,
+                    rgba(100, 100, 100, 0.2) 75%);
+            background-size: 200% 100%;
+        }
+
+        /* Fade-in animation for loaded content */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Slider skeleton */
+        .slider-skeleton {
+            display: flex;
+            gap: 16px;
+            padding: 0 16px;
+        }
+
+        .slider-skeleton-item {
+            height: 160px;
+            width: 280px;
+            flex-shrink: 0;
+            border-radius: 12px;
+        }
+
         #image-slider-container {
             min-height: 180px;
         }
@@ -157,6 +227,296 @@
         #image-slider-container:hover .slider-animate {
             animation-play-state: paused;
         }
+
+        /* Hide load-more button while loading */
+        #load-more-btn.loading-hidden {
+            display: none !important;
+        }
+
+        /* ===== PAGE TRANSITIONS ===== */
+        /* Fade-in effect when page loads */
+        body {
+            opacity: 0;
+            animation: pageLoad 0.6s ease-out forwards;
+        }
+
+        @keyframes pageLoad {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Smooth page exit transition */
+        body.page-exit {
+            animation: pageExit 0.3s ease-in forwards;
+        }
+
+        @keyframes pageExit {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        /* ===== ENHANCED BUTTON HOVER EFFECTS ===== */
+        /* Primary buttons with gradient and lift effect */
+        .btn-enhanced {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-enhanced:hover::before {
+            left: 100%;
+        }
+
+        .btn-enhanced:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(43, 140, 238, 0.35);
+        }
+
+        /* Newsletter button enhanced */
+        #newsletter-form button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #newsletter-form button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        #newsletter-form button:hover::before {
+            left: 100%;
+        }
+
+        #newsletter-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(43, 140, 238, 0.4);
+        }
+
+        /* Load more button enhanced */
+        #load-more-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary, #2b8cee);
+            color: var(--primary, #2b8cee);
+        }
+
+        /* ===== ENHANCED ARTICLE CARD HOVER EFFECTS ===== */
+        /* Article cards with lift and glow effect */
+        #news-grid article:not(.skeleton-card) {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #news-grid article:not(.skeleton-card):hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(43, 140, 238, 0.15), 0 8px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        #news-grid article:not(.skeleton-card):hover img {
+            transform: scale(1.1);
+        }
+
+        /* Category tag bounce on card hover */
+        #news-grid article:not(.skeleton-card):hover span.bg-blue-100 {
+            animation: tagBounce 0.5s ease;
+        }
+
+        @keyframes tagBounce {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Featured section enhanced hover */
+        #featured-main:hover img {
+            transform: scale(1.08);
+        }
+
+        #featured-side-list>div {
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        #featured-side-list>div:hover {
+            background: rgba(43, 140, 238, 0.05);
+            transform: translateX(4px);
+        }
+
+        /* Sidebar widget cards hover */
+        aside>div {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        aside>div:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Quick links enhanced hover */
+        .flex.items-center.gap-2.text-sm.text-text-secondary {
+            transition: all 0.2s ease;
+            padding: 0.25rem 0.5rem;
+            margin: -0.25rem -0.5rem;
+            border-radius: 0.375rem;
+        }
+
+        .flex.items-center.gap-2.text-sm.text-text-secondary:hover {
+            background: rgba(43, 140, 238, 0.08);
+            transform: translateX(4px);
+        }
+
+        /* ===== BACK TO TOP BUTTON ===== */
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2b8cee 0%, #1a6bb8 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(43, 140, 238, 0.4);
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        #back-to-top:hover {
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(43, 140, 238, 0.5);
+        }
+
+        #back-to-top:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        #back-to-top .material-symbols-outlined {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        #back-to-top:hover .material-symbols-outlined {
+            animation: arrowBounce 0.6s ease infinite;
+        }
+
+        @keyframes arrowBounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* ===== NAV LINK HOVER ENHANCEMENT ===== */
+        header nav a {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        header nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2b8cee, #1a6bb8);
+            border-radius: 1px;
+            transition: width 0.3s ease;
+        }
+
+        header nav a:hover::after {
+            width: 100%;
+        }
+
+        /* ===== FOOTER LINK HOVER ===== */
+        footer a {
+            transition: all 0.2s ease;
+        }
+
+        footer a:hover {
+            color: #2b8cee;
+            transform: translateX(2px);
+        }
+
+        /* ===== EVENTS LIST ITEM HOVER ===== */
+        #upcoming-events-list>div {
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            margin: -0.5rem;
+        }
+
+        #upcoming-events-list>div:hover {
+            background: rgba(43, 140, 238, 0.05);
+            transform: translateX(4px);
+        }
+
+        /* ===== SMOOTH SCROLL BEHAVIOR ===== */
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
     <script>
         // Load images for slider
@@ -179,7 +539,7 @@
                 if (images.length > 0) {
                     let html = '';
                     images.forEach(p => {
-                        html += `<img src="${p}" alt="Slider" onerror="this.style.display='none'">`;
+                        html += `<img src="${p}" alt="Slider" onerror="this.style.display='none'" loading="lazy">`;
                     });
                     slider.innerHTML = html + html;
                     slider.classList.add('slider-animate');
@@ -209,10 +569,9 @@
             <div id="featured-main"
                 class="w-full lg:w-3/5 relative group cursor-pointer overflow-hidden rounded-lg aspect-video lg:aspect-auto min-h-[300px]"
                 onclick="">
-                <div id="featured-main-bg"
-                    class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                    style='background-image: url("");'>
-                </div>
+                <img id="featured-main-bg" src="" alt="Featured Article"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 flex flex-col gap-2">
                     <span id="featured-main-category"
@@ -586,7 +945,7 @@
                     if (mainArticle) {
                         featuredSection.classList.remove('hidden');
                         document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${mainArticle._id}`;
-                        document.getElementById('featured-main-bg').style.backgroundImage = `url("${mainArticle.image || 'https://via.placeholder.com/800x400'}")`;
+                        document.getElementById('featured-main-bg').src = mainArticle.image || 'https://via.placeholder.com/800x400';
                         document.getElementById('featured-main-title').innerText = mainArticle.title;
                         document.getElementById('featured-main-category').innerText = mainArticle.category || 'Tiêu điểm';
                     }
@@ -596,9 +955,7 @@
                     sideArticles.forEach(article => {
                         const html = `
                             <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='/bai-viet/${article._id}'">
-                                <div class="w-20 h-14 rounded-md bg-cover bg-center shrink-0"
-                                    style='background-image: url("${article.image || 'https://via.placeholder.com/100x100'}");'>
-                                </div>
+                                <img src="${article.image || 'https://via.placeholder.com/100x100'}" alt="${article.title}" class="w-20 h-14 rounded-md object-cover shrink-0" loading="lazy">
                                 <div>
                                     <p class="text-xs text-primary font-semibold mb-1">${article.category || 'Tin tức'}</p>
                                     <h3 class="text-sm font-bold text-text-main dark:text-white group-hover:text-primary transition-colors line-clamp-2">
@@ -617,21 +974,19 @@
                     // Let's display ALL in grid for now to ensure nothing is hidden, 
                     // or maybe slice(0) is fine.
 
-                    newsGrid.innerHTML = ''; // Clear static content
+                    newsGrid.innerHTML = ''; // Clear skeleton content
                     let articlesToShow = articles.slice(0, 4); // Show only 4 initially
                     window.allArticles = articles; // Store all articles
                     window.currentArticleIndex = 4;
 
-                    articlesToShow.forEach(article => {
+                    articlesToShow.forEach((article, index) => {
                         const date = new Date(article.createdAt).toLocaleDateString('vi-VN');
                         const imageUrl = article.image || 'https://via.placeholder.com/400x200?text=No+Image';
 
                         const articleHtml = `
-                            <article class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                            <article class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group fade-in" style="animation-delay: ${index * 0.1}s">
                                 <div class="relative h-48 overflow-hidden">
-                                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                        style='background-image: url("${imageUrl}");'>
-                                    </div>
+                                    <img src="${imageUrl}" alt="${article.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
                                     <span class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
                                         ${article.category || 'Tin tức'}
                                     </span>
@@ -659,10 +1014,34 @@
                     // Hide load more button if no more articles
                     if (articles.length <= 4) {
                         document.getElementById('load-more-btn').style.display = 'none';
+                    } else {
+                        document.getElementById('load-more-btn').classList.remove('loading-hidden');
                     }
+                } else {
+                    // No articles - show empty state
+                    newsGrid.innerHTML = `
+                        <div class="col-span-2 text-center py-12 fade-in">
+                            <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-4">article</span>
+                            <p class="text-text-secondary dark:text-gray-400">Chưa có bài viết nào.</p>
+                        </div>
+                    `;
+                    document.getElementById('load-more-btn').style.display = 'none';
                 }
             } catch (error) {
                 console.error('Error fetching articles:', error);
+                // Show error message to user
+                const newsGrid = document.getElementById('news-grid');
+                newsGrid.innerHTML = `
+                    <div class="col-span-2 text-center py-12 fade-in">
+                        <span class="material-symbols-outlined text-6xl text-red-300 dark:text-red-600 mb-4">cloud_off</span>
+                        <p class="text-text-secondary dark:text-gray-400 mb-2">Không thể tải bài viết.</p>
+                        <button onclick="location.reload()" class="text-primary hover:underline text-sm font-medium">
+                            <span class="material-symbols-outlined text-sm align-middle">refresh</span>
+                            Thử lại
+                        </button>
+                    </div>
+                `;
+                document.getElementById('load-more-btn').style.display = 'none';
             }
         });
 
@@ -680,9 +1059,7 @@
                 const articleHtml = `
                     <article class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
                         <div class="relative h-48 overflow-hidden">
-                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                style='background-image: url("${imageUrl}");'>
-                            </div>
+                            <img src="${imageUrl}" alt="${article.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
                             <span class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
                                 ${article.category || 'Tin tức'}
                             </span>
@@ -722,8 +1099,49 @@
                 window.location.href = '/search?q=' + encodeURIComponent(query);
             }
         }
+
+        // ===== BACK TO TOP BUTTON FUNCTIONALITY =====
+        const backToTopBtn = document.getElementById('back-to-top');
+
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Smooth scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // ===== PAGE TRANSITION HANDLING =====
+        // Add smooth transition when navigating to internal links
+        document.querySelectorAll('a[href^="/"], a[href^="./"]').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                // Skip external links and anchor links
+                if (href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript:')) return;
+
+                e.preventDefault();
+                document.body.classList.add('page-exit');
+
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            });
+        });
     </script>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top" onclick="scrollToTop()" aria-label="Về đầu trang" title="Về đầu trang">
+        <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
 
 </body>
 
