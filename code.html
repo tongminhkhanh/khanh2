@@ -50,9 +50,9 @@
 
 <body
     class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased flex flex-col min-h-screen overflow-x-hidden">
-    <!-- Enhanced TopNavBar - Dreamy Pastel Gradient -->
+    <!-- Enhanced TopNavBar - Professional Blue Theme -->
     <header id="main-header"
-        class="sticky top-0 z-50 backdrop-blur-md border-b border-white/40 dark:border-gray-700/50 shadow-lg transition-all duration-300 dreamy-header">
+        class="sticky top-0 z-50 backdrop-blur-md border-b border-blue-400/30 dark:border-blue-900/50 shadow-lg transition-all duration-300 blue-header">
         <div class="px-4 lg:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full transition-all duration-300"
             id="header-inner">
             <!-- Logo & Brand -->
@@ -158,69 +158,56 @@
     </header>
 
     <style>
-        /* ===== DREAMY PASTEL GRADIENT NAVIGATION THEME ===== */
-        /* Sky Blue (#87CEEB) → Cotton Candy Pink (#FFB6C1) → Lavender Purple (#E6E6FA) */
+        /* ===== PROFESSIONAL BLUE NAVIGATION THEME ===== */
+        /* Blue 500 (#3B82F6) → Blue 600 (#2563EB) → Blue 700 (#1D4ED8) */
+        /* Tạo cảm giác tin cậy, an toàn và tập trung - phù hợp cho khu vực học tập */
 
-        /* Animated Gradient Background */
-        @keyframes gradientFlow {
+        /* Subtle Shimmer Animation */
+        @keyframes blueShimmer {
             0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        @keyframes shimmerGlow {
-            0% {
-                opacity: 0.3;
+                opacity: 0;
                 transform: translateX(-100%);
             }
 
             50% {
-                opacity: 0.6;
+                opacity: 0.3;
             }
 
             100% {
-                opacity: 0.3;
+                opacity: 0;
                 transform: translateX(100%);
             }
         }
 
-        @keyframes floatingGlow {
+        @keyframes subtleGlow {
 
             0%,
             100% {
-                box-shadow: 0 4px 20px rgba(135, 206, 235, 0.3), 0 0 40px rgba(255, 182, 193, 0.2);
+                box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
             }
 
             50% {
-                box-shadow: 0 6px 30px rgba(255, 182, 193, 0.4), 0 0 50px rgba(230, 230, 250, 0.3);
+                box-shadow: 0 6px 25px rgba(37, 99, 235, 0.35);
             }
         }
 
-        /* Dreamy Header Base */
-        .dreamy-header {
+        /* Professional Blue Header Base */
+        .blue-header {
             background: linear-gradient(135deg,
-                    rgba(135, 206, 235, 0.92) 0%,
-                    rgba(173, 216, 230, 0.95) 20%,
-                    rgba(255, 182, 193, 0.92) 45%,
-                    rgba(255, 218, 233, 0.95) 65%,
-                    rgba(230, 230, 250, 0.92) 85%,
-                    rgba(200, 200, 255, 0.95) 100%);
-            background-size: 300% 300%;
-            animation: gradientFlow 12s ease infinite;
+                    #3B82F6 0%,
+                    /* Blue 500 */
+                    #2563EB 40%,
+                    /* Blue 600 */
+                    #1D4ED8 70%,
+                    /* Blue 700 */
+                    #1E40AF 100%);
+            /* Blue 800 */
             position: relative;
             overflow: hidden;
         }
 
-        /* Shimmer overlay effect */
-        .dreamy-header::before {
+        /* Subtle shimmer overlay */
+        .blue-header::before {
             content: '';
             position: absolute;
             top: 0;
@@ -229,49 +216,46 @@
             bottom: 0;
             background: linear-gradient(90deg,
                     transparent 0%,
-                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0.15) 50%,
                     transparent 100%);
-            animation: shimmerGlow 8s ease-in-out infinite;
+            animation: blueShimmer 10s ease-in-out infinite;
             pointer-events: none;
         }
 
-        /* Floating glow animation */
-        .dreamy-header::after {
+        /* Subtle glow effect */
+        .blue-header::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            animation: floatingGlow 4s ease-in-out infinite;
+            animation: subtleGlow 5s ease-in-out infinite;
             pointer-events: none;
         }
 
-        /* Dark mode header - deeper, richer colors */
-        .dark .dreamy-header {
+        /* Dark mode header - deeper blue tones */
+        .dark .blue-header {
             background: linear-gradient(135deg,
-                    rgba(45, 75, 110, 0.98) 0%,
-                    rgba(65, 55, 90, 0.98) 35%,
-                    rgba(85, 55, 85, 0.98) 55%,
-                    rgba(60, 50, 85, 0.98) 75%,
-                    rgba(55, 55, 95, 0.98) 100%) !important;
-            background-size: 300% 300%;
-            animation: gradientFlow 12s ease infinite;
+                    #1E3A5F 0%,
+                    #1E3A8A 35%,
+                    #172554 65%,
+                    #0F172A 100%) !important;
         }
 
-        .dark .dreamy-header::before {
+        .dark .blue-header::before {
             background: linear-gradient(90deg,
                     transparent 0%,
-                    rgba(135, 206, 235, 0.15) 50%,
+                    rgba(59, 130, 246, 0.1) 50%,
                     transparent 100%);
         }
 
-        .dark .dreamy-header::after {
+        .dark .blue-header::after {
             animation: none;
-            box-shadow: 0 4px 20px rgba(135, 206, 235, 0.15), 0 0 30px rgba(255, 182, 193, 0.1);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
         }
 
-        /* Navigation Link Styles - Enhanced */
+        /* Navigation Link Styles - Professional Blue */
         .nav-link {
             display: flex;
             align-items: center;
@@ -280,59 +264,51 @@
             border-radius: 9999px;
             font-size: 0.875rem;
             font-weight: 600;
-            color: #1e3a5f;
+            color: rgba(255, 255, 255, 0.95);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
 
         .dark .nav-link {
-            color: #e8edf3;
+            color: rgba(255, 255, 255, 0.9);
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .nav-link:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 100%);
-            color: #1a3550;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             transform: translateY(-2px);
             box-shadow:
-                0 4px 15px rgba(135, 206, 235, 0.4),
-                0 0 20px rgba(255, 182, 193, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+                0 4px 15px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .dark .nav-link:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+            background: rgba(59, 130, 246, 0.3);
             color: white;
             box-shadow:
-                0 4px 15px rgba(135, 206, 235, 0.25),
-                0 0 15px rgba(255, 182, 193, 0.15);
+                0 4px 15px rgba(59, 130, 246, 0.25);
         }
 
         .nav-link.active {
-            background: linear-gradient(135deg,
-                    rgba(135, 206, 235, 0.9) 0%,
-                    rgba(255, 182, 193, 0.9) 45%,
-                    rgba(230, 230, 250, 0.9) 100%);
-            color: #1e3a5f;
+            background: rgba(255, 255, 255, 0.95);
+            color: #1D4ED8;
             box-shadow:
-                0 4px 18px rgba(255, 182, 193, 0.5),
-                0 0 25px rgba(135, 206, 235, 0.4),
+                0 4px 15px rgba(0, 0, 0, 0.15),
+                0 0 20px rgba(255, 255, 255, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            text-shadow: none;
             transform: translateY(-1px);
         }
 
         .dark .nav-link.active {
-            background: linear-gradient(135deg,
-                    rgba(135, 206, 235, 0.75) 0%,
-                    rgba(255, 182, 193, 0.75) 45%,
-                    rgba(230, 230, 250, 0.75) 100%);
-            color: #1a2a3a;
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
             box-shadow:
-                0 4px 18px rgba(135, 206, 235, 0.35),
-                0 0 25px rgba(255, 182, 193, 0.25);
+                0 4px 18px rgba(59, 130, 246, 0.4),
+                0 0 25px rgba(59, 130, 246, 0.2);
         }
 
         .nav-link .nav-icon {
@@ -341,112 +317,101 @@
         }
 
         .nav-link:hover .nav-icon {
-            transform: scale(1.2) rotate(-8deg);
-            filter: drop-shadow(0 2px 4px rgba(255, 182, 193, 0.4));
+            transform: scale(1.15) rotate(-5deg);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         .nav-link.external {
-            background: linear-gradient(135deg,
-                    rgba(230, 230, 250, 0.45) 0%,
-                    rgba(255, 182, 193, 0.35) 50%,
-                    rgba(200, 200, 255, 0.45) 100%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .nav-link.external:hover {
-            background: linear-gradient(135deg,
-                    rgba(230, 230, 250, 0.65) 0%,
-                    rgba(255, 182, 193, 0.55) 50%,
-                    rgba(200, 200, 255, 0.65) 100%);
-            color: #5a3d70;
-            box-shadow:
-                0 4px 15px rgba(230, 230, 250, 0.4),
-                0 0 20px rgba(255, 182, 193, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         }
 
-        /* Login button dreamy pastel style */
+        /* Login button professional blue style */
         #main-header a[href="/admin"] {
-            background: linear-gradient(135deg,
-                    rgba(255, 255, 255, 0.65) 0%,
-                    rgba(255, 255, 255, 0.45) 50%,
-                    rgba(255, 218, 233, 0.55) 100%) !important;
-            color: #1e3a5f !important;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
+            background: rgba(255, 255, 255, 0.95) !important;
+            color: #1D4ED8 !important;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
         }
 
         #main-header a[href="/admin"]:hover {
-            background: linear-gradient(135deg,
-                    rgba(255, 182, 193, 0.85) 0%,
-                    rgba(230, 230, 250, 0.85) 100%) !important;
-            color: #1e3a5f !important;
+            background: white !important;
+            color: #1E40AF !important;
             box-shadow:
-                0 4px 18px rgba(255, 182, 193, 0.5),
-                0 0 20px rgba(230, 230, 250, 0.3);
+                0 4px 18px rgba(0, 0, 0, 0.15),
+                0 0 20px rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
 
         .dark #main-header a[href="/admin"] {
-            background: linear-gradient(135deg,
-                    rgba(255, 255, 255, 0.15) 0%,
-                    rgba(135, 206, 235, 0.1) 100%) !important;
-            color: #e8edf3 !important;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(59, 130, 246, 0.2) !important;
+            color: white !important;
+            border: 1px solid rgba(59, 130, 246, 0.4);
         }
 
         .dark #main-header a[href="/admin"]:hover {
-            background: linear-gradient(135deg,
-                    rgba(135, 206, 235, 0.45) 0%,
-                    rgba(255, 182, 193, 0.45) 100%) !important;
-            box-shadow: 0 4px 15px rgba(135, 206, 235, 0.3);
+            background: rgba(59, 130, 246, 0.4) !important;
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
-        /* Search bar dreamy pastel style */
+        /* Search bar professional blue style */
         #nav-search {
-            background: rgba(255, 255, 255, 0.75) !important;
-            border-color: rgba(255, 255, 255, 0.55) !important;
-            box-shadow: 0 2px 8px rgba(135, 206, 235, 0.15);
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         #nav-search:focus {
-            background: rgba(255, 255, 255, 0.92) !important;
-            border-color: rgba(255, 182, 193, 0.8) !important;
+            background: white !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
             box-shadow:
-                0 0 0 3px rgba(255, 182, 193, 0.3),
-                0 4px 15px rgba(135, 206, 235, 0.2);
+                0 0 0 3px rgba(255, 255, 255, 0.3),
+                0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #nav-search::placeholder {
+            color: #6B7280;
         }
 
         .dark #nav-search {
-            background: rgba(35, 40, 60, 0.85) !important;
-            border-color: rgba(135, 206, 235, 0.25) !important;
+            background: rgba(30, 58, 95, 0.9) !important;
+            border-color: rgba(59, 130, 246, 0.3) !important;
         }
 
         .dark #nav-search:focus {
-            border-color: rgba(255, 182, 193, 0.5) !important;
+            border-color: rgba(59, 130, 246, 0.6) !important;
             box-shadow:
-                0 0 0 3px rgba(255, 182, 193, 0.15),
-                0 4px 12px rgba(135, 206, 235, 0.15);
+                0 0 0 3px rgba(59, 130, 246, 0.2),
+                0 4px 12px rgba(59, 130, 246, 0.15);
         }
 
-        /* Header scrolled state with enhanced glow */
+        /* Header scrolled state */
         #main-header.scrolled {
             box-shadow:
-                0 8px 35px rgba(135, 206, 235, 0.35),
-                0 4px 20px rgba(255, 182, 193, 0.25),
-                0 0 50px rgba(230, 230, 250, 0.15);
+                0 8px 30px rgba(29, 78, 216, 0.3),
+                0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .dark #main-header.scrolled {
             box-shadow:
-                0 8px 30px rgba(135, 206, 235, 0.15),
-                0 4px 15px rgba(255, 182, 193, 0.1),
-                0 0 40px rgba(60, 60, 100, 0.2);
+                0 8px 30px rgba(59, 130, 246, 0.2),
+                0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* Hamburger Menu Animation */
         .hamburger-line {
             width: 20px;
             height: 2px;
-            background: currentColor;
+            background: white;
             border-radius: 2px;
             transition: all 0.3s ease;
         }
@@ -483,20 +448,42 @@
             width: 2rem;
         }
 
-        /* Mobile search bar pastel style */
+        /* Mobile search bar blue style */
         #nav-search-mobile {
-            background: rgba(255, 255, 255, 0.85) !important;
-            border-color: rgba(255, 182, 193, 0.4) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
         }
 
         #nav-search-mobile:focus {
-            border-color: rgba(255, 182, 193, 0.7) !important;
-            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2);
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
         }
 
         .dark #nav-search-mobile {
-            background: rgba(35, 40, 60, 0.9) !important;
-            border-color: rgba(135, 206, 235, 0.3) !important;
+            background: rgba(30, 58, 95, 0.9) !important;
+            border-color: rgba(59, 130, 246, 0.3) !important;
+        }
+
+        /* Brand text color adjustment for blue header */
+        .blue-header .text-text-main,
+        .blue-header h2,
+        .blue-header p {
+            color: white !important;
+        }
+
+        .blue-header .text-text-secondary,
+        .blue-header .text-xs {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        /* Search icon color */
+        .blue-header .material-symbols-outlined.text-gray-400 {
+            color: #6B7280 !important;
+        }
+
+        /* Mobile buttons color */
+        .blue-header button .material-symbols-outlined {
+            color: white !important;
         }
     </style>
 
