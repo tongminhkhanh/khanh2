@@ -433,20 +433,34 @@
         let mediaSelectCallback = null;
         let mediaSelectInputId = null;
 
-        // Editor.js Init
-        document.addEventListener('DOMContentLoaded', function () {
-            initEditor();
-        });
+        // Editor.js Init - Only init when dashboard is visible
+        let editorReady = false;
 
         function initEditor(data = null) {
+            const holder = document.getElementById('editorjs');
+            if (!holder) {
+                console.log('Editor holder not found');
+                return;
+            }
+            
+            // Clear the holder first
+            holder.innerHTML = '';
+            
             if (editor) {
-                editor.destroy();
+                try {
+                    editor.destroy();
+                } catch(e) {
+                    console.log('Editor destroy error:', e);
+                }
                 editor = null;
             }
+            
+            editorReady = false;
+            
             editor = new EditorJS({
                 holder: 'editorjs',
                 placeholder: 'Nhap noi dung bai viet...',
-                data: data,
+                data: data || { blocks: [] },
                 tools: {
                     header: { class: Header, config: { levels: [2, 3, 4], defaultLevel: 2 } },
                     list: { class: List, inlineToolbar: true },
@@ -474,6 +488,10 @@
                     code: CodeTool,
                     table: Table,
                     delimiter: Delimiter
+                },
+                onReady: () => {
+                    editorReady = true;
+                    console.log('Editor.js is ready');
                 }
             });
         }
@@ -512,12 +530,65 @@
 
         function htmlToEditorBlocks(html) {
             if (!html) return { blocks: [] };
-            // Simple conversion - treat as paragraph
-            const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-            if (!text) return { blocks: [] };
-            return {
-                blocks: [{ type: 'paragraph', data: { text: text } }]
-            };
+            
+            const blocks = [];
+            
+            // Create a temporary div to parse HTML
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            
+            // Get all paragraphs, headings, etc.
+            div.childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent.trim();
+                    if (text) {
+                        blocks.push({ type: 'paragraph', data: { text: text } });
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    const tagName = node.tagName.toLowerCase();
+                    const textContent = node.innerHTML || node.textContent;
+                    
+                    if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tagName)) {
+                        blocks.push({
+                            type: 'header',
+                            data: { text: textContent, level: parseInt(tagName[1]) }
+                        });
+                    } else if (tagName === 'ul' || tagName === 'ol') {
+                        const items = Array.from(node.querySelectorAll('li')).map(li => li.textContent);
+                        blocks.push({
+                            type: 'list',
+                            data: { style: tagName === 'ol' ? 'ordered' : 'unordered', items: items }
+                        });
+                    } else if (tagName === 'img') {
+                        blocks.push({
+                            type: 'image',
+                            data: { file: { url: node.src }, caption: node.alt || '' }
+                        });
+                    } else if (tagName === 'blockquote') {
+                        blocks.push({
+                            type: 'quote',
+                            data: { text: textContent, caption: '' }
+                        });
+                    } else if (tagName === 'pre') {
+                        blocks.push({
+                            type: 'code',
+                            data: { code: node.textContent }
+                        });
+                    } else if (tagName === 'hr') {
+                        blocks.push({ type: 'delimiter', data: {} });
+                    } else if (textContent.trim()) {
+                        // Default to paragraph for other elements
+                        blocks.push({ type: 'paragraph', data: { text: textContent } });
+                    }
+                }
+            });
+            
+            // If no blocks were created, add the raw HTML as paragraph
+            if (blocks.length === 0 && html.trim()) {
+                blocks.push({ type: 'paragraph', data: { text: html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() } });
+            }
+            
+            return { blocks: blocks };
         }
 
         // Auth Functions
@@ -534,6 +605,10 @@
                 document.getElementById('user-role').innerText = currentUser.role ? currentUser.role.toUpperCase() : 'USER';
                 document.getElementById('user-avatar').innerText = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'A';
             }
+            // Init Editor.js after dashboard is visible
+            setTimeout(() => {
+                initEditor();
+            }, 100);
             fetchArticles();
         }
 
