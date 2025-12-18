@@ -50,56 +50,250 @@
 
 <body
     class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased flex flex-col min-h-screen overflow-x-hidden">
-    <!-- TopNavBar -->
-    <header
-        class="sticky top-0 z-50 bg-surface-light dark:bg-surface-dark border-b border-[#e7edf3] dark:border-gray-700 shadow-sm">
-        <div class="px-4 lg:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full">
+    <!-- Enhanced TopNavBar -->
+    <header id="main-header"
+        class="sticky top-0 z-50 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-[#e7edf3] dark:border-gray-700 shadow-sm transition-all duration-300">
+        <div class="px-4 lg:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full transition-all duration-300"
+            id="header-inner">
+            <!-- Logo & Brand -->
             <div class="flex items-center gap-8">
-                <div class="flex items-center gap-4 text-text-main dark:text-white">
-                    <img src="/public/logo_school.jpg" alt="Logo Truong Tieu hoc It Ong"
-                        class="h-10 w-10 rounded-full object-cover" loading="lazy"
-                        onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IT+ONG&background=2b8cee&color=fff&size=40&rounded=true'">
-                    <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] hidden md:block">Trường Tiểu học Ít
-                        Ong</h2>
-                </div>
-                <nav class="hidden lg:flex items-center gap-9">
-                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
-                        href="/">Trang chủ</a>
-                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
-                        href="/gioi-thieu">Giới thiệu</a>
-                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
-                        href="/thong-bao">Thông báo</a>
-                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
-                        href="/hoat-dong">Hoạt động</a>
-                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
-                        href="/thanh-tich">Thành tích</a>
-                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
-                        href="/su-kien">Sự kiện</a>
-                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300"
-                        href="http://thitong.site" target="_blank">Trợ lý AI</a>
+                <a href="/" class="flex items-center gap-3 text-text-main dark:text-white group">
                     <div class="relative">
-                        <input type="text" id="nav-search" placeholder="Tìm kiếm..."
-                            class="text-sm px-3 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:border-primary w-40"
-                            onkeypress="if(event.key==='Enter') searchArticles()">
-                        <button onclick="searchArticles()"
-                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary">
-                            <span class="material-symbols-outlined text-base">search</span>
-                        </button>
+                        <img src="/public/logo_school.jpg" alt="Logo Truong Tieu hoc It Ong"
+                            class="h-10 w-10 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/50 transition-all duration-300"
+                            loading="lazy"
+                            onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IT+ONG&background=2b8cee&color=fff&size=40&rounded=true'">
+                        <span
+                            class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></span>
                     </div>
+                    <div class="hidden md:block">
+                        <h2
+                            class="text-lg font-bold leading-tight tracking-[-0.015em] group-hover:text-primary transition-colors">
+                            Trường Tiểu học Ít Ong</h2>
+                        <p class="text-xs text-text-secondary dark:text-gray-400">Mường La, Sơn La</p>
+                    </div>
+                </a>
+
+                <!-- Main Navigation -->
+                <nav class="hidden lg:flex items-center gap-1" id="main-nav">
+                    <a class="nav-link" href="/" data-page="home">
+                        <span class="material-symbols-outlined nav-icon">home</span>
+                        <span>Trang chủ</span>
+                    </a>
+                    <a class="nav-link" href="/gioi-thieu" data-page="about">
+                        <span class="material-symbols-outlined nav-icon">info</span>
+                        <span>Giới thiệu</span>
+                    </a>
+                    <a class="nav-link" href="/thong-bao" data-page="news">
+                        <span class="material-symbols-outlined nav-icon">campaign</span>
+                        <span>Thông báo</span>
+                    </a>
+                    <a class="nav-link" href="/hoat-dong" data-page="activities">
+                        <span class="material-symbols-outlined nav-icon">celebration</span>
+                        <span>Hoạt động</span>
+                    </a>
+                    <a class="nav-link" href="/thanh-tich" data-page="achievements">
+                        <span class="material-symbols-outlined nav-icon">emoji_events</span>
+                        <span>Thành tích</span>
+                    </a>
+                    <a class="nav-link" href="/su-kien" data-page="events">
+                        <span class="material-symbols-outlined nav-icon">event</span>
+                        <span>Sự kiện</span>
+                    </a>
+                    <a class="nav-link external" href="http://thitong.site" target="_blank">
+                        <span class="material-symbols-outlined nav-icon">smart_toy</span>
+                        <span>Trợ lý AI</span>
+                        <span class="material-symbols-outlined text-xs ml-0.5">open_in_new</span>
+                    </a>
                 </nav>
             </div>
-            <div class="flex items-center gap-4">
-                <button class="lg:hidden text-text-main dark:text-white">
-                    <span class="material-symbols-outlined">menu</span>
-                </button>
-                <div class="hidden md:flex items-center justify-end gap-8">
-                    <a href="/admin"
-                        class="text-sm font-medium leading-normal hover:text-primary transition-colors text-text-main dark:text-gray-300">Đăng
-                        nhập</a>
+
+            <!-- Right Side: Search & Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Search Bar -->
+                <div class="hidden md:flex items-center relative group">
+                    <div class="relative">
+                        <input type="text" id="nav-search" placeholder="Tìm kiếm bài viết..."
+                            class="text-sm pl-10 pr-4 py-2 rounded-full border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-primary focus:bg-white dark:focus:bg-gray-700 w-48 focus:w-64 transition-all duration-300"
+                            onkeypress="if(event.key==='Enter') searchArticles()">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">search</span>
+                    </div>
                 </div>
+
+                <!-- Mobile Search Toggle -->
+                <button class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    onclick="toggleMobileSearch()">
+                    <span class="material-symbols-outlined text-text-main dark:text-white">search</span>
+                </button>
+
+                <!-- Admin Login Button -->
+                <a href="/admin"
+                    class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary text-primary hover:text-white font-medium text-sm transition-all duration-300">
+                    <span class="material-symbols-outlined text-lg">login</span>
+                    <span>Đăng nhập</span>
+                </a>
+
+                <!-- Hamburger Menu Button (Mobile) -->
+                <button
+                    class="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group"
+                    onclick="openMobileMenu()" id="hamburger-btn">
+                    <span class="hamburger-line top"></span>
+                    <span class="hamburger-line middle"></span>
+                    <span class="hamburger-line bottom"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (Hidden by default) -->
+        <div id="mobile-search-bar" class="hidden md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="nav-search-mobile" placeholder="Tìm kiếm bài viết..."
+                    class="w-full text-sm pl-10 pr-4 py-2.5 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-primary"
+                    onkeypress="if(event.key==='Enter') searchArticles()">
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">search</span>
             </div>
         </div>
     </header>
+
+    <style>
+        /* Navigation Link Styles */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4c739a;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .dark .nav-link {
+            color: #9ca3af;
+        }
+
+        .nav-link:hover {
+            background: rgba(43, 140, 238, 0.1);
+            color: #2b8cee;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #2b8cee 0%, #1a6bb8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(43, 140, 238, 0.3);
+        }
+
+        .nav-link .nav-icon {
+            font-size: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-link:hover .nav-icon {
+            transform: scale(1.1);
+        }
+
+        .nav-link.external {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .nav-link.external:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            color: #764ba2;
+        }
+
+        /* Hamburger Menu Animation */
+        .hamburger-line {
+            width: 20px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-line.top {
+            transform: translateY(-6px);
+        }
+
+        .hamburger-line.bottom {
+            transform: translateY(6px);
+        }
+
+        #hamburger-btn.active .hamburger-line.top {
+            transform: translateY(0) rotate(45deg);
+        }
+
+        #hamburger-btn.active .hamburger-line.middle {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        #hamburger-btn.active .hamburger-line.bottom {
+            transform: translateY(0) rotate(-45deg);
+        }
+
+        /* Header Shrink on Scroll */
+        #main-header.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #main-header.scrolled #header-inner {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        #main-header.scrolled img {
+            height: 2rem;
+            width: 2rem;
+        }
+    </style>
+
+    <script>
+        // Active Navigation State
+        function setActiveNav() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link[data-page]');
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href');
+
+                if (currentPath === '/' && href === '/') {
+                    link.classList.add('active');
+                } else if (href !== '/' && currentPath.startsWith(href)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Header Shrink on Scroll
+        function handleHeaderScroll() {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // Toggle Mobile Search
+        function toggleMobileSearch() {
+            const searchBar = document.getElementById('mobile-search-bar');
+            searchBar.classList.toggle('hidden');
+            if (!searchBar.classList.contains('hidden')) {
+                document.getElementById('nav-search-mobile').focus();
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setActiveNav();
+            window.addEventListener('scroll', handleHeaderScroll);
+        });
+    </script>
     <!-- Urgent Notice Bar -->
     <div id="urgent-notice-container" class="hidden w-full py-2">
         <div class="max-w-[1200px] mx-auto px-4">
