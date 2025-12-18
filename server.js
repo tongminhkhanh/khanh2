@@ -187,15 +187,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-    const fs = require('fs');
-    const adminPath = path.join(__dirname, 'admin.html');
-    let html = fs.readFileSync(adminPath, 'utf8');
-
-    // Inject TinyMCE API key from environment
-    const tinymceApiKey = process.env.TINYMCE_API_KEY || 'no-api-key';
-    html = html.replace('TINYMCE_API_KEY', tinymceApiKey);
-
-    res.send(html);
+    res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 app.get('/bai-viet/:id', async (req, res) => {
