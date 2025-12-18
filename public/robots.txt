@@ -1,0 +1,24 @@
+# robots.txt for Truong Tieu hoc It Ong
+# https://thitong.io.vn
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://thitong.io.vn/sitemap.xml
+
+# Disallow admin and API routes
+Disallow: /admin
+Disallow: /api/
+Disallow: /uploads/
+
+# Allow important pages
+Allow: /bai-viet/
+Allow: /thong-bao
+Allow: /hoat-dong
+Allow: /thanh-tich
+Allow: /su-kien
+Allow: /gioi-thieu
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

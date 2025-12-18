@@ -128,6 +128,59 @@ const authorizeRole = (roles) => {
     };
 };
 
+// SEO Routes - Sitemap and Robots.txt
+app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'robots.txt'));
+});
+
+app.get('/sitemap.xml', async (req, res) => {
+    try {
+        const baseUrl = 'https://thitong.io.vn';
+        const articles = await Article.find({ status: 'published' }).sort({ createdAt: -1 });
+        const staticPages = await StaticPage.find({ isPublished: true });
+
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+        // Homepage
+        xml += `  <url>\n    <loc>${baseUrl}/</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+
+        // Static pages
+        const staticRoutes = [
+            { path: '/gioi-thieu', priority: '0.8' },
+            { path: '/thong-bao', priority: '0.9' },
+            { path: '/hoat-dong', priority: '0.8' },
+            { path: '/thanh-tich', priority: '0.8' },
+            { path: '/su-kien', priority: '0.8' }
+        ];
+
+        staticRoutes.forEach(route => {
+            xml += `  <url>\n    <loc>${baseUrl}${route.path}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${route.priority}</priority>\n  </url>\n`;
+        });
+
+        // Articles
+        articles.forEach(article => {
+            const lastmod = article.updatedAt ? new Date(article.updatedAt).toISOString().split('T')[0] : new Date(article.createdAt).toISOString().split('T')[0];
+            xml += `  <url>\n    <loc>${baseUrl}/bai-viet/${article._id}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+        });
+
+        // Dynamic static pages
+        staticPages.forEach(page => {
+            const lastmod = page.updatedAt ? new Date(page.updatedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+            xml += `  <url>\n    <loc>${baseUrl}/${page.slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
+        });
+
+        xml += '</urlset>';
+
+        res.header('Content-Type', 'application/xml');
+        res.header('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+        res.send(xml);
+    } catch (error) {
+        console.error('Error generating sitemap:', error);
+        res.status(500).send('Error generating sitemap');
+    }
+});
+
 // Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'code.html'));
@@ -137,8 +190,57 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-app.get('/bai-viet/:id', (req, res) => {
-    res.sendFile(path.join(__dirname, 'article.html'));
+app.get('/bai-viet/:id', async (req, res) => {
+    try {
+        const article = await Article.findById(req.params.id);
+        if (!article) {
+            return res.sendFile(path.join(__dirname, 'article.html'));
+        }
+
+        // Read the article.html template
+        let html = fs.readFileSync(path.join(__dirname, 'article.html'), 'utf8');
+
+        // Prepare meta content
+        const title = article.title + ' - Trường Tiểu học Ít Ong';
+        const description = article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : 'Bài viết từ Trường Tiểu học Ít Ong';
+        const image = article.image || 'https://thitong.io.vn/public/logo_school.jpg';
+        const url = `https://thitong.io.vn/bai-viet/${article._id}`;
+
+        // Replace title tag
+        html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+
+        // Inject OG meta tags right after <head>
+        const ogTags = `
+    <!-- Dynamic SEO Meta Tags -->
+    <meta name="description" content="${description.replace(/"/g, '&quot;')}" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="${url}" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:title" content="${title.replace(/"/g, '&quot;')}" />
+    <meta property="og:description" content="${description.replace(/"/g, '&quot;')}" />
+    <meta property="og:image" content="${image}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:site_name" content="Trường Tiểu học Ít Ong" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${title.replace(/"/g, '&quot;')}" />
+    <meta name="twitter:description" content="${description.replace(/"/g, '&quot;')}" />
+    <meta name="twitter:image" content="${image}" />
+`;
+
+        html = html.replace('<head>', '<head>' + ogTags);
+
+        res.send(html);
+    } catch (error) {
+        console.error('Error rendering article:', error);
+        res.sendFile(path.join(__dirname, 'article.html'));
+    }
 });
 
 // Category Routes
