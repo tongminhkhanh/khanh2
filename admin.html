@@ -5,72 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Truong Tieu hoc It Ong</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js" defer></script>
     <style>
         body {
             font-family: 'Lexend', sans-serif;
         }
 
-        /* Tiptap Styles */
-        .ProseMirror {
-            outline: none;
-            min-height: 150px;
-        }
-
-        .ProseMirror p.is-editor-empty:first-child::before {
-            content: attr(data-placeholder);
-            float: left;
-            color: #adb5bd;
-            pointer-events: none;
-            height: 0;
-        }
-
-        /* Toolbar Styles */
-        .editor-toolbar {
-            border-bottom: 1px solid #e5e7eb;
-            padding: 0.5rem;
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            background: #f9fafb;
-            border-radius: 0.375rem 0.375rem 0 0;
-        }
-
-        .editor-content {
-            border: 1px solid #e5e7eb;
-            border-top: none;
-            border-radius: 0 0 0.375rem 0.375rem;
-            padding: 1rem;
-            background: white;
-            min-height: 200px;
-        }
-
-        .editor-btn {
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-            color: #374151;
-            background: white;
-            border: 1px solid #d1d5db;
-            cursor: pointer;
-        }
-
-        .editor-btn:hover {
-            background: #f3f4f6;
-        }
-
-        .editor-btn.is-active {
-            background: #e5e7eb;
-            color: #111827;
-            font-weight: 600;
+        .tox-tinymce {
+            border-radius: 0.375rem;
         }
     </style>
 </head>
 
-<body>
-
-
+<body class="bg-gray-100 min-h-screen">
+    <!-- Auth Modal -->
     <div id="auth-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
         <div class="bg-white p-8 rounded-lg shadow-lg w-96">
             <h2 class="text-2xl font-bold mb-4 text-center">Dang nhap Admin</h2>
@@ -180,9 +130,24 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Hinh anh (URL)</label>
                                 <div class="flex gap-2">
-                                    <button type="button" id="cancel-edit"
-                                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
+                                    <input type="text" id="image"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                    <button type="button" onclick="openMediaSelector('image')"
+                                        class="mt-1 bg-gray-200 px-3 rounded hover:bg-gray-300">Chon</button>
                                 </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
+                                <textarea id="content" rows="10"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu bai
+                                    viet</button>
+                                <button type="button" id="cancel-edit"
+                                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
+                            </div>
                         </form>
                     </div>
                     <div class="bg-white shadow sm:rounded-lg overflow-hidden">
@@ -271,8 +236,7 @@
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit"
-                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu
-                                    su
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu su
                                     kien</button>
                                 <button type="button" id="cancel-event-edit"
                                     class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
@@ -329,15 +293,30 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Slug (URL)</label>
-                                    </label>
+                                    <input type="text" id="page-slug"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-50"
+                                        required>
                                 </div>
-                                <div class="flex gap-2">
-                                    <button type="submit"
-                                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu
-                                        trang</button>
-                                    <button type="button" id="cancel-page-edit"
-                                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
-                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
+                                <textarea id="page-content-editor" rows="10"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="page-published"
+                                        class="form-checkbox h-5 w-5 text-blue-600">
+                                    <span class="ml-2 text-gray-700">Xuat ban ngay</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu
+                                    trang</button>
+                                <button type="button" id="cancel-page-edit"
+                                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden">Huy</button>
+                            </div>
                         </form>
                     </div>
                     <div class="bg-white shadow sm:rounded-lg overflow-hidden">
@@ -413,8 +392,7 @@
                         </div>
                         <div class="flex items-center justify-between mt-4">
                             <p class="text-sm text-gray-500">Da chon: <span id="slider-count"
-                                    class="font-bold text-blue-600">0</span>
-                                anh</p>
+                                    class="font-bold text-blue-600">0</span> anh</p>
                             <button type="button" onclick="saveSliderImages()"
                                 class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Luu cai dat
                                 slider</button>
@@ -436,7 +414,7 @@
         </div>
     </div>
 
-    <script type="module">
+    <script>
         const API_URL = '/api';
         let token = localStorage.getItem('admin-token');
         let currentUser = null;
@@ -444,144 +422,19 @@
         let mediaSelectCallback = null;
         let mediaSelectInputId = null;
 
-        // Tiptap Imports
-        import { Editor } from 'https://esm.sh/@tiptap/core';
-        import StarterKit from 'https://esm.sh/@tiptap/starter-kit';
-        import Image from 'https://esm.sh/@tiptap/extension-image';
-        import Link from 'https://esm.sh/@tiptap/extension-link';
-        import Placeholder from 'https://esm.sh/@tiptap/extension-placeholder';
-
-        let articleEditor = null;
-        let pageEditor = null;
-
-        // Initialize Editors
-        function initEditors() {
-            // Article Editor
-            if (!articleEditor) {
-                articleEditor = new Editor({
-                    element: document.querySelector('#editor-content'),
-                    extensions: [
-                        StarterKit,
-                        Image,
-                        Link.configure({ openOnClick: false }),
-                        Placeholder.configure({ placeholder: 'Nhap noi dung bai viet...' })
-                    ],
-                    content: '',
-                    onUpdate: ({ editor }) => {
-                        updateToolbar('toolbar-content', editor);
-                    },
-                    onSelectionUpdate: ({ editor }) => {
-                        updateToolbar('toolbar-content', editor);
-                    }
+        // TinyMCE Init
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof tinymce !== 'undefined') {
+                tinymce.init({
+                    selector: '#content, #page-content-editor',
+                    height: 400,
+                    menubar: false,
+                    plugins: 'lists link image code',
+                    toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image | code',
+                    file_picker_callback: function (cb) { openMediaSelector(null, cb); }
                 });
-                createToolbar('toolbar-content', articleEditor);
             }
-
-            // Page Editor
-            if (!pageEditor) {
-                pageEditor = new Editor({
-                    element: document.querySelector('#editor-page'),
-                    extensions: [
-                        StarterKit,
-                        Image,
-                        Link.configure({ openOnClick: false }),
-                        Placeholder.configure({ placeholder: 'Nhap noi dung trang...' })
-                    ],
-                    content: '',
-                    onUpdate: ({ editor }) => {
-                        updateToolbar('toolbar-page', editor);
-                    },
-                    onSelectionUpdate: ({ editor }) => {
-                        updateToolbar('toolbar-page', editor);
-                    }
-                });
-                createToolbar('toolbar-page', pageEditor);
-            }
-        }
-
-        // Create Toolbar UI
-        function createToolbar(toolbarId, editor) {
-            const toolbar = document.getElementById(toolbarId);
-            if (!toolbar) return;
-
-            const buttons = [
-                {
-                    label: 'B', action: () => editor.chain().focus().toggleBold().run(), isActive: () =>
-                        editor.isActive('bold')
-                },
-                {
-                    label: 'I', action: () => editor.chain().focus().toggleItalic().run(), isActive: () =>
-                        editor.isActive('italic')
-                },
-                {
-                    label: 'H1', action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(), isActive:
-                        () => editor.isActive('heading', { level: 1 })
-                },
-                {
-                    label: 'H2', action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), isActive:
-                        () => editor.isActive('heading', { level: 2 })
-                },
-                {
-                    label: 'List', action: () => editor.chain().focus().toggleBulletList().run(), isActive: () =>
-                        editor.isActive('bulletList')
-                },
-                {
-                    label: 'Num', action: () => editor.chain().focus().toggleOrderedList().run(), isActive: () =>
-                        editor.isActive('orderedList')
-                },
-                {
-                    label: 'Quote', action: () => editor.chain().focus().toggleBlockquote().run(), isActive: () =>
-                        editor.isActive('blockquote')
-                },
-                { label: 'Img', action: () => openMediaSelectorForEditor(editor), isActive: () => false },
-                { label: 'Undo', action: () => editor.chain().focus().undo().run(), isActive: () => false },
-                { label: 'Redo', action: () => editor.chain().focus().redo().run(), isActive: () => false },
-            ];
-
-            toolbar.innerHTML = '';
-            buttons.forEach(btn => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'editor-btn';
-                button.innerText = btn.label;
-                button.onclick = btn.action;
-                button.dataset.label = btn.label;
-                toolbar.appendChild(button);
-            });
-        }
-
-        // Update Toolbar State
-        function updateToolbar(toolbarId, editor) {
-            const toolbar = document.getElementById(toolbarId);
-            if (!toolbar) return;
-            Array.from(toolbar.children).forEach(btn => {
-                const label = btn.dataset.label;
-                const isActive = editor.isActive(label.toLowerCase()) || (label === 'H1' &&
-                    editor.isActive('heading', { level: 1 })) || (label === 'H2' && editor.isActive('heading', {
-                        level: 2
-                    })) || (label === 'List' && editor.isActive('bulletList')) || (label === 'Num' &&
-                        editor.isActive('orderedList')) || (label === 'Quote' && editor.isActive('blockquote'));
-
-                if (isActive) btn.classList.add('is-active');
-                else btn.classList.remove('is-active');
-            });
-        }
-
-        // Media Selector for Editor
-        window.openMediaSelectorForEditor = function (editor) {
-            openMediaSelector(null, (url) => {
-                if (url) {
-                    editor.chain().focus().setImage({ src: url }).run();
-                }
-            });
-        }
-
-        // Expose editors to window for legacy functions
-        window.getArticleContent = () => articleEditor ? articleEditor.getHTML() : '';
-        window.setArticleContent = (html) => articleEditor && articleEditor.commands.setContent(html);
-        window.getPageContent = () => pageEditor ? pageEditor.getHTML() : '';
-        window.setPageContent = (html) => pageEditor && pageEditor.commands.setContent(html);
-
+        });
 
         // Auth Functions
         function showAuth() {
@@ -594,13 +447,10 @@
             document.getElementById('dashboard').classList.remove('hidden');
             if (currentUser) {
                 document.getElementById('user-name').innerText = currentUser.username;
-                document.getElementById('user-role').innerText = currentUser.role ?
-                    currentUser.role.toUpperCase() : 'USER';
-                document.getElementById('user-avatar').innerText = currentUser.username ?
-                    currentUser.username.charAt(0).toUpperCase() : 'A';
+                document.getElementById('user-role').innerText = currentUser.role ? currentUser.role.toUpperCase() : 'USER';
+                document.getElementById('user-avatar').innerText = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'A';
             }
             fetchArticles();
-            initEditors(); // Init editors when dashboard is shown
         }
 
         function showError(msg) {
@@ -657,8 +507,7 @@
         Object.keys(navLinks).forEach(id => {
             document.getElementById(id).addEventListener('click', (e) => {
                 e.preventDefault();
-                document.querySelectorAll('aside nav a').forEach(l => l.classList.remove('bg-blue-600',
-                    'text-white'));
+                document.querySelectorAll('aside nav a').forEach(l => l.classList.remove('bg-blue-600', 'text-white'));
                 document.querySelectorAll('aside nav a').forEach(l => l.classList.add('text-gray-300'));
                 e.currentTarget.classList.remove('text-gray-300');
                 e.currentTarget.classList.add('bg-blue-600', 'text-white');
@@ -680,20 +529,16 @@
                 const articles = await res.json();
                 const tbody = document.getElementById('articles-list');
                 tbody.innerHTML = articles.map(a => `
-                <tr>
-                    <td class="px-6 py-4">${a.image ? `<img src="${a.image}" class="h-10 w-10 rounded object-cover">` :
-                        '<div class="h-10 w-10 rounded bg-gray-200"></div>'}</td>
-                    <td class="px-6 py-4 font-medium">${a.title}</td>
-                    <td class="px-6 py-4 text-gray-500">${a.category}</td>
-                    <td class="px-6 py-4"><span
-                            class="px-2 py-1 text-xs rounded-full ${a.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${a.status}</span>
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <button onclick="editArticle('${a._id}')"
-                            class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
-                        <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="px-6 py-4">${a.image ? `<img src="${a.image}" class="h-10 w-10 rounded object-cover">` : '<div class="h-10 w-10 rounded bg-gray-200"></div>'}</td>
+                        <td class="px-6 py-4 font-medium">${a.title}</td>
+                        <td class="px-6 py-4 text-gray-500">${a.category}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${a.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${a.status}</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
+                        </td>
+                    </tr>
                 `).join('');
             } catch (err) { console.error(err); }
         }
@@ -701,9 +546,10 @@
         document.getElementById('article-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('article-id').value;
+            const contentEditor = tinymce.get('content');
             const article = {
                 title: document.getElementById('title').value,
-                content: window.getArticleContent(),
+                content: contentEditor ? contentEditor.getContent() : document.getElementById('content').value,
                 category: document.getElementById('category').value,
                 image: document.getElementById('image').value,
                 status: document.getElementById('status').value,
@@ -727,7 +573,9 @@
             if (a) {
                 document.getElementById('article-id').value = a._id;
                 document.getElementById('title').value = a.title;
-                window.setArticleContent(a.content || '');
+                const contentEditor = tinymce.get('content');
+                if (contentEditor) contentEditor.setContent(a.content || '');
+                else document.getElementById('content').value = a.content || '';
                 document.getElementById('category').value = a.category;
                 document.getElementById('image').value = a.image || '';
                 document.getElementById('status').value = a.status;
@@ -739,12 +587,7 @@
 
         window.deleteArticle = async (id) => {
             if (confirm('Ban co chac chan muon xoa bai viet nay?')) {
-                await fetch(`${API_URL}/articles/${id}`, {
-                    method: 'DELETE', headers: {
-                        'Authorization': `Bearer
-                ${token}`
-                    }
-                });
+                await fetch(`${API_URL}/articles/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                 fetchArticles();
             }
         };
@@ -754,30 +597,28 @@
         function resetArticleForm() {
             document.getElementById('article-form').reset();
             document.getElementById('article-id').value = '';
-            window.setArticleContent('');
+            const contentEditor = tinymce.get('content');
+            if (contentEditor) contentEditor.setContent('');
             document.getElementById('cancel-edit').classList.add('hidden');
         }
 
         // Events
         async function fetchEvents() {
             try {
-                const res = await fetch(`${API_URL}/events`);
+                const res = await fetch(`${API_URL}/admin/events`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const events = await res.json();
                 const tbody = document.getElementById('events-list');
                 tbody.innerHTML = events.map(e => `
-                <tr>
-                    <td class="px-6 py-4 font-medium">${e.title}</td>
-                    <td class="px-6 py-4 text-gray-500">${new Date(e.start).toLocaleString()}</td>
-                    <td class="px-6 py-4 text-gray-500">${e.location}</td>
-                    <td class="px-6 py-4"><span
-                            class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished
-                        ? 'Da xuat ban' : 'Nhap'}</span></td>
-                    <td class="px-6 py-4 text-right">
-                        <button onclick="editEvent('${e._id}')"
-                            class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
-                        <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="px-6 py-4 font-medium">${e.title}</td>
+                        <td class="px-6 py-4 text-gray-500">${new Date(e.startDate).toLocaleDateString('vi-VN')}</td>
+                        <td class="px-6 py-4 text-gray-500">${e.location || '-'}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished ? 'Da xuat ban' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editEvent('${e._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
+                        </td>
+                    </tr>
                 `).join('');
             } catch (err) { console.error(err); }
         }
@@ -787,12 +628,12 @@
             const id = document.getElementById('event-id').value;
             const event = {
                 title: document.getElementById('event-title').value,
+                description: document.getElementById('event-description').value,
+                startDate: document.getElementById('event-start').value,
+                endDate: document.getElementById('event-end').value,
                 type: document.getElementById('event-type').value,
-                start: document.getElementById('event-start').value,
-                end: document.getElementById('event-end').value,
                 location: document.getElementById('event-location').value,
                 color: document.getElementById('event-color').value,
-                description: document.getElementById('event-description').value,
                 isPublished: document.getElementById('event-published').checked
             };
             const method = id ? 'PUT' : 'POST';
@@ -808,17 +649,18 @@
         });
 
         window.editEvent = async (id) => {
-            const res = await fetch(`${API_URL}/events/${id}`);
-            const e = await res.json();
+            const res = await fetch(`${API_URL}/admin/events`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const events = await res.json();
+            const e = events.find(x => x._id === id);
             if (e) {
                 document.getElementById('event-id').value = e._id;
                 document.getElementById('event-title').value = e.title;
-                document.getElementById('event-type').value = e.type;
-                document.getElementById('event-start').value = e.start.slice(0, 16);
-                document.getElementById('event-end').value = e.end.slice(0, 16);
-                document.getElementById('event-location').value = e.location;
-                document.getElementById('event-color').value = e.color;
                 document.getElementById('event-description').value = e.description || '';
+                document.getElementById('event-start').value = new Date(e.startDate).toISOString().slice(0, 16);
+                document.getElementById('event-end').value = new Date(e.endDate).toISOString().slice(0, 16);
+                document.getElementById('event-type').value = e.type || 'public';
+                document.getElementById('event-location').value = e.location || '';
+                document.getElementById('event-color').value = e.color || '#3788d8';
                 document.getElementById('event-published').checked = e.isPublished;
                 document.getElementById('cancel-event-edit').classList.remove('hidden');
                 window.scrollTo(0, 0);
@@ -827,12 +669,7 @@
 
         window.deleteEvent = async (id) => {
             if (confirm('Ban co chac chan muon xoa su kien nay?')) {
-                await fetch(`${API_URL}/events/${id}`, {
-                    method: 'DELETE', headers: {
-                        'Authorization': `Bearer
-                ${token}`
-                    }
-                });
+                await fetch(`${API_URL}/events/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                 fetchEvents();
             }
         };
@@ -842,37 +679,29 @@
         function resetEventForm() {
             document.getElementById('event-form').reset();
             document.getElementById('event-id').value = '';
+            document.getElementById('event-color').value = '#3788d8';
             document.getElementById('cancel-event-edit').classList.add('hidden');
         }
 
         // Media
         async function fetchMedia() {
             try {
-                const res = await fetch(`${API_URL}/media`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const res = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const media = await res.json();
                 const grid = document.getElementById('media-grid');
                 grid.innerHTML = media.map(m => `
-                <div class="relative group">
-                    <img src="${m.path}" class="w-full h-32 object-cover rounded shadow">
-                    <div
-                        class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity rounded">
-                        <button onclick="copyMediaUrl('${m.path}')"
-                            class="text-white bg-blue-600 px-2 py-1 rounded text-xs">Copy</button>
-                        <button onclick="deleteMedia('${m._id}')"
-                            class="text-white bg-red-600 px-2 py-1 rounded text-xs">Xoa</button>
+                    <div class="relative group">
+                        <img src="${m.path}" class="w-full h-24 object-cover rounded cursor-pointer" onclick="copyMediaUrl('${m.path}')">
+                        <button onclick="deleteMedia('${m._id}')" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs opacity-0 group-hover:opacity-100 transition-opacity">&times;</button>
                     </div>
-                </div>
                 `).join('');
             } catch (err) { console.error(err); }
         }
 
         document.getElementById('media-upload').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
+            if (e.target.files[0]) {
                 const formData = new FormData();
-                formData.append('image', file);
+                formData.append('file', e.target.files[0]);
                 try {
                     const res = await fetch(`${API_URL}/upload`, {
                         method: 'POST',
@@ -892,12 +721,7 @@
 
         window.deleteMedia = async (id) => {
             if (confirm('Ban co chac chan muon xoa anh nay?')) {
-                await fetch(`${API_URL}/media/${id}`, {
-                    method: 'DELETE', headers: {
-                        'Authorization': `Bearer
-                ${token}`
-                    }
-                });
+                await fetch(`${API_URL}/media/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                 fetchMedia();
             }
         };
@@ -910,14 +734,10 @@
             modal.classList.remove('hidden');
             const grid = document.getElementById('modal-media-grid');
             try {
-                const res = await fetch(`${API_URL}/media`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const res = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const media = await res.json();
                 grid.innerHTML = media.map(m => `
-                <img src="${m.path}"
-                    class="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500"
-                    onclick="selectMedia('${m.path}')">
+                    <img src="${m.path}" class="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500" onclick="selectMedia('${m.path}')">
                 `).join('');
             } catch (err) { console.error(err); }
         };
@@ -940,27 +760,19 @@
         // Pages
         async function fetchPages() {
             try {
-                const res = await fetch(`${API_URL}/admin/static-pages`, {
-                    headers: {
-                        'Authorization': `Bearer
-                ${token}`
-                    }
-                });
+                const res = await fetch(`${API_URL}/admin/static-pages`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const pages = await res.json();
                 const tbody = document.getElementById('pages-list');
                 tbody.innerHTML = pages.map(p => `
-                <tr>
-                    <td class="px-6 py-4 font-medium">${p.title}</td>
-                    <td class="px-6 py-4 text-gray-500">${p.slug}</td>
-                    <td class="px-6 py-4"><span
-                            class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished
-                        ? 'Da xuat ban' : 'Nhap'}</span></td>
-                    <td class="px-6 py-4 text-right">
-                        <button onclick="editPage('${p._id}')"
-                            class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
-                        <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="px-6 py-4 font-medium">${p.title}</td>
+                        <td class="px-6 py-4 text-gray-500">${p.slug}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished ? 'Da xuat ban' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editPage('${p._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
+                        </td>
+                    </tr>
                 `).join('');
             } catch (err) { console.error(err); }
         }
@@ -974,10 +786,11 @@
         document.getElementById('page-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('page-id').value;
+            const contentEditor = tinymce.get('page-content-editor');
             const page = {
                 title: document.getElementById('page-title-input').value,
                 slug: document.getElementById('page-slug').value,
-                content: window.getPageContent(),
+                content: contentEditor ? contentEditor.getContent() : document.getElementById('page-content-editor').value,
                 isPublished: document.getElementById('page-published').checked
             };
             const method = id ? 'PUT' : 'POST';
@@ -993,19 +806,16 @@
         });
 
         window.editPage = async (id) => {
-            const res = await fetch(`${API_URL}/admin/static-pages`, {
-                headers: {
-                    'Authorization': `Bearer
-                ${token}`
-                }
-            });
+            const res = await fetch(`${API_URL}/admin/static-pages`, { headers: { 'Authorization': `Bearer ${token}` } });
             const pages = await res.json();
             const p = pages.find(x => x._id === id);
             if (p) {
                 document.getElementById('page-id').value = p._id;
                 document.getElementById('page-title-input').value = p.title;
                 document.getElementById('page-slug').value = p.slug;
-                window.setPageContent(p.content || '');
+                const contentEditor = tinymce.get('page-content-editor');
+                if (contentEditor) contentEditor.setContent(p.content || '');
+                else document.getElementById('page-content-editor').value = p.content || '';
                 document.getElementById('page-published').checked = p.isPublished;
                 document.getElementById('cancel-page-edit').classList.remove('hidden');
                 window.scrollTo(0, 0);
@@ -1014,11 +824,7 @@
 
         window.deletePage = async (id) => {
             if (confirm('Ban co chac chan muon xoa trang nay?')) {
-                await fetch(`${API_URL}/admin/static-pages/${id}`, {
-                    method: 'DELETE', headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                await fetch(`${API_URL}/admin/static-pages/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                 fetchPages();
             }
         };
@@ -1028,7 +834,8 @@
         function resetPageForm() {
             document.getElementById('page-form').reset();
             document.getElementById('page-id').value = '';
-            window.setPageContent('');
+            const contentEditor = tinymce.get('page-content-editor');
+            if (contentEditor) contentEditor.setContent('');
             document.getElementById('cancel-page-edit').classList.add('hidden');
         }
 
@@ -1067,84 +874,83 @@
 
                 const grid = document.getElementById('slider-images-grid');
                 grid.innerHTML = media.map(m => `
-                <div class="relative cursor-pointer" onclick="toggleSliderImage('${m.path}')">
-                    <img src="${m.path}"
-                        class="w-full h-24 object-cover rounded ${selectedSliderImages.includes(m.path) ? 'ring-4 ring-blue-500' : ''}">
-                    ${selectedSliderImages.includes(m.path) ? '<div class="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">✓</div>' : ''}
-                </div >
-                    `).join('');
+                    <div class="relative cursor-pointer" onclick="toggleSliderImage('${m.path}')">
+                        <img src="${m.path}" class="w-full h-24 object-cover rounded ${selectedSliderImages.includes(m.path) ? 'ring-4 ring-blue-500' : ''}">
+                        ${selectedSliderImages.includes(m.path) ? '<div class="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">✓</div>' : ''}
+                    </div>
+                `).join('');
                 document.getElementById('slider-count').textContent = selectedSliderImages.length;
-                } catch (err) { console.error(err); }
-                }
+            } catch (err) { console.error(err); }
+        }
 
-                window.toggleSliderImage = (url) => {
-                if (selectedSliderImages.includes(url)) {
+        window.toggleSliderImage = (url) => {
+            if (selectedSliderImages.includes(url)) {
                 selectedSliderImages = selectedSliderImages.filter(u => u !== url);
-                } else {
+            } else {
                 selectedSliderImages.push(url);
-                }
-                loadSliderImagesSelection();
-                };
+            }
+            loadSliderImagesSelection();
+        };
 
-                window.saveSliderImages = async function () {
-                try {
-                const res = await fetch(`${ API_URL } / admin / settings / slider_images`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token }` },
-                body: JSON.stringify({ value: { images: selectedSliderImages }, description: 'Slider' })
+        window.saveSliderImages = async function () {
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/slider_images`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: { images: selectedSliderImages }, description: 'Slider' })
                 });
                 if (res.ok) alert('Da luu slider!');
                 else { const d = await res.json(); alert('Loi: ' + d.message); }
-                } catch (e) { console.error(e); }
-                };
+            } catch (e) { console.error(e); }
+        };
 
-                document.getElementById('urgent-notice-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const data = {
+        document.getElementById('urgent-notice-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
                 isEnabled: document.getElementById('urgent-enabled').checked,
                 content: document.getElementById('urgent-content').value,
                 link: document.getElementById('urgent-link').value
-                };
-                try {
-                const res = await fetch(`${ API_URL } / admin / settings / urgent_notice`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token }` },
-                body: JSON.stringify({ value: data, description: 'Thong bao khan' })
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/urgent_notice`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Thong bao khan' })
                 });
                 if (res.ok) alert('Da luu cai dat!');
                 else { const d = await res.json(); alert('Loi: ' + d.message); }
-                } catch (err) { console.error(err); }
-                });
+            } catch (err) { console.error(err); }
+        });
 
-                document.getElementById('principal-message-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const data = {
+        document.getElementById('principal-message-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
                 title: document.getElementById('principal-title').value,
                 content: document.getElementById('principal-content').value
-                };
-                try {
-                const res = await fetch(`${ API_URL } / admin / settings / principal_message`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token }` },
-                body: JSON.stringify({ value: data, description: 'Thong diep Hieu Truong' })
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/principal_message`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Thong diep Hieu Truong' })
                 });
                 if (res.ok) alert('Da luu thong diep!');
                 else { const d = await res.json(); alert('Loi: ' + d.message); }
-                } catch (err) { console.error(err); }
-                });
+            } catch (err) { console.error(err); }
+        });
 
-                // Init
-                if (token) {
-                try {
+        // Init
+        if (token) {
+            try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 currentUser = payload;
                 showDashboard();
-                } catch (e) {
+            } catch (e) {
                 showAuth();
-                }
-                } else {
-                showAuth();
-                }
+            }
+        } else {
+            showAuth();
+        }
     </script>
 </body>
 
