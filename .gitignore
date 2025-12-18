@@ -37,3 +37,4 @@ build/
 # Optional: package-lock.json (nếu muốn lock versions thì comment dòng này)
 # package-lock.json
 .vercel
+.env*.local
