@@ -238,10 +238,18 @@
                                         placeholder="VD: Hoi truong, San truong...">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Mau sac</label>
-                                    <input type="color" id="event-color"
-                                        class="mt-1 block h-10 w-full border border-gray-300 rounded-md shadow-sm"
-                                        value="#3788d8">
+                                    <label class="block text-sm font-medium text-gray-700">Danh muc su kien</label>
+                                    <select id="event-category"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        onchange="updateEventColor()">
+                                        <option value="exam" data-color="#dc2626">🔴 Lich thi / Kiem tra</option>
+                                        <option value="activity" data-color="#2563eb">🔵 Hoat dong ngoai khoa / Chao co
+                                        </option>
+                                        <option value="holiday" data-color="#16a34a">🟢 Lich nghi le / Hop phu huynh
+                                        </option>
+                                        <option value="other" data-color="#6b7280">⚪ Khac</option>
+                                    </select>
+                                    <input type="hidden" id="event-color" value="#dc2626">
                                 </div>
                             </div>
                             <div>
@@ -685,7 +693,8 @@
                 document.getElementById('event-end').value = new Date(e.endDate).toISOString().slice(0, 16);
                 document.getElementById('event-type').value = e.type || 'public';
                 document.getElementById('event-location').value = e.location || '';
-                document.getElementById('event-color').value = e.color || '#3788d8';
+                setEventCategoryByColor(e.color || '#dc2626');
+                document.getElementById('event-color').value = e.color || '#dc2626';
                 document.getElementById('event-published').checked = e.isPublished;
                 document.getElementById('event-target-grade').value = e.targetGrade || '';
                 document.getElementById('event-target-class').value = e.targetClass || '';
@@ -707,7 +716,8 @@
         function resetEventForm() {
             document.getElementById('event-form').reset();
             document.getElementById('event-id').value = '';
-            document.getElementById('event-color').value = '#3788d8';
+            document.getElementById('event-category').value = 'exam';
+            document.getElementById('event-color').value = '#dc2626';
             document.getElementById('event-target-grade').value = '';
             document.getElementById('event-target-class').value = '';
             document.getElementById('event-target-container').style.display = 'none';
@@ -723,6 +733,25 @@
 
         // Add event listener for type change
         document.getElementById('event-type').addEventListener('change', toggleEventTargetFields);
+
+        // Update color based on category selection
+        function updateEventColor() {
+            const select = document.getElementById('event-category');
+            const color = select.options[select.selectedIndex].getAttribute('data-color');
+            document.getElementById('event-color').value = color;
+        }
+
+        // Set category dropdown based on saved color
+        function setEventCategoryByColor(color) {
+            const select = document.getElementById('event-category');
+            const colorMap = {
+                '#dc2626': 'exam',
+                '#2563eb': 'activity',
+                '#16a34a': 'holiday',
+                '#6b7280': 'other'
+            };
+            select.value = colorMap[color] || 'other';
+        }
 
         // Media
         async function fetchMedia() {
