@@ -194,6 +194,28 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- Target Grade/Class (only for class events) -->
+                            <div id="event-target-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                style="display: none;">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Khoi lop tham du</label>
+                                    <select id="event-target-grade"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="">Tat ca cac khoi</option>
+                                        <option value="1">Khoi 1</option>
+                                        <option value="2">Khoi 2</option>
+                                        <option value="3">Khoi 3</option>
+                                        <option value="4">Khoi 4</option>
+                                        <option value="5">Khoi 5</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Lop cu the (tuy chon)</label>
+                                    <input type="text" id="event-target-class"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        placeholder="VD: 1A, 2B, 3C...">
+                                </div>
+                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Ngay bat dau</label>
@@ -626,15 +648,18 @@
         document.getElementById('event-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('event-id').value;
+            const eventType = document.getElementById('event-type').value;
             const event = {
                 title: document.getElementById('event-title').value,
                 description: document.getElementById('event-description').value,
                 startDate: document.getElementById('event-start').value,
                 endDate: document.getElementById('event-end').value,
-                type: document.getElementById('event-type').value,
+                type: eventType,
                 location: document.getElementById('event-location').value,
                 color: document.getElementById('event-color').value,
-                isPublished: document.getElementById('event-published').checked
+                isPublished: document.getElementById('event-published').checked,
+                targetGrade: eventType === 'class' ? document.getElementById('event-target-grade').value : null,
+                targetClass: eventType === 'class' ? document.getElementById('event-target-class').value : null
             };
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_URL}/events/${id}` : `${API_URL}/events`;
@@ -662,6 +687,9 @@
                 document.getElementById('event-location').value = e.location || '';
                 document.getElementById('event-color').value = e.color || '#3788d8';
                 document.getElementById('event-published').checked = e.isPublished;
+                document.getElementById('event-target-grade').value = e.targetGrade || '';
+                document.getElementById('event-target-class').value = e.targetClass || '';
+                toggleEventTargetFields();
                 document.getElementById('cancel-event-edit').classList.remove('hidden');
                 window.scrollTo(0, 0);
             }
@@ -680,8 +708,21 @@
             document.getElementById('event-form').reset();
             document.getElementById('event-id').value = '';
             document.getElementById('event-color').value = '#3788d8';
+            document.getElementById('event-target-grade').value = '';
+            document.getElementById('event-target-class').value = '';
+            document.getElementById('event-target-container').style.display = 'none';
             document.getElementById('cancel-event-edit').classList.add('hidden');
         }
+
+        // Toggle target fields visibility based on event type
+        function toggleEventTargetFields() {
+            const eventType = document.getElementById('event-type').value;
+            const container = document.getElementById('event-target-container');
+            container.style.display = eventType === 'class' ? 'grid' : 'none';
+        }
+
+        // Add event listener for type change
+        document.getElementById('event-type').addEventListener('change', toggleEventTargetFields);
 
         // Media
         async function fetchMedia() {
@@ -901,7 +942,7 @@
                 const isSelected = selectedSliderImages.some(path => imgSrc.includes(path) || imgSrc.endsWith(path));
                 const img = div.querySelector('img');
                 const checkmark = div.querySelector('div');
-                
+
                 if (isSelected) {
                     img.classList.add('ring-4', 'ring-blue-500');
                     if (!checkmark) {

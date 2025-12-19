@@ -2,14 +2,22 @@
  * Script kiểm tra và sửa trạng thái bài viết trên MongoDB Atlas
  */
 
+require('dotenv').config();
 const mongoose = require('mongoose');
 const Article = require('./models/Article');
 
-const ATLAS_URI = 'mongodb+srv://tongminhkhanh_db_user:bTq4BsHXGon5yTEK@cluster0.drxwj28.mongodb.net/school-news?retryWrites=true&w=majority';
+// Sử dụng biến môi trường thay vì hardcode password
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+    console.error('❌ Lỗi: Thiếu biến môi trường MONGODB_URI!');
+    console.error('   Hãy tạo file .env và thêm MONGODB_URI=<chuỗi kết nối của bạn>');
+    process.exit(1);
+}
 
 async function checkArticles() {
     console.log('🔄 Đang kết nối MongoDB Atlas...');
-    await mongoose.connect(ATLAS_URI);
+    await mongoose.connect(MONGODB_URI);
     console.log('✅ Đã kết nối!\n');
 
     // Lấy tất cả bài viết
