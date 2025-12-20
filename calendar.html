@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/public/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lịch Sự Kiện - Trường Tiểu học Ít Ong</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -431,12 +432,10 @@
         }
 
         // Close modal when clicking outside
-        document.getElementById('event-modal').addEventListener('cl
-
-ick', function (e) {
+        document.getElementById('event-modal').addEventListener('click', function (e) {
             if (e.target === this) {
-            closeEventModal();
-        }
+                closeEventModal();
+            }
         });
     </script>
 </body>

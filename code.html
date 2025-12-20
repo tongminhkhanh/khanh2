@@ -4,6 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/public/logo.png">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Tin tức và Sự kiện - Trường Tiểu học Ít Ong</title>
 
@@ -127,7 +128,7 @@
 
             <!-- Right Side: Search & Actions -->
             <div class="flex items-center gap-3">
-                
+
 
                 <!-- Admin Login Button -->
                 <a href="/admin"
@@ -147,7 +148,7 @@
             </div>
         </div>
 
-        
+
     </header>
     <!-- Scrolling Ticker Bar -->
     <div id="ticker-bar" class="w-full border-b border-white/10 py-2.5 overflow-hidden">
@@ -166,7 +167,8 @@
             <!-- Search Bar (Desktop) -->
             <div class="hidden md:block w-72 shrink-0">
                 <div class="relative group">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-base group-focus-within:text-white transition-colors">search</span>
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-base group-focus-within:text-white transition-colors">search</span>
                     <input type="text" id="nav-search" placeholder="Tìm kiếm bài viết..."
                         class="text-xs pl-10 pr-4 py-1.5 rounded-full border border-white/20 bg-white/10 text-white placeholder-white/60 focus:outline-none focus:bg-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10 w-full transition-all"
                         onkeypress="if(event.key==='Enter') searchArticles()">
@@ -180,11 +182,12 @@
         </div>
         <!-- Mobile Search Input (Hidden by default) -->
         <div id="mobile-search-bar" class="hidden px-4 pb-2 pt-2 bg-blue-700/50 md:hidden">
-             <div class="relative">
+            <div class="relative">
                 <input type="text" id="nav-search-mobile" placeholder="Tìm kiếm..."
                     class="w-full text-sm pl-10 pr-4 py-2 rounded-full border border-white/20 bg-white/10 text-white placeholder-white/60 focus:outline-none focus:bg-white/20"
                     onkeypress="if(event.key==='Enter') searchArticles()">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-sm">search</span>
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-sm">search</span>
             </div>
         </div>
     </div>
@@ -516,7 +519,7 @@
         .blue-header button .material-symbols-outlined {
             color: white !important;
         }
-    
+
         /* Ticker Bar Styles */
         #ticker-bar {
             background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
@@ -530,8 +533,13 @@
         }
 
         @keyframes ticker-scroll {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100%); }
+            0% {
+                transform: translateX(100vw);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
         }
 
         .animate-ticker {
@@ -646,7 +654,7 @@
             animation: fadeIn 0.4s ease-out forwards;
         }
 
-                /* Hide load-more button while loading */
+        /* Hide load-more button while loading */
         #load-more-btn.loading-hidden {
             display: none !important;
         }
