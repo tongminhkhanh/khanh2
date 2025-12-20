@@ -558,21 +558,6 @@
             </div>
         </div>
     </div>
-    <!-- Image Slider Banner -->
-    <div id="image-slider-container"
-        class="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 py-4 overflow-hidden">
-        <div class="max-w-[1440px] mx-auto px-4 lg:px-10">
-            <div class="relative overflow-hidden rounded-xl">
-                <div id="image-slider" class="flex gap-4">
-                    <!-- Skeleton loading for slider -->
-                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
-                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
-                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
-                    <div class="h-40 w-72 bg-gray-200 dark:bg-gray-700 rounded-xl flex-shrink-0 skeleton-shimmer"></div>
-                </div>
-            </div>
-        </div>
-    </div>
     <style>
         /* Skeleton Loading Animation */
         @keyframes shimmer {
@@ -619,63 +604,7 @@
             animation: fadeIn 0.4s ease-out forwards;
         }
 
-        /* Slider skeleton */
-        .slider-skeleton {
-            display: flex;
-            gap: 16px;
-            padding: 0 16px;
-        }
-
-        .slider-skeleton-item {
-            height: 160px;
-            width: 280px;
-            flex-shrink: 0;
-            border-radius: 12px;
-        }
-
-        #image-slider-container {
-            min-height: 180px;
-        }
-
-        #image-slider {
-            display: flex;
-            gap: 16px;
-        }
-
-        #image-slider img {
-            height: 160px;
-            width: 280px;
-            object-fit: cover;
-            flex-shrink: 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        #image-slider img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        @keyframes scroll-left {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .slider-animate {
-            animation: scroll-left 30s linear infinite;
-        }
-
-        #image-slider-container:hover .slider-animate {
-            animation-play-state: paused;
-        }
-
-        /* Hide load-more button while loading */
+                /* Hide load-more button while loading */
         #load-more-btn.loading-hidden {
             display: none !important;
         }

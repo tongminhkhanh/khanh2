@@ -418,23 +418,6 @@
                                 thong diep</button>
                         </form>
                     </div>
-                    <!-- Slider Images Section -->
-                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-2">Anh Slider Trang Chu</h2>
-                        <p class="text-sm text-gray-600 mb-4">Chon cac anh se hien thi trong slider o trang chu. Bam vao
-                            anh de chon/bo chon.</p>
-                        <div id="slider-images-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-4">
-                            <p class="text-gray-400 text-sm col-span-full">Dang tai anh...</p>
-                        </div>
-                        <div class="flex items-center justify-between mt-4">
-                            <p class="text-sm text-gray-500">Da chon: <span id="slider-count"
-                                    class="font-bold text-blue-600">0</span> anh</p>
-                            <button type="button" onclick="saveSliderImages()"
-                                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Luu cai dat
-                                slider</button>
-                        </div>
-                    </div>
-                </div>
             </main>
         </div>
     </div>
@@ -454,7 +437,7 @@
         const API_URL = '/api';
         let token = localStorage.getItem('admin-token');
         let currentUser = null;
-        let selectedSliderImages = [];
+        
         let mediaSelectCallback = null;
         let mediaSelectInputId = null;
 
@@ -554,7 +537,7 @@
                 if (id === 'nav-events') fetchEvents();
                 if (id === 'nav-media') fetchMedia();
                 if (id === 'nav-pages') fetchPages();
-                if (id === 'nav-settings') { fetchSettings(); loadSliderImagesSelection(); }
+                if (id === 'nav-settings') { fetchSettings(); }
             });
         });
 
@@ -937,74 +920,7 @@
             } catch (err) { console.error(err); }
         }
 
-        // Slider Images
-        async function loadSliderImagesSelection() {
-            try {
-                const [mediaRes, sliderRes] = await Promise.all([
-                    fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } }),
-                    fetch(`${API_URL}/settings/slider_images`)
-                ]);
-                const media = await mediaRes.json();
-                const sliderData = await sliderRes.json();
-                selectedSliderImages = (sliderData.value && sliderData.value.images) || [];
 
-                const grid = document.getElementById('slider-images-grid');
-                grid.innerHTML = media.map(m => `
-                    <div class="relative cursor-pointer" onclick="toggleSliderImage('${m.path}')">
-                        <img src="${m.path}" class="w-full h-24 object-cover rounded ${selectedSliderImages.includes(m.path) ? 'ring-4 ring-blue-500' : ''}">
-                        ${selectedSliderImages.includes(m.path) ? '<div class="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">✓</div>' : ''}
-                    </div>
-                `).join('');
-                document.getElementById('slider-count').textContent = selectedSliderImages.length;
-            } catch (err) { console.error(err); }
-        }
-
-        window.toggleSliderImage = (url) => {
-            if (selectedSliderImages.includes(url)) {
-                selectedSliderImages = selectedSliderImages.filter(u => u !== url);
-            } else {
-                selectedSliderImages.push(url);
-            }
-            // Update UI directly without re-fetching from server
-            updateSliderImagesUI();
-        };
-
-        function updateSliderImagesUI() {
-            const grid = document.getElementById('slider-images-grid');
-            const images = grid.querySelectorAll('[onclick^="toggleSliderImage"]');
-            images.forEach(div => {
-                const imgSrc = div.querySelector('img').src;
-                const isSelected = selectedSliderImages.some(path => imgSrc.includes(path) || imgSrc.endsWith(path));
-                const img = div.querySelector('img');
-                const checkmark = div.querySelector('div');
-
-                if (isSelected) {
-                    img.classList.add('ring-4', 'ring-blue-500');
-                    if (!checkmark) {
-                        const mark = document.createElement('div');
-                        mark.className = 'absolute top-1 right-1 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs';
-                        mark.textContent = '✓';
-                        div.appendChild(mark);
-                    }
-                } else {
-                    img.classList.remove('ring-4', 'ring-blue-500');
-                    if (checkmark) checkmark.remove();
-                }
-            });
-            document.getElementById('slider-count').textContent = selectedSliderImages.length;
-        }
-
-        window.saveSliderImages = async function () {
-            try {
-                const res = await fetch(`${API_URL}/admin/settings/slider_images`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ value: { images: selectedSliderImages }, description: 'Slider' })
-                });
-                if (res.ok) alert('Da luu slider!');
-                else { const d = await res.json(); alert('Loi: ' + d.message); }
-            } catch (e) { console.error(e); }
-        };
 
         document.getElementById('urgent-notice-form').addEventListener('submit', async (e) => {
             e.preventDefault();

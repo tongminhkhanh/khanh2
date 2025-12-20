@@ -360,17 +360,6 @@ app.post('/api/upload', authenticateToken, upload.single('file'), async (req, re
     }
 });
 
-// Public Media for Slider (no auth required)
-app.get('/api/public/media', async (req, res) => {
-    try {
-        const media = await Media.find().sort({ createdAt: -1 }).limit(20);
-        res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=59');
-        res.json(media);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
 app.get('/api/media', authenticateToken, async (req, res) => {
     try {
         const media = await Media.find().sort({ createdAt: -1 });
