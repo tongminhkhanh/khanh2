@@ -376,6 +376,23 @@
 
                 <!-- Settings Section -->
                 <div id="section-settings" class="hidden">
+
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Cai dat Thanh thong bao (Ticker)</h2>
+                        <form id="ticker-settings-form" class="space-y-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="ticker-enabled" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                <label for="ticker-enabled" class="ml-2 block text-sm text-gray-900">Bat thanh thong bao</label>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung hien thi</label>
+                                <textarea id="ticker-content-input" rows="3"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="Nhap noi dung chay tren thanh ticker..."></textarea>
+                            </div>
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Luu cai dat</button>
+                        </form>
+                    </div>
+
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
                         <h2 class="text-xl font-bold mb-4">Cai dat chung</h2>
                         <form id="urgent-notice-form" class="space-y-4">
@@ -559,6 +576,15 @@
                         </td>
                     </tr>
                 `).join('');
+            
+                // Ticker Settings
+                const tickerRes = await fetch(`${API_URL}/settings/ticker_settings`);
+                const tickerData = await tickerRes.json();
+                if (tickerData.value) {
+                    document.getElementById('ticker-enabled').checked = tickerData.value.isEnabled || false;
+                    document.getElementById('ticker-content-input').value = tickerData.value.content || '';
+                }
+
             } catch (err) { console.error(err); }
         }
 
@@ -901,6 +927,14 @@
         // Settings
         async function fetchSettings() {
             try {
+                // Ticker Settings
+                const tickerRes = await fetch(`${API_URL}/settings/ticker_settings`);
+                const tickerData = await tickerRes.json();
+                if (tickerData.value) {
+                    document.getElementById('ticker-enabled').checked = tickerData.value.isEnabled || false;
+                    document.getElementById('ticker-content-input').value = tickerData.value.content || '';
+                }
+
                 // Urgent Notice
                 const urgentRes = await fetch(`${API_URL}/settings/urgent_notice`);
                 const urgentData = await urgentRes.json();
@@ -953,6 +987,24 @@
                     body: JSON.stringify({ value: data, description: 'Thong diep Hieu Truong' })
                 });
                 if (res.ok) alert('Da luu thong diep!');
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        
+        document.getElementById('ticker-settings-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                isEnabled: document.getElementById('ticker-enabled').checked,
+                content: document.getElementById('ticker-content-input').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/ticker_settings`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Cai dat Ticker Bar' })
+                });
+                if (res.ok) alert('Da luu cai dat Ticker!');
                 else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
