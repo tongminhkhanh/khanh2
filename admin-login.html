@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Login</title>
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://fonts.googleapis.com https://fonts.gstatic.com;">
+
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind CSS (Local) -->
+    <script src="/public/tailwindcss.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #324d67;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #405d7a;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#111418] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden transition-colors duration-200">
+    <!-- Main Layout Container -->
+    <div class="relative flex min-h-screen w-full flex-col justify-center items-center p-4">
+        <!-- Header / Navigation (Simplified for Login Context) -->
+        <header
+            class="absolute top-0 w-full flex items-center justify-between px-6 py-4 lg:px-10 border-b border-transparent dark:border-[#233648]">
+            <div class="flex items-center gap-3">
+                <div
+                    class="flex items-center justify-center size-10 rounded-lg bg-primary/10 text-primary dark:text-white dark:bg-transparent">
+                    <span class="material-symbols-outlined !text-[28px]">shield_person</span>
+                </div>
+                <h2 class="text-lg font-bold leading-tight tracking-tight dark:text-white text-[#111418]">Admin Portal
+                </h2>
+            </div>
+            <!-- Optional: Help or Status link -->
+            <a class="text-sm font-medium text-slate-500 hover:text-primary dark:text-[#92adc9] dark:hover:text-white transition-colors"
+                href="#">
+                System Status
+            </a>
+        </header>
+        <!-- Centered Login Content -->
+        <div class="w-full max-w-[480px] flex flex-col gap-8 pt-16 sm:pt-0">
+            <!-- Hero Section -->
+            <div class="flex flex-col gap-4 text-center sm:text-left">
+                <h1
+                    class="text-3xl font-black leading-tight tracking-[-0.033em] text-[#111418] dark:text-white sm:text-4xl">
+                    Secure Admin Access
+                </h1>
+                <p class="text-base font-normal leading-normal text-slate-500 dark:text-[#92adc9]">
+                    Welcome back. Please enter your credentials to access the system operations dashboard.
+                </p>
+            </div>
+            <!-- Login Form -->
+            <form action="#" class="flex flex-col gap-5" onsubmit="event.preventDefault();" id="login-form">
+                <!-- Username Field -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-base font-medium leading-normal text-[#111418] dark:text-white">
+                        Username or Email
+                    </label>
+                    <div class="relative">
+                        <input
+                            class="form-input w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base font-normal text-[#111418] placeholder-slate-400 focus:border-primary focus:ring-1 focus:ring-primary dark:border-[#324d67] dark:bg-[#192633] dark:text-white dark:placeholder-[#92adc9] dark:focus:border-primary"
+                            placeholder="admin@company.com" required="" type="email" id="username"
+                            autocomplete="username" />
+                        <div
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#92adc9] pointer-events-none flex items-center">
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Password Field -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-base font-medium leading-normal text-[#111418] dark:text-white">
+                            Password
+                        </label>
+                        <a class="text-sm font-medium text-primary hover:underline decoration-2 underline-offset-2"
+                            href="#">
+                            Forgot password?
+                        </a>
+                    </div>
+                    <div
+                        class="relative flex w-full items-center rounded-xl border border-slate-200 bg-white dark:border-[#324d67] dark:bg-[#192633]">
+                        <input
+                            class="form-input w-full flex-1 rounded-xl rounded-r-none border-none bg-transparent px-4 py-3.5 text-base font-normal text-[#111418] placeholder-slate-400 focus:ring-0 dark:text-white dark:placeholder-[#92adc9]"
+                            placeholder="••••••••" required="" type="password" id="password"
+                            autocomplete="current-password" />
+                        <button
+                            class="flex items-center justify-center px-4 text-slate-400 transition-colors hover:text-primary dark:text-[#92adc9] dark:hover:text-white"
+                            type="button" id="toggle-password">
+                            <span class="material-symbols-outlined">visibility</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Action Button -->
+                <div class="flex flex-col gap-4 pt-2">
+                    <button
+                        class="flex w-full items-center justify-center rounded-xl bg-primary px-6 py-3.5 text-base font-bold leading-normal text-white shadow-lg shadow-primary/20 transition-all hover:bg-blue-600 hover:shadow-primary/40 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-[#101922]"
+                        id="login-btn">
+                        <span class="material-symbols-outlined mr-2 text-[20px]">login</span>
+                        Sign In
+                    </button>
+                </div>
+                <!-- Additional Options -->
+                <div class="flex items-center gap-3 pt-2">
+                    <input
+                        class="size-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-[#324d67] dark:bg-[#192633] dark:checked:bg-primary"
+                        id="remember" type="checkbox" />
+                    <label class="select-none text-base font-medium text-[#111418] dark:text-white" for="remember">
+                        Keep me logged in
+                    </label>
+                </div>
+            </form>
+            <!-- Security Badge / Footer -->
+            <div
+                class="mt-4 flex items-center justify-center gap-2 rounded-lg bg-slate-100 py-3 text-sm text-slate-500 dark:bg-[#192633]/50 dark:text-[#92adc9]">
+                <span class="material-symbols-outlined text-[18px]">lock</span>
+                <span>256-bit SSL Secure Connection</span>
+            </div>
+        </div>
+    </div>
+    <!-- Background Decoration (Optional Subtle Gradient) -->
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div
+            class="absolute -left-[10%] -top-[10%] size-[500px] rounded-full bg-primary/5 blur-[100px] dark:bg-primary/10">
+        </div>
+        <div
+            class="absolute -right-[10%] -bottom-[10%] size-[500px] rounded-full bg-blue-500/5 blur-[100px] dark:bg-blue-500/10">
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <!-- Scripts -->
+    <script src="/public/security-helpers.js"></script>
+    <script>
+        // Simple Toast Implementation
+        const Toast = {
+            show: (message, type = 'info') => {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                const colors = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    info: 'bg-blue-500',
+                    warning: 'bg-yellow-500'
+                };
+
+                toast.className = `${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full flex items-center gap-2`;
+                toast.innerHTML = `
+                    <span class="material-symbols-outlined text-sm">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info'}</span>
+                    <span class="font-medium">${message}</span>
+                `;
+
+                container.appendChild(toast);
+
+                // Animate in
+                requestAnimationFrame(() => {
+                    toast.classList.remove('translate-x-full');
+                });
+
+                // Auto remove
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full', 'opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            },
+            success: (msg) => Toast.show(msg, 'success'),
+            error: (msg) => Toast.show(msg, 'error')
+        };
+
+        // API Helper
+        const API = {
+            baseUrl: '/api',
+            post: async (endpoint, body) => {
+                try {
+                    const res = await fetch(`${API.baseUrl}${endpoint}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.message || 'Request failed');
+                    return data;
+                } catch (err) {
+                    throw err;
+                }
+            }
+        };
+
+        // Login Logic
+        const handleLogin = async (e) => {
+            e.preventDefault();
+
+            const btn = document.getElementById('login-btn');
+            const originalContent = btn.innerHTML;
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            // Basic Validation
+            if (!usernameInput.value || !passwordInput.value) {
+                return Toast.error('Please enter both username and password');
+            }
+
+            // Loading State
+            btn.disabled = true;
+            btn.innerHTML = `<span class="material-symbols-outlined animate-spin mr-2">progress_activity</span> Signing in...`;
+
+            try {
+                const data = await API.post('/login', {
+                    username: usernameInput.value,
+                    password: passwordInput.value
+                });
+
+                // Success
+                Toast.success('Login successful! Redirecting...');
+
+                // Securely store token
+                if (window.SecureStorage) {
+                    SecureStorage.setToken(data.token);
+                } else {
+                    // Fallback if security-helpers not loaded
+                    sessionStorage.setItem('admin-token', data.token);
+                }
+
+                // Redirect
+                setTimeout(() => {
+                    window.location.href = '/admin';
+                }, 1000);
+
+            } catch (err) {
+                Toast.error(err.message || 'Login failed. Please check your credentials.');
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if already logged in
+            const token = window.SecureStorage ? SecureStorage.getToken() : sessionStorage.getItem('admin-token');
+            if (token) {
+                window.location.href = '/admin';
+                return;
+            }
+
+            // Bind Events
+            const form = document.getElementById('login-form');
+            if (form) {
+                form.addEventListener('submit', handleLogin);
+            }
+
+            // Password Visibility Toggle
+            const toggleBtn = document.getElementById('toggle-password');
+            const passwordInput = document.getElementById('password');
+            if (toggleBtn && passwordInput) {
+                toggleBtn.addEventListener('click', () => {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    toggleBtn.querySelector('span').textContent = type === 'password' ? 'visibility' : 'visibility_off';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
