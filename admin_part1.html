@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        // Early auth check - redirect to login if no token
+        if (!localStorage.getItem('admin-token')) {
+            window.location.href = '/admin-login.html';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/public/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Truong Tieu hoc It Ong</title>
+    <!-- Tiptap CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/core@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/starter-kit@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-text-align@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-link@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-image@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-highlight@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-underline@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-text-style@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-color@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-code-block@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/dashboard-v2.css">
+    <style>
+        /* Custom scrollbar for editor */
+        .ProseMirror {
+            min-height: 300px;
+            outline: none;
+        }
+
+        .ProseMirror p.is-editor-empty:first-child::before {
+            color: #adb5bd;
+            content: attr(data-placeholder);
+            float: left;
+            height: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+            <h2 class="text-2xl font-bold mb-4 text-center">Admin Login</h2>
+            <form id="login-form" class="flex flex-col gap-4">
+                <input type="text" id="login-username" placeholder="Username" class="border p-2 rounded" required>
+                <input type="password" id="login-password" placeholder="Password" class="border p-2 rounded" required>
+                <button type="submit" class="btn btn-primary w-full">Login</button>
+            </form>
+            <p id="auth-error" class="text-red-500 text-sm mt-2 hidden text-center"></p>
+        </div>
+    </div>
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden dashboard flex">
+        <!-- Sidebar -->
+        <aside
+            class="sidebar w-64 bg-gray-800 text-white flex flex-col h-screen fixed left-0 top-0 overflow-y-auto z-20">
+            <div class="logo p-4 text-xl font-bold text-center border-b border-gray-700">≡ƒôè Admin Panel</div>
+            <ul class="sidebar-menu p-4 space-y-2 flex-1">
+                <li><a href="javascript:switchTab('articles')" id="nav-articles"
+                        class="block p-2 rounded hover:bg-gray-700 active">≡ƒô¥ Articles</a></li>
+                <li><a href="javascript:switchTab('events')" id="nav-events"
+                        class="block p-2 rounded hover:bg-gray-700">≡ƒÄ» Events</a></li>
+                <li><a href="javascript:switchTab('media')" id="nav-media"
+                        class="block p-2 rounded hover:bg-gray-700">≡ƒû╝∩╕Å Media Library</a></li>
+                <li><a href="javascript:switchTab('pages')" id="nav-pages"
+                        class="block p-2 rounded hover:bg-gray-700">≡ƒôä Static Pages</a></li>
+                <li><a href="javascript:switchTab('settings')" id="nav-settings"
+                        class="block p-2 rounded hover:bg-gray-700 mt-4">ΓÜÖ∩╕Å Settings</a></li>
+            </ul>
+            <div class="p-4 border-t border-gray-700 mt-auto">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white"
+                        id="user-avatar">A</div>
+                    <div>
+                        <p class="text-sm font-medium" id="user-name">Admin</p>
+                        <p class="text-xs text-gray-400" id="user-role">Administrator</p>
+                    </div>
+                </div>
+                <button id="logout-btn"
+                    class="mt-4 w-full text-sm text-red-400 hover:text-red-300 text-left">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content flex-1 ml-64 p-8">
+            <header class="header flex justify-between items-center mb-8">
+                <h1 id="page-title" class="text-2xl font-bold text-gray-800">Content Management</h1>
+                <div class="user-menu flex items-center gap-4">
+                    <span id="admin-name" class="text-gray-600">≡ƒæñ Admin User</span>
+                    <button onclick="logout()"
+                        class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm">Logout</button>
+                </div>
+            </header>
+
+            <!-- Tabs -->
+            <div class="tabs flex gap-2 mb-6 border-b border-gray-200 pb-2 overflow-x-auto">
+                <button class="tab-btn active px-4 py-2 rounded-t-lg hover:bg-gray-100 whitespace-nowrap"
+                    onclick="switchTab('articles')">≡ƒô¥ Articles</button>
+                <button class="tab-btn px-4 py-2 rounded-t-lg hover:bg-gray-100 whitespace-nowrap"
+                    onclick="switchTab('add-article')">Γ₧ò Add Article</button>
+                <button class="tab-btn px-4 py-2 rounded-t-lg hover:bg-gray-100 whitespace-nowrap"
+                    onclick="switchTab('events')">≡ƒÄ» Events</button>
+                <button class="tab-btn px-4 py-2 rounded-t-lg hover:bg-gray-100 whitespace-nowrap"
+                    onclick="switchTab('media')">≡ƒû╝∩╕Å Media Library</button>
+                <button class="tab-btn px-4 py-2 rounded-t-lg hover:bg-gray-100 whitespace-nowrap"
+                    onclick="switchTab('pages')">≡ƒôä Static Pages</button>
+                <button class="tab-btn px-4 py-2 rounded-t-lg hover:bg-gray-100 whitespace-nowrap"
+                    onclick="switchTab('settings')">ΓÜÖ∩╕Å Settings</button>
+            </div>
+
+            <main>
+                <!-- Articles Section -->
+                <div id="section-articles"><!-- Add/Edit Article Form -->
+                    <div id="article-editor-container" class="bg-white shadow sm:rounded-lg p-6 mb-8 hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold text-gray-800">Edit Article</h2>
+                            <button onclick="switchTab('articles')" class="text-gray-500 hover:text-gray-700">&larr;
+                                Back to list</button>
+                        </div>
+
+                        <form id="article-form" class="space-y-6">
+                            <input type="hidden" id="article-id">
+
+                            <!-- Basic Info Section -->
+                            <div class="form-section">
+                                <h2 class="text-lg font-bold mb-4 border-b pb-2">≡ƒôï Basic Information</h2>
+
+                                <div class="form-group mb-4">
+                                    <label class="block font-medium mb-2">Title <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text" id="title" class="w-full p-3 border rounded-lg"
+                                        placeholder="Enter article title..." required>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="form-group">
+                                        <label class="block font-medium mb-2">Category <span
+                                                class="text-red-500">*</span></label>
+                                        <select id="category" class="w-full p-3 border rounded-lg" required>
+                                            <option value="">-- Select Category --</option>
+                                            <option value="Tin tuc">News</option>
+                                            <option value="Su kien">Events</option>
+                                            <option value="Hoat dong">Activities</option>
+                                            <option value="Thong bao">Announcements</option>
+                                            <option value="Thanh tich">Achievements</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block font-medium mb-2">Status <span
+                                                class="text-red-500">*</span></label>
+                                        <select id="status" class="w-full p-3 border rounded-lg" required>
+                                            <option value="draft">Draft</option>
+                                            <option value="published">Published</option>
+                                            <option value="pending">Pending</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Featured Image Section -->
+                            <div class="form-section">
+                                <h2 class="text-lg font-bold mb-4 border-b pb-2">≡ƒû╝∩╕Å Featured Image</h2>
+                                <div class="form-group">
+                                    <div class="flex gap-2">
+                                        <input type="text" id="image" class="w-full p-3 border rounded-lg"
+                                            placeholder="Image URL">
+                                        <button type="button" onclick="openMediaSelector('image')"
+                                            class="bg-gray-100 border px-4 py-2 rounded hover:bg-gray-200">≡ƒû╝∩╕Å
+                                            Select</button>
+                                    </div>
+                                    <div id="image-preview"
+                                        class="mt-2 h-48 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden border">
+                                        <span class="text-gray-400">No image selected</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content Section -->
+                            <div class="form-section">
+                                <h2 class="text-lg font-bold mb-4 border-b pb-2">Γ£ì∩╕Å Article Content</h2>
+
+                                <!-- Editor Toolbar -->
+                                <div class="editor-toolbar" id="article-toolbar">
+                                    <div class="toolbar-group">
+                                        <button type="button" id="bold"
+                                            title="Bold (Ctrl+B)"><strong>B</strong></button>
+                                        <button type="button" id="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+                                        <button type="button" id="underline" title="Underline">U</button>
+                                        <button type="button" id="strike" title="Strikethrough">S</button>
+                                        <input type="color" id="textColor" title="Text Color" value="#333333">
+                                    </div>
+
+                                    <div class="toolbar-group">
+                                        <select id="heading" title="Heading Level">
+                                            <option value="paragraph">Normal</option>
+                                            <option value="1">Heading 1</option>
+                                            <option value="2">Heading 2</option>
+                                            <option value="3">Heading 3</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="toolbar-group">
+                                        <button type="button" id="bullet" title="Bullet List">ΓÇó List</button>
+                                        <button type="button" id="ordered" title="Ordered List">1. List</button>
+                                        <button type="button" id="quote" title="Blockquote">Γ¥¥ Quote</button>
+                                    </div>
+
+                                    <div class="toolbar-group">
+                                        <button type="button" id="code" title="Inline Code">Code</button>
+                                        <button type="button" id="codeBlock" title="Code Block">&lt;/&gt;</button>
+                                    </div>
+
+                                    <div class="toolbar-group">
+                                        <button type="button" id="link" title="Add Link">≡ƒöù</button>
+                                        <button type="button" id="highlight" title="Highlight">≡ƒûì</button>
+                                        <button type="button" id="clear" title="Clear Formatting">Γ£ò</button>
+                                    </div>
+
+                                    <div class="toolbar-group">
+                                        <button type="button" id="undo" title="Undo">Γå╢</button>
+                                        <button type="button" id="redo" title="Redo">Γå╖</button>
+                                    </div>
+                                </div>
+
+                                <!-- Editor -->
+                                <div id="article-editor" class="editor-container"></div>
+                            </div>
+
+                            <!-- SEO Section -->
+                            <div class="form-section">
+                                <h2 class="text-lg font-bold mb-4 border-b pb-2">≡ƒöì SEO</h2>
+                                <div class="form-group mb-4">
+                                    <label class="block font-medium mb-2">Meta Description</label>
+                                    <textarea id="meta-desc" rows="3" class="w-full p-3 border rounded-lg"
+                                        placeholder="Short description for search engines..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="block font-medium mb-2">Tags (comma separated)</label>
+                                    <input type="text" id="tags" class="w-full p-3 border rounded-lg"
+                                        placeholder="tag1, tag2, tag3">
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="form-actions flex gap-4 pt-4 border-t">
+                                <button type="submit"
+                                    class="btn btn-primary px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">≡ƒôñ
+                                    Publish</button>
+                                <button type="button" id="schedule-btn"
+                                    class="btn btn-primary px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">ΓÅ░
+                                    Schedule</button>
+                                <button type="button" id="save-draft-btn"
+                                    class="btn btn-secondary px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">≡ƒÆ╛
+                                    Save Draft</button>
+                                <button type="button" id="cancel-edit"
+                                    class="btn btn-danger px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600">Γ£ò
+                                    Cancel</button>
+                            </div>
+                        </form>
+                    </div><!-- Articles List -->
+                    <div id="articles-list-container" class="bg-white shadow sm:rounded-lg overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                            <h3 class="text-lg font-medium text-gray-900">Articles List</h3>
+                            <div class="flex gap-2">
+                                <input type="text" placeholder="Search..."
+                                    class="border border-gray-300 rounded-md px-3 py-1 text-sm">
+                                <select class="border border-gray-300 rounded-md px-3 py-1 text-sm">
+                                    <option>All Categories</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Image</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Title</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Category</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status</th>
+                                    <th
+                                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articles-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>

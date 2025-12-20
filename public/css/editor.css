@@ -1,0 +1,189 @@
+/* Editor Toolbar */
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px;
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 4px;
+    padding-right: 6px;
+    border-right: 1px solid var(--border-color);
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+.editor-toolbar button,
+.editor-toolbar select,
+.editor-toolbar input {
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-white);
+    color: var(--text-main);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.editor-toolbar button:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.editor-toolbar button.active {
+    background: var(--primary-color);
+    color: var(--text-light);
+    border-color: var(--primary-color);
+}
+
+.editor-toolbar select,
+.editor-toolbar input {
+    cursor: pointer;
+}
+
+.editor-toolbar input[type="color"] {
+    width: 36px;
+    height: 30px;
+    padding: 2px;
+}
+
+/* Editor Container */
+.editor-container {
+    border: 1px solid var(--border-color);
+    border-radius: 0 0 6px 6px;
+    background: var(--bg-white);
+    min-height: 350px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.editor-container:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* ProseMirror Styles */
+.ProseMirror {
+    outline: none;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-main);
+}
+
+.ProseMirror h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 15px 0 10px 0;
+}
+
+.ProseMirror h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 12px 0 8px 0;
+}
+
+.ProseMirror h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 10px 0 6px 0;
+}
+
+.ProseMirror p {
+    margin-bottom: 10px;
+}
+
+.ProseMirror strong {
+    font-weight: 700;
+}
+
+.ProseMirror em {
+    font-style: italic;
+}
+
+.ProseMirror u {
+    text-decoration: underline;
+}
+
+.ProseMirror s {
+    text-decoration: line-through;
+}
+
+.ProseMirror code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--code-color);
+}
+
+.ProseMirror pre {
+    background: var(--pre-bg);
+    color: var(--pre-color);
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.ProseMirror pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.ProseMirror li {
+    margin-bottom: 4px;
+}
+
+.ProseMirror blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 10px;
+    margin: 10px 0;
+    color: var(--text-secondary);
+}
+
+.ProseMirror a {
+    color: var(--link-color);
+    text-decoration: underline;
+}
+
+.ProseMirror img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.ProseMirror mark {
+    background: var(--highlight-color);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+/* From inline style */
+.ProseMirror {
+    min-height: 300px;
+    outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}

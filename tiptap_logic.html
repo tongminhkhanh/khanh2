@@ -1,0 +1,111 @@
+<script>
+    // Tiptap Initialization
+    let editor;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('article-editor')) {
+            editor = new Tiptap.Editor({
+                element: document.getElementById('article-editor'),
+                extensions: [
+                    Tiptap.StarterKit,
+                    Tiptap.TextAlign.configure({
+                        types: ['heading', 'paragraph'],
+                        alignments: ['left', 'center', 'right'],
+                    }),
+                    Tiptap.Link.configure({ openOnClick: false }),
+                    Tiptap.Image.configure({ inline: true, allowBase64: true }),
+                    Tiptap.Highlight.configure({ multicolor: true }),
+                    Tiptap.Underline,
+                    Tiptap.TextStyle,
+                    Tiptap.Color,
+                ],
+                content: '',
+                onUpdate: () => updateToolbarState(),
+            });
+
+            // Expose editor to window for other functions
+            window.articleEditor = editor;
+
+            // Toolbar Event Listeners
+            setupToolbarListeners();
+        }
+    });
+
+    function setupToolbarListeners() {
+        const addListener = (id, callback) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('click', callback);
+        };
+
+        addListener('bold', () => { editor.chain().focus().toggleBold().run(); updateToolbarState(); });
+        addListener('italic', () => { editor.chain().focus().toggleItalic().run(); updateToolbarState(); });
+        addListener('underline', () => { editor.chain().focus().toggleUnderline().run(); updateToolbarState(); });
+        addListener('strike', () => { editor.chain().focus().toggleStrike().run(); updateToolbarState(); });
+
+        const textColor = document.getElementById('textColor');
+        if (textColor) {
+            textColor.addEventListener('change', (e) => {
+                editor.chain().focus().setColor(e.target.value).run();
+            });
+        }
+
+        const heading = document.getElementById('heading');
+        if (heading) {
+            heading.addEventListener('change', (e) => {
+                const level = e.target.value;
+                if (level === 'paragraph') {
+                    editor.chain().focus().setParagraph().run();
+                } else {
+                    editor.chain().focus().setHeading({ level: parseInt(level) }).run();
+                }
+                e.target.value = 'paragraph'; // Reset select
+                updateToolbarState();
+            });
+        }
+
+        addListener('bullet', () => { editor.chain().focus().toggleBulletList().run(); updateToolbarState(); });
+        addListener('ordered', () => { editor.chain().focus().toggleOrderedList().run(); updateToolbarState(); });
+        addListener('quote', () => { editor.chain().focus().toggleBlockquote().run(); updateToolbarState(); });
+        addListener('code', () => { editor.chain().focus().toggleCode().run(); updateToolbarState(); });
+        addListener('codeBlock', () => { editor.chain().focus().toggleCodeBlock().run(); updateToolbarState(); });
+
+        addListener('link', () => {
+            const url = prompt('Enter URL:', 'https://');
+            if (url) {
+                editor.chain().focus().setLink({ href: url }).run();
+            }
+        });
+
+        addListener('highlight', () => {
+            editor.chain().focus().toggleHighlight({ color: '#ffeb3b' }).run();
+        });
+
+        addListener('clear', () => {
+            editor.chain().focus().clearNodes().run();
+            editor.chain().focus().unsetAllMarks().run();
+        });
+
+        addListener('undo', () => { editor.chain().focus().undo().run(); });
+        addListener('redo', () => { editor.chain().focus().redo().run(); });
+    }
+
+    function updateToolbarState() {
+        if (!editor) return;
+
+        const toggleActive = (id, isActive) => {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('active', isActive);
+        };
+
+        toggleActive('bold', editor.isActive('bold'));
+        toggleActive('italic', editor.isActive('italic'));
+        toggleActive('underline', editor.isActive('underline'));
+        toggleActive('strike', editor.isActive('strike'));
+        toggleActive('bullet', editor.isActive('bulletList'));
+        toggleActive('ordered', editor.isActive('orderedList'));
+        toggleActive('quote', editor.isActive('blockquote'));
+        toggleActive('code', editor.isActive('code'));
+        toggleActive('codeBlock', editor.isActive('codeBlock'));
+        toggleActive('highlight', editor.isActive('highlight'));
+    }
+</script>

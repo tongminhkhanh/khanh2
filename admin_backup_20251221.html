@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/public/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Trường Tiểu học Ít Ong</title>
+    <title>Admin Panel - Truong Tieu hoc It Ong</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/public/css/main.css">
 </head>
@@ -20,11 +20,11 @@
     <!-- Auth Modal -->
     <div id="auth-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
         <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-            <h2 class="text-2xl font-bold mb-4 text-center">Đăng nhập Admin</h2>
+            <h2 class="text-2xl font-bold mb-4 text-center">Dang nhap Admin</h2>
             <form id="login-form" class="flex flex-col gap-4">
-                <input type="text" id="login-username" placeholder="Tên đăng nhập" class="border p-2 rounded" required>
-                <input type="password" id="login-password" placeholder="Mật khẩu" class="border p-2 rounded" required>
-                <button type="submit" class="btn btn-primary w-full">Đăng nhập</button>
+                <input type="text" id="login-username" placeholder="Ten dang nhap" class="border p-2 rounded" required>
+                <input type="password" id="login-password" placeholder="Mat khau" class="border p-2 rounded" required>
+                <button type="submit" class="btn btn-primary w-full">Dang nhap</button>
             </form>
             <p id="auth-error" class="text-red-500 text-sm mt-2 hidden text-center"></p>
         </div>
@@ -40,23 +40,23 @@
             <nav class="flex-1 p-4">
                 <a href="#" id="nav-articles"
                     class="flex items-center gap-2 px-4 py-2 rounded bg-blue-600 text-white mb-2">
-                    <span>Bài viết</span>
+                    <span>Bai viet</span>
                 </a>
                 <a href="#" id="nav-events"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Sự kiện</span>
+                    <span>Su kien</span>
                 </a>
                 <a href="#" id="nav-media"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Thư viện ảnh</span>
+                    <span>Thu vien anh</span>
                 </a>
                 <a href="#" id="nav-pages"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Trang tĩnh</span>
+                    <span>Trang tinh</span>
                 </a>
                 <a href="#" id="nav-settings"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Cài đặt</span>
+                    <span>Cai dat</span>
                 </a>
             </nav>
             <div class="p-4 border-t border-gray-700">
@@ -68,8 +68,8 @@
                         <p class="text-xs text-gray-400" id="user-role">Administrator</p>
                     </div>
                 </div>
-                <button id="logout-btn" class="mt-4 w-full text-sm text-red-400 hover:text-red-300 text-left">Đăng
-                    xuất</button>
+                <button id="logout-btn" class="mt-4 w-full text-sm text-red-400 hover:text-red-300 text-left">Dang
+                    xuat</button>
             </div>
         </aside>
 
@@ -77,7 +77,7 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <header class="bg-white shadow z-10">
                 <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                    <h1 class="text-2xl font-bold text-gray-900" id="page-title">Quản lý Bài viết</h1>
+                    <h1 class="text-2xl font-bold text-gray-900" id="page-title">Quan ly Bai viet</h1>
                 </div>
             </header>
 
@@ -85,36 +85,36 @@
                 <!-- Articles Section -->
                 <div id="section-articles">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Thêm bài viết mới</h2>
+                        <h2 class="text-xl font-bold mb-4">Them bai viet moi</h2>
                         <form id="article-form" class="space-y-4">
                             <input type="hidden" id="article-id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                    <label class="block text-sm font-medium text-gray-700">Tieu de</label>
                                     <input type="text" id="title"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Danh mục</label>
+                                    <label class="block text-sm font-medium text-gray-700">Danh muc</label>
                                     <select id="category"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="Tin tuc">Tin tức</option>
-                                        <option value="Sự kiện">Sự kiện</option>
-                                        <option value="Hoat dong">Hoạt động</option>
-                                        <option value="Thong bao">Thông báo</option>
-                                        <option value="Thanh tich">Thành tích</option>
+                                        <option value="Tin tuc">Tin tuc</option>
+                                        <option value="Su kien">Su kien</option>
+                                        <option value="Hoat dong">Hoat dong</option>
+                                        <option value="Thong bao">Thong bao</option>
+                                        <option value="Thanh tich">Thanh tich</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Trạng thái</label>
+                                    <label class="block text-sm font-medium text-gray-700">Trang thai</label>
                                     <select id="status"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="draft">Nháp</option>
-                                        <option value="pending">Chờ duyệt</option>
-                                        <option value="published">Đã xuất bản</option>
+                                        <option value="draft">Nhap</option>
+                                        <option value="pending">Cho duyet</option>
+                                        <option value="published">Da xuat ban</option>
                                     </select>
                                 </div>
                                 <div>
@@ -125,16 +125,16 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Hình ảnh (URL)</label>
+                                <label class="block text-sm font-medium text-gray-700">Hinh anh (URL)</label>
                                 <div class="flex gap-2">
                                     <input type="text" id="image"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                                     <button type="button" onclick="openMediaSelector('image')"
-                                        class="mt-1 bg-gray-200 px-3 rounded hover:bg-gray-300">Chọn</button>
+                                        class="mt-1 bg-gray-200 px-3 rounded hover:bg-gray-300">Chon</button>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
                                 <div class="border border-gray-300 rounded-md shadow-sm mt-1 bg-white">
                                     <div id="article-toolbar"
                                         class="border-b border-gray-300 p-2 bg-gray-50 flex gap-2 flex-wrap items-center">
@@ -146,7 +146,8 @@
                             <div class="flex gap-2">
                                 <button type="submit" class="btn btn-primary">Luu bai
                                     viet</button>
-                                <button type="button" id="cancel-edit" class="btn btn-secondary hidden">Hủy</button>
+                                <button type="button" id="cancel-edit"
+                                    class="btn btn-secondary hidden">Huy</button>
                             </div>
                         </form>
                     </div>
@@ -174,23 +175,23 @@
                 <!-- Events Section -->
                 <div id="section-events" class="hidden">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Quản lý Sự kiện</h2>
+                        <h2 class="text-xl font-bold mb-4">Quan ly Su kien</h2>
                         <form id="event-form" class="space-y-4">
                             <input type="hidden" id="event-id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề sự kiện</label>
+                                    <label class="block text-sm font-medium text-gray-700">Tieu de su kien</label>
                                     <input type="text" id="event-title"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Loại sự kiện</label>
+                                    <label class="block text-sm font-medium text-gray-700">Loai su kien</label>
                                     <select id="event-type"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="public">Sự kiện chung</option>
-                                        <option value="class">Sự kiện lớp</option>
-                                        <option value="teacher">Sự kiện giáo viên</option>
+                                        <option value="public">Su kien chung</option>
+                                        <option value="class">Su kien lop</option>
+                                        <option value="teacher">Su kien giao vien</option>
                                     </select>
                                 </div>
                             </div>
@@ -198,19 +199,19 @@
                             <div id="event-target-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"
                                 style="display: none;">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Khối lớp tham dự</label>
+                                    <label class="block text-sm font-medium text-gray-700">Khoi lop tham du</label>
                                     <select id="event-target-grade"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="">Tất cả các khối</option>
-                                        <option value="1">Khối 1</option>
-                                        <option value="2">Khối 2</option>
-                                        <option value="3">Khối 3</option>
-                                        <option value="4">Khối 4</option>
-                                        <option value="5">Khối 5</option>
+                                        <option value="">Tat ca cac khoi</option>
+                                        <option value="1">Khoi 1</option>
+                                        <option value="2">Khoi 2</option>
+                                        <option value="3">Khoi 3</option>
+                                        <option value="4">Khoi 4</option>
+                                        <option value="5">Khoi 5</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Lớp cụ thể (tùy chọn)</label>
+                                    <label class="block text-sm font-medium text-gray-700">Lop cu the (tuy chon)</label>
                                     <input type="text" id="event-target-class"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         placeholder="VD: 1A, 2B, 3C...">
@@ -218,13 +219,13 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Ngày bắt đầu</label>
+                                    <label class="block text-sm font-medium text-gray-700">Ngay bat dau</label>
                                     <input type="datetime-local" id="event-start"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Ngày kết thúc</label>
+                                    <label class="block text-sm font-medium text-gray-700">Ngay ket thuc</label>
                                     <input type="datetime-local" id="event-end"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
@@ -232,28 +233,28 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Địa điểm</label>
+                                    <label class="block text-sm font-medium text-gray-700">Dia diem</label>
                                     <input type="text" id="event-location"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         placeholder="VD: Hoi truong, San truong...">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Danh mục sự kiện</label>
+                                    <label class="block text-sm font-medium text-gray-700">Danh muc su kien</label>
                                     <select id="event-category"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         onchange="updateEventColor()">
-                                        <option value="exam" data-color="#dc2626">🔴 Lịch thi / Kiểm tra</option>
-                                        <option value="activity" data-color="#2563eb">🔵 Hoạt động ngoại khóa / Chào cờ
+                                        <option value="exam" data-color="#dc2626">🔴 Lich thi / Kiem tra</option>
+                                        <option value="activity" data-color="#2563eb">🔵 Hoat dong ngoai khoa / Chao co
                                         </option>
-                                        <option value="holiday" data-color="#16a34a">🟢 Lịch nghỉ lễ / Họp phụ huynh
+                                        <option value="holiday" data-color="#16a34a">🟢 Lich nghi le / Hop phu huynh
                                         </option>
-                                        <option value="other" data-color="#6b7280">⚪ Khác</option>
+                                        <option value="other" data-color="#6b7280">⚪ Khac</option>
                                     </select>
                                     <input type="hidden" id="event-color" value="#dc2626">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Mô tả</label>
+                                <label class="block text-sm font-medium text-gray-700">Mo ta</label>
                                 <textarea id="event-description" rows="3"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
                             </div>
@@ -261,14 +262,14 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" id="event-published"
                                         class="form-checkbox h-5 w-5 text-blue-600" checked>
-                                    <span class="ml-2 text-gray-700">Xuất bản ngay</span>
+                                    <span class="ml-2 text-gray-700">Xuat ban ngay</span>
                                 </label>
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit" class="btn btn-primary">Luu su
                                     kien</button>
                                 <button type="button" id="cancel-event-edit"
-                                    class="btn btn-secondary hidden">Hủy</button>
+                                    class="btn btn-secondary hidden">Huy</button>
                             </div>
                         </form>
                     </div>
@@ -297,9 +298,9 @@
                 <div id="section-media" class="hidden">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold">Thư viện Ảnh</h2>
+                            <h2 class="text-xl font-bold">Thu vien Anh</h2>
                             <label class="btn btn-primary cursor-pointer">
-                                <span>Tải ảnh lên</span>
+                                <span>Tai anh len</span>
                                 <input type="file" id="media-upload" class="hidden" accept="image/*">
                             </label>
                         </div>
@@ -310,12 +311,12 @@
                 <!-- Pages Section -->
                 <div id="section-pages" class="hidden">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Quản lý Trang tĩnh</h2>
+                        <h2 class="text-xl font-bold mb-4">Quan ly Trang tinh</h2>
                         <form id="page-form" class="space-y-4">
                             <input type="hidden" id="page-id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                    <label class="block text-sm font-medium text-gray-700">Tieu de</label>
                                     <input type="text" id="page-title-input"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required oninput="generateSlug()">
@@ -328,7 +329,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
                                 <div class="border border-gray-300 rounded-md shadow-sm mt-1 bg-white">
                                     <div id="page-toolbar"
                                         class="border-b border-gray-300 p-2 bg-gray-50 flex gap-2 flex-wrap items-center">
@@ -341,14 +342,14 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" id="page-published"
                                         class="form-checkbox h-5 w-5 text-blue-600">
-                                    <span class="ml-2 text-gray-700">Xuất bản ngay</span>
+                                    <span class="ml-2 text-gray-700">Xuat ban ngay</span>
                                 </label>
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit" class="btn btn-primary">Luu
                                     trang</button>
                                 <button type="button" id="cancel-page-edit"
-                                    class="btn btn-secondary hidden">Hủy</button>
+                                    class="btn btn-secondary hidden">Huy</button>
                             </div>
                         </form>
                     </div>
@@ -375,7 +376,7 @@
                 <div id="section-settings" class="hidden">
 
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Cài đặt Thanh thông báo (Ticker)</h2>
+                        <h2 class="text-xl font-bold mb-4">Cai dat Thanh thong bao (Ticker)</h2>
                         <form id="ticker-settings-form" class="space-y-4">
                             <div class="flex items-center">
                                 <input type="checkbox" id="ticker-enabled"
@@ -384,10 +385,10 @@
                                     bao</label>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung hiển thị</label>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung hien thi</label>
                                 <textarea id="ticker-content-input" rows="3"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                                    placeholder="Nhập nội dung chạy trên thanh ticker..."></textarea>
+                                    placeholder="Nhap noi dung chay tren thanh ticker..."></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Luu
                                 cai dat</button>
@@ -395,22 +396,22 @@
                     </div>
 
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Cài đặt chung</h2>
+                        <h2 class="text-xl font-bold mb-4">Cai dat chung</h2>
                         <form id="urgent-notice-form" class="space-y-4">
                             <div class="flex items-center gap-4">
                                 <label class="flex items-center">
                                     <input type="checkbox" id="urgent-enabled"
                                         class="form-checkbox h-5 w-5 text-red-600">
-                                    <span class="ml-2 text-gray-700 font-bold">Bật thông báo khẩn</span>
+                                    <span class="ml-2 text-gray-700 font-bold">Bat thong bao khan</span>
                                 </label>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung thông báo</label>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung thong bao</label>
                                 <textarea id="urgent-content" rows="3"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Đường dẫn (tùy chọn)</label>
+                                <label class="block text-sm font-medium text-gray-700">Duong dan (tuy chon)</label>
                                 <input type="text" id="urgent-link"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                     placeholder="https://...">
@@ -420,15 +421,15 @@
                         </form>
                     </div>
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Thông điệp từ Hiệu Trưởng</h2>
+                        <h2 class="text-xl font-bold mb-4">Thong diep tu Hieu Truong</h2>
                         <form id="principal-message-form" class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                <label class="block text-sm font-medium text-gray-700">Tieu de</label>
                                 <input type="text" id="principal-title"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <label class="block text-sm font-medium text-gray-700">Noi dung</label>
                                 <textarea id="principal-content" rows="5"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
                             </div>
@@ -443,17 +444,12 @@
     <div id="media-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold">Chọn ảnh</h3>
+                <h3 class="text-lg font-bold">Chon anh</h3>
                 <button onclick="closeMediaModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
             </div>
             <div id="modal-media-grid" class="grid grid-cols-4 gap-4"></div>
         </div>
     </div>
-
-    <!-- External JS Modules (for future use) -->
-    <script src="/public/js/config.js"></script>
-    <script src="/public/js/utils.js"></script>
-    <script src="/public/js/api.js"></script>
 
     <script>
         const API_URL = '/api';
@@ -506,7 +502,7 @@
                     showError(data.message || 'Login failed');
                 }
             } catch (err) {
-                showError('Lỗi kết nối server');
+                showError('Loi ket noi server');
             }
         });
 
@@ -524,11 +520,11 @@
             'nav-settings': 'section-settings'
         };
         const titles = {
-            'nav-articles': 'Quản lý Bài viết',
-            'nav-events': 'Quản lý Sự kiện',
-            'nav-media': 'Thư viện Ảnh',
-            'nav-pages': 'Trang tĩnh',
-            'nav-settings': 'Cài đặt chung'
+            'nav-articles': 'Quan ly Bai viet',
+            'nav-events': 'Quan ly Su kien',
+            'nav-media': 'Thu vien Anh',
+            'nav-pages': 'Trang tinh',
+            'nav-settings': 'Cai dat chung'
         };
 
         Object.keys(navLinks).forEach(id => {
@@ -566,7 +562,7 @@
             try {
                 const res = await fetch(`${API_URL}/articles`);
                 const articles = await res.json();
-
+                
                 if (!articles || articles.length === 0) {
                     tbody.innerHTML = `
                         <tr>
@@ -592,8 +588,8 @@
                         <td class="px-6 py-4 text-gray-500">${a.category}</td>
                         <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${a.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${a.status}</span></td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
-                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
+                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
                         </td>
                     </tr>
                 `).join('');
@@ -605,7 +601,7 @@
                     document.getElementById('ticker-enabled').checked = tickerData.value.isEnabled || false;
                     document.getElementById('ticker-content-input').value = tickerData.value.content || '';
                 }
-            } catch (err) {
+            } catch (err) { 
                 console.error(err);
                 tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
             }
@@ -630,8 +626,8 @@
                     method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(article)
                 });
-                if (res.ok) { resetArticleForm(); fetchArticles(); alert('Đã lưu bài viết!'); }
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) { resetArticleForm(); fetchArticles(); alert('Da luu bai viet!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -691,7 +687,7 @@
             try {
                 const res = await fetch(`${API_URL}/admin/events`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const events = await res.json();
-
+                
                 if (!events || events.length === 0) {
                     tbody.innerHTML = `
                         <tr>
@@ -714,14 +710,14 @@
                         <td class="px-6 py-4 font-medium">${e.title}</td>
                         <td class="px-6 py-4 text-gray-500">${new Date(e.startDate).toLocaleDateString('vi-VN')}</td>
                         <td class="px-6 py-4 text-gray-500">${e.location || '-'}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished ? 'Đã xuất bản' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished ? 'Da xuat ban' : 'Nhap'}</span></td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editEvent('${e._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
-                            <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
+                            <button onclick="editEvent('${e._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
                         </td>
                     </tr>
                 `).join('');
-            } catch (err) {
+            } catch (err) { 
                 console.error(err);
                 tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
             }
@@ -750,8 +746,8 @@
                     method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(event)
                 });
-                if (res.ok) { resetEventForm(); fetchEvents(); alert('Đã lưu sự kiện!'); }
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) { resetEventForm(); fetchEvents(); alert('Da luu su kien!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -845,7 +841,7 @@
             try {
                 const res = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const media = await res.json();
-
+                
                 if (!media || media.length === 0) {
                     grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500">Chưa có ảnh nào</div>`;
                     return;
@@ -857,7 +853,7 @@
                         <button onclick="deleteMedia('${m._id}')" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs opacity-0 group-hover:opacity-100 transition-opacity">&times;</button>
                     </div>
                 `).join('');
-            } catch (err) {
+            } catch (err) { 
                 console.error(err);
                 grid.innerHTML = `<div class="col-span-full py-4 text-center text-red-500">Lỗi khi tải ảnh</div>`;
             }
@@ -873,15 +869,15 @@
                         headers: { 'Authorization': `Bearer ${token}` },
                         body: formData
                     });
-                    if (res.ok) { fetchMedia(); alert('Đã tải ảnh lên!'); }
-                    else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                    if (res.ok) { fetchMedia(); alert('Da tai anh len!'); }
+                    else { const d = await res.json(); alert('Loi: ' + d.message); }
                 } catch (err) { console.error(err); }
             }
         });
 
         window.copyMediaUrl = (url) => {
             navigator.clipboard.writeText(url);
-            alert('Đã sao chép URL!');
+            alert('Da sao chep URL!');
         };
 
         window.deleteMedia = async (id) => {
@@ -945,7 +941,7 @@
             try {
                 const res = await fetch(`${API_URL}/admin/static-pages`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const pages = await res.json();
-
+                
                 if (!pages || pages.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">Chưa có trang nào</td></tr>`;
                     return;
@@ -955,14 +951,14 @@
                     <tr>
                         <td class="px-6 py-4 font-medium">${p.title}</td>
                         <td class="px-6 py-4 text-gray-500">${p.slug}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished ? 'Đã xuất bản' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished ? 'Da xuat ban' : 'Nhap'}</span></td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editPage('${p._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
-                            <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
+                            <button onclick="editPage('${p._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sua</button>
+                            <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">Xoa</button>
                         </td>
                     </tr>
                 `).join('');
-            } catch (err) {
+            } catch (err) { 
                 console.error(err);
                 tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
             }
@@ -991,8 +987,8 @@
                     method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(page)
                 });
-                if (res.ok) { resetPageForm(); fetchPages(); alert('Đã lưu trang!'); }
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) { resetPageForm(); fetchPages(); alert('Da luu trang!'); }
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1075,10 +1071,10 @@
                 const res = await fetch(`${API_URL}/admin/settings/urgent_notice`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ value: data, description: 'Thông báo khẩn' })
+                    body: JSON.stringify({ value: data, description: 'Thong bao khan' })
                 });
-                if (res.ok) alert('Đã lưu cài đặt!');
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) alert('Da luu cai dat!');
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1092,10 +1088,10 @@
                 const res = await fetch(`${API_URL}/admin/settings/principal_message`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ value: data, description: 'Thông điệp Hiệu Trưởng' })
+                    body: JSON.stringify({ value: data, description: 'Thong diep Hieu Truong' })
                 });
-                if (res.ok) alert('Đã lưu thông điệp!');
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) alert('Da luu thong diep!');
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1109,10 +1105,10 @@
                 const res = await fetch(`${API_URL}/admin/settings/ticker_settings`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ value: data, description: 'Cài đặt Ticker Bar' })
+                    body: JSON.stringify({ value: data, description: 'Cai dat Ticker Bar' })
                 });
-                if (res.ok) alert('Đã lưu cài đặt Ticker!');
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) alert('Da luu cai dat Ticker!');
+                else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1131,213 +1127,14 @@
     </script>
 
     <script type="module">
-        import { Editor, Extension } from 'https://esm.sh/@tiptap/core@2.0.0';
-        import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.0.0';
-        import Image from 'https://esm.sh/@tiptap/extension-image@2.0.0';
-        import Youtube from 'https://esm.sh/@tiptap/extension-youtube@2.0.0';
-        import Link from 'https://esm.sh/@tiptap/extension-link@2.0.0';
-        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align@2.0.0';
-        import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.0.0';
-        import Underline from 'https://esm.sh/@tiptap/extension-underline@2.0.0';
-        import Color from 'https://esm.sh/@tiptap/extension-color@2.0.0';
-        import Highlight from 'https://esm.sh/@tiptap/extension-highlight@2.0.0';
-        import Table from 'https://esm.sh/@tiptap/extension-table@2.0.0';
-        import TableRow from 'https://esm.sh/@tiptap/extension-table-row@2.0.0';
-        import TableHeader from 'https://esm.sh/@tiptap/extension-table-header@2.0.0';
-        import TableCell from 'https://esm.sh/@tiptap/extension-table-cell@2.0.0';
-        import BubbleMenu from 'https://esm.sh/@tiptap/extension-bubble-menu@2.0.0';
-        import FloatingMenu from 'https://esm.sh/@tiptap/extension-floating-menu@2.0.0';
-        import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.0.0';
-
-        function createBubbleMenu(editor) {
-            const menu = document.createElement('div');
-            menu.className = 'bubble-menu';
-
-            const buttons = [
-                { label: 'Bold', action: () => editor.chain().focus().toggleBold().run(), isActive: () => editor.isActive('bold') },
-                { label: 'Italic', action: () => editor.chain().focus().toggleItalic().run(), isActive: () => editor.isActive('italic') },
-                { label: 'Strike', action: () => editor.chain().focus().toggleStrike().run(), isActive: () => editor.isActive('strike') },
-                {
-                    label: '⇥ 1.27',
-                    action: () => editor.chain().focus().toggleFirstLineIndent().run(),
-                    isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
-                },
-            ];
-
-            buttons.forEach(btn => {
-                const button = document.createElement('button');
-                button.innerText = btn.label;
-                button.onclick = btn.action;
-                menu.appendChild(button);
-            });
-
-            document.body.appendChild(menu);
-            return menu;
-        }
-
-        function createFloatingMenu(editor) {
-            const menu = document.createElement('div');
-            menu.className = 'floating-menu';
-
-            const buttons = [
-                { label: 'H1', action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(), isActive: () => editor.isActive('heading', { level: 1 }) },
-                { label: 'H2', action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), isActive: () => editor.isActive('heading', { level: 2 }) },
-                { label: 'List', action: () => editor.chain().focus().toggleBulletList().run(), isActive: () => editor.isActive('bulletList') },
-            ];
-
-            buttons.forEach(btn => {
-                const button = document.createElement('button');
-                button.innerText = btn.label;
-                button.onclick = btn.action;
-                menu.appendChild(button);
-            });
-
-            document.body.appendChild(menu);
-            return menu;
-        }
-
-        // Inline Indent Extension
-        const Indent = {
-            name: 'indent',
-            addOptions() {
-                return {
-                    types: ['paragraph', 'heading', 'blockquote'],
-                    indentLevels: [0, 30, 60, 90, 120, 150, 180, 210],
-                    defaultIndentLevel: 0,
-                }
-            },
-            addGlobalAttributes() {
-                return [
-                    {
-                        types: this.options.types,
-                        attributes: {
-                            indent: {
-                                default: this.options.defaultIndentLevel,
-                                renderHTML: attributes => {
-                                    if (attributes.indent === 0) {
-                                        return {}
-                                    }
-                                    return {
-                                        style: `margin-left: ${attributes.indent}px!important;`
-                                    }
-                                },
-                                parseHTML: element => {
-                                    const marginLeft = element.style.marginLeft
-                                    return marginLeft ? parseInt(marginLeft, 10) : 0
-                                },
-                            },
-                        },
-                    },
-                ]
-            },
-            addCommands() {
-                return {
-                    indent: () => ({ tr, state, dispatch }) => {
-                        const { selection } = state
-                        const { tr: transaction } = state
-
-                        transaction.selection.ranges.forEach(range => {
-                            state.doc.nodesBetween(range.$from.pos, range.$to.pos, (node, pos) => {
-                                if (this.options.types.includes(node.type.name)) {
-                                    const currentIndent = node.attrs.indent || 0
-                                    const indentLevels = this.options.indentLevels
-                                    const nextLevel = indentLevels.find(level => level > currentIndent) || currentIndent
-
-                                    if (nextLevel > currentIndent) {
-                                        transaction.setNodeMarkup(pos, undefined, {
-                                            ...node.attrs,
-                                            indent: nextLevel
-                                        })
-                                    }
-                                }
-                            })
-                        })
-
-                        if (dispatch) dispatch(transaction)
-                        return true
-                    },
-                    outdent: () => ({ tr, state, dispatch }) => {
-                        const { selection } = state
-                        const { tr: transaction } = state
-
-                        transaction.selection.ranges.forEach(range => {
-                            state.doc.nodesBetween(range.$from.pos, range.$to.pos, (node, pos) => {
-                                if (this.options.types.includes(node.type.name)) {
-                                    const currentIndent = node.attrs.indent || 0
-                                    const indentLevels = this.options.indentLevels
-                                    const prevLevel = [...indentLevels].reverse().find(level => level < currentIndent) || 0
-
-                                    if (prevLevel < currentIndent) {
-                                        transaction.setNodeMarkup(pos, undefined, {
-                                            ...node.attrs,
-                                            indent: prevLevel
-                                        })
-                                    }
-                                }
-                            })
-                        })
-
-                        if (dispatch) dispatch(transaction)
-                        return true
-                    },
-                }
-            },
-            addKeyboardShortcuts() {
-                return {
-                    'Tab': () => this.editor.commands.indent(),
-                    'Shift-Tab': () => this.editor.commands.outdent(),
-                }
-            },
-        };
-
-        // Wrap in Extension.create to ensure proper Tiptap structure
-        const IndentExtension = Extension.create(Indent);
-        // First Line Indent Extension (1.27cm)
-        const FirstLineIndent = Extension.create({
-            name: 'firstLineIndent',
-            addGlobalAttributes() {
-                return [{
-                    types: ['paragraph'],
-                    attributes: {
-                        firstLineIndent: {
-                            default: false,
-                            renderHTML: attributes => {
-                                if (!attributes.firstLineIndent) return {}
-                                return {
-                                    style: 'text-indent: 1.27cm'
-                                }
-                            },
-                            parseHTML: element => {
-                                return element.style.textIndent === '1.27cm'
-                            },
-                        }
-                    }
-                }]
-            },
-            addCommands() {
-                return {
-                    toggleFirstLineIndent: () => ({ editor, commands }) => {
-                        const isActive = editor.getAttributes('paragraph').firstLineIndent === true;
-                        return commands.updateAttributes('paragraph', {
-                            firstLineIndent: !isActive
-                        });
-                    },
-                }
-            }
-        });
-
+        import { Editor } from 'https://esm.sh/@tiptap/core';
+        import StarterKit from 'https://esm.sh/@tiptap/starter-kit';
+        import Image from 'https://esm.sh/@tiptap/extension-image';
+        import Youtube from 'https://esm.sh/@tiptap/extension-youtube';
+        import Link from 'https://esm.sh/@tiptap/extension-link';
+        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align';
 
         function setupEditor(elementId, toolbarId) {
-            // 1. Create Menu Elements (empty first)
-            const bubbleMenuEl = document.createElement('div');
-            bubbleMenuEl.className = 'bubble-menu';
-            document.body.appendChild(bubbleMenuEl);
-
-            const floatingMenuEl = document.createElement('div');
-            floatingMenuEl.className = 'floating-menu';
-            document.body.appendChild(floatingMenuEl);
-
-            // 2. Initialize Editor
             const editor = new Editor({
                 element: document.getElementById(elementId),
                 extensions: [
@@ -1355,23 +1152,6 @@
                     TextAlign.configure({
                         types: ['heading', 'paragraph'],
                     }),
-                    TextStyle,
-                    Underline,
-                    Color,
-                    Highlight.configure({ multicolor: true }),
-                    Table.configure({ resizable: true }),
-                    TableRow,
-                    TableHeader,
-                    TableCell,
-                    BubbleMenu.configure({
-                        element: bubbleMenuEl,
-                    }),
-                    FloatingMenu.configure({
-                        element: floatingMenuEl,
-                    }),
-                    FontFamily,
-                    IndentExtension,
-                    FirstLineIndent,
                 ],
                 content: '',
                 editorProps: {
@@ -1381,7 +1161,6 @@
                 },
             });
 
-            // 3. Setup Toolbar
             const toolbar = document.getElementById(toolbarId);
 
             const buttons = [
@@ -1416,23 +1195,6 @@
                 { label: 'Left', action: () => editor.chain().focus().setTextAlign('left').run(), isActive: () => editor.isActive({ textAlign: 'left' }) },
                 { label: 'Center', action: () => editor.chain().focus().setTextAlign('center').run(), isActive: () => editor.isActive({ textAlign: 'center' }) },
                 { label: 'Right', action: () => editor.chain().focus().setTextAlign('right').run(), isActive: () => editor.isActive({ textAlign: 'right' }) },
-                { label: 'U', action: () => editor.chain().focus().toggleUnderline().run(), isActive: () => editor.isActive('underline') },
-                { label: '🎨', action: () => { const c = prompt('Màu (hex):', '#ff0000'); if (c) editor.chain().focus().setColor(c).run(); }, isActive: () => false },
-                { label: '🖌', action: () => { editor.chain().focus().toggleHighlight({ color: 'yellow' }).run(); }, isActive: () => editor.isActive('highlight') },
-                { label: '📊', action: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), isActive: () => false },
-                {
-                    label: 'Aa',
-                    action: () => {
-                        const font = prompt('Font Family (e.g., Arial, serif, monospace):', 'Arial');
-                        if (font) editor.chain().focus().setFontFamily(font).run();
-                    },
-                    isActive: () => false
-                },
-                {
-                    label: '⇥ 1.27',
-                    action: () => editor.chain().focus().toggleFirstLineIndent().run(),
-                    isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
-                },
             ];
 
             buttons.forEach(btn => {
@@ -1461,3 +1223,5 @@
     <!-- Admin UI Enhancements -->
     <script src="/public/admin-ui-enhancements.js"></script>
 </body>
+
+</html>

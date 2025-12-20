@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - With Tiptap Editor</title>
+    
+    <!-- Tiptap CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/core@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/starter-kit@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-text-align@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-link@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-image@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-highlight@latest"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 12px;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 12px 15px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #333;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Two Column Layout */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        /* Editor Toolbar */
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 4px;
+            padding-right: 6px;
+            border-right: 1px solid #ddd;
+        }
+
+        .toolbar-group:last-child {
+            border-right: none;
+        }
+
+        .editor-toolbar button,
+        .editor-toolbar select,
+        .editor-toolbar input {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .editor-toolbar button:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .editor-toolbar button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .editor-toolbar select,
+        .editor-toolbar input {
+            cursor: pointer;
+        }
+
+        .editor-toolbar input[type="color"] {
+            width: 36px;
+            height: 30px;
+            padding: 2px;
+        }
+
+        /* Editor Container */
+        .editor-container {
+            border: 1px solid #ddd;
+            border-radius: 0 0 6px 6px;
+            background: white;
+            min-height: 350px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .editor-container:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .ProseMirror {
+            outline: none;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .ProseMirror h1 { font-size: 28px; font-weight: 700; margin: 15px 0 10px 0; }
+        .ProseMirror h2 { font-size: 22px; font-weight: 700; margin: 12px 0 8px 0; }
+        .ProseMirror h3 { font-size: 18px; font-weight: 700; margin: 10px 0 6px 0; }
+        .ProseMirror p { margin-bottom: 10px; }
+        .ProseMirror strong { font-weight: 700; }
+        .ProseMirror em { font-style: italic; }
+        .ProseMirror u { text-decoration: underline; }
+        .ProseMirror s { text-decoration: line-through; }
+        .ProseMirror code { background: #f1f3f5; padding: 2px 6px; border-radius: 3px; color: #e83e8c; }
+        .ProseMirror pre { background: #2d2d2d; color: #f8f8f2; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .ProseMirror pre code { background: transparent; padding: 0; color: inherit; }
+        .ProseMirror ul, .ProseMirror ol { margin-left: 20px; margin-bottom: 10px; }
+        .ProseMirror li { margin-bottom: 4px; }
+        .ProseMirror blockquote { border-left: 4px solid #667eea; padding-left: 10px; margin: 10px 0; color: #666; }
+        .ProseMirror a { color: #0066cc; text-decoration: underline; }
+        .ProseMirror img { max-width: 100%; height: auto; border-radius: 4px; margin: 10px 0; }
+        .ProseMirror mark { background: #ffeb3b; padding: 2px 4px; border-radius: 3px; }
+
+        /* Buttons */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #e7f5ff;
+            color: #0066cc;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: #28a745;
+            color: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-toolbar {
+                gap: 4px;
+            }
+
+            .editor-toolbar button,
+            .editor-toolbar select {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">📊 Admin</div>
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard">📈 Dashboard</a></li>
+                <li><a href="#articles" class="active">📝 Articles</a></li>
+                <li><a href="#events">🎯 Events</a></li>
+                <li><a href="#media">🖼️ Media Library</a></li>
+                <li><a href="#pages">📄 Static Pages</a></li>
+                <li><a href="#settings" style="margin-top: 20px;">⚙️ Settings</a></li>
+                <li><a href="#logout">🚪 Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Add New Article</h1>
+                <div class="user-menu">
+                    <span>👤 Admin User</span>
+                </div>
+            </div>
+
+            <!-- Article Form -->
+            <div class="form-container">
+                <!-- Basic Info Section -->
+                <div class="form-section">
+                    <h2>📋 Basic Information</h2>
+                    
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" id="title" placeholder="Enter article title..." required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="category" required>
+                                <option value="">Select a category...</option>
+                                <option value="tech">Technology</option>
+                                <option value="business">Business</option>
+                                <option value="lifestyle">Lifestyle</option>
+                                <option value="health">Health</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status *</label>
+                            <select id="status" required>
+                                <option value="draft">Draft</option>
+                                <option value="published">Published</option>
+                                <option value="scheduled">Scheduled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Image Section -->
+                <div class="form-section">
+                    <h2>🖼️ Featured Image</h2>
+                    <div class="form-group">
+                        <label>Upload Image</label>
+                        <input type="file" id="featured-image" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Content Section -->
+                <div class="form-section">
+                    <h2>✍️ Article Content</h2>
+                    
+                    <!-- Editor Toolbar -->
+                    <div class="editor-toolbar">
+                        <div class="toolbar-group">
+                            <button id="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+                            <button id="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+                            <button id="underline" title="Underline">U</button>
+                            <button id="strike" title="Strikethrough">S</button>
+                            <input type="color" id="textColor" title="Text Color" value="#333">
+                        </div>
+
+                        <div class="toolbar-group">
+                            <select id="heading" title="Heading Level">
+                                <option value="paragraph">Normal</option>
+                                <option value="1">Heading 1</option>
+                                <option value="2">Heading 2</option>
+                                <option value="3">Heading 3</option>
+                            </select>
+                        </div>
+
+                        <div class="toolbar-group">
+                            <button id="bullet" title="Bullet List">• List</button>
+                            <button id="ordered" title="Ordered List">1. List</button>
+                            <button id="quote" title="Blockquote">❝ Quote</button>
+                        </div>
+
+                        <div class="toolbar-group">
+                            <button id="code" title="Inline Code">Code</button>
+                            <button id="codeBlock" title="Code Block">&lt;/&gt;</button>
+                        </div>
+
+                        <div class="toolbar-group">
+                            <button id="link" title="Add Link">🔗</button>
+                            <button id="highlight" title="Highlight">🖍</button>
+                            <button id="clear" title="Clear Formatting">✕</button>
+                        </div>
+
+                        <div class="toolbar-group">
+                            <button id="undo" title="Undo">↶</button>
+                            <button id="redo" title="Redo">↷</button>
+                        </div>
+                    </div>
+
+                    <!-- Editor -->
+                    <div id="editor" class="editor-container">
+                        <p>Start typing your article content here...</p>
+                    </div>
+                </div>
+
+                <!-- SEO Section -->
+                <div class="form-section">
+                    <h2>🔍 SEO</h2>
+                    <div class="form-group">
+                        <label>Meta Description</label>
+                        <textarea id="meta-desc" placeholder="Enter SEO meta description..." rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (comma-separated)</label>
+                        <input type="text" id="tags" placeholder="tag1, tag2, tag3">
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="publish">📤 Publish</button>
+                    <button class="btn btn-primary" id="schedule">⏰ Schedule</button>
+                    <button class="btn btn-secondary" id="save-draft">💾 Save Draft</button>
+                    <button class="btn btn-danger" id="cancel">✕ Cancel</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Tiptap Editor
+        let editor;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            editor = new Tiptap.Editor({
+                element: document.getElementById('editor'),
+                extensions: [
+                    Tiptap.StarterKit,
+                    Tiptap.TextAlign.configure({
+                        types: ['heading', 'paragraph'],
+                        alignments: ['left', 'center', 'right'],
+                    }),
+                    Tiptap.Link.configure({ openOnClick: false }),
+                    Tiptap.Image,
+                    Tiptap.Highlight.configure({ multicolor: true }),
+                ],
+                onUpdate: () => updateToolbarState(),
+            });
+
+            // Toolbar Event Listeners
+            setupToolbarListeners();
+            setupFormListeners();
+        });
+
+        function setupToolbarListeners() {
+            document.getElementById('bold').addEventListener('click', () => {
+                editor.chain().focus().toggleBold().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('italic').addEventListener('click', () => {
+                editor.chain().focus().toggleItalic().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('underline').addEventListener('click', () => {
+                editor.chain().focus().toggleUnderline().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('strike').addEventListener('click', () => {
+                editor.chain().focus().toggleStrike().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('textColor').addEventListener('change', (e) => {
+                editor.chain().focus().setColor(e.target.value).run();
+            });
+
+            document.getElementById('heading').addEventListener('change', (e) => {
+                const level = e.target.value;
+                if (level === 'paragraph') {
+                    editor.chain().focus().setParagraph().run();
+                } else {
+                    editor.chain().focus().setHeading({ level: parseInt(level) }).run();
+                }
+                e.target.value = 'paragraph';
+                updateToolbarState();
+            });
+
+            document.getElementById('bullet').addEventListener('click', () => {
+                editor.chain().focus().toggleBulletList().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('ordered').addEventListener('click', () => {
+                editor.chain().focus().toggleOrderedList().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('quote').addEventListener('click', () => {
+                editor.chain().focus().toggleBlockquote().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('code').addEventListener('click', () => {
+                editor.chain().focus().toggleCode().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('codeBlock').addEventListener('click', () => {
+                editor.chain().focus().toggleCodeBlock().run();
+                updateToolbarState();
+            });
+
+            document.getElementById('link').addEventListener('click', () => {
+                const url = prompt('Enter URL:', 'https://');
+                if (url) {
+                    editor.chain().focus().setLink({ href: url }).run();
+                }
+            });
+
+            document.getElementById('highlight').addEventListener('click', () => {
+                editor.chain().focus().toggleHighlight({ color: '#ffeb3b' }).run();
+            });
+
+            document.getElementById('clear').addEventListener('click', () => {
+                editor.chain().focus().clearNodes().run();
+            });
+
+            document.getElementById('undo').addEventListener('click', () => {
+                editor.chain().focus().undo().run();
+            });
+
+            document.getElementById('redo').addEventListener('click', () => {
+                editor.chain().focus().redo().run();
+            });
+        }
+
+        function setupFormListeners() {
+            document.getElementById('publish').addEventListener('click', () => {
+                const title = document.getElementById('title').value;
+                if (!title) {
+                    showToast('Please enter a title', 'error');
+                    return;
+                }
+                const content = editor.getHTML();
+                console.log('Publishing:', { title, content });
+                showToast('Article published successfully!', 'success');
+            });
+
+            document.getElementById('schedule').addEventListener('click', () => {
+                const date = prompt('Select publish date:', '2025-12-25');
+                if (date) {
+                    showToast('Article scheduled for: ' + date, 'success');
+                }
+            });
+
+            document.getElementById('save-draft').addEventListener('click', () => {
+                const title = document.getElementById('title').value || 'Untitled';
+                const content = editor.getHTML();
+                console.log('Saving draft:', { title, content });
+                showToast('Draft saved successfully!', 'success');
+            });
+
+            document.getElementById('cancel').addEventListener('click', () => {
+                if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
+                    location.href = '#articles';
+                }
+            });
+        }
+
+        function updateToolbarState() {
+            document.getElementById('bold').classList.toggle('active', editor.isActive('bold'));
+            document.getElementById('italic').classList.toggle('active', editor.isActive('italic'));
+            document.getElementById('underline').classList.toggle('active', editor.isActive('underline'));
+            document.getElementById('strike').classList.toggle('active', editor.isActive('strike'));
+            document.getElementById('bullet').classList.toggle('active', editor.isActive('bulletList'));
+            document.getElementById('ordered').classList.toggle('active', editor.isActive('orderedList'));
+            document.getElementById('quote').classList.toggle('active', editor.isActive('blockquote'));
+            document.getElementById('code').classList.toggle('active', editor.isActive('code'));
+            document.getElementById('codeBlock').classList.toggle('active', editor.isActive('codeBlock'));
+            document.getElementById('highlight').classList.toggle('active', editor.isActive('highlight'));
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            if (type === 'error') toast.style.background = '#dc3545';
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                e.preventDefault();
+                editor.chain().focus().toggleBold().run();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+                e.preventDefault();
+                editor.chain().focus().toggleItalic().run();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'u') {
+                e.preventDefault();
+                editor.chain().focus().toggleUnderline().run();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                document.getElementById('save-draft').click();
+            }
+        });
+    </script>
+</body>
+</html>

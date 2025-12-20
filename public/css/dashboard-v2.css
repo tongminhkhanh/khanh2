@@ -1,0 +1,507 @@
+/* =========================================
+   DASHBOARD V2 STYLES (from admin-dashboard.md)
+   ========================================= */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding: 10px;
+    text-align: center;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    margin-bottom: 12px;
+}
+
+.sidebar-menu a {
+    display: block;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sidebar-menu a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-menu a.active {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 280px;
+    flex: 1;
+    padding: 30px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+    color: #333;
+}
+
+.user-menu {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.user-menu button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.tabs button {
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s ease;
+}
+
+.tabs button.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+}
+
+.tabs button:hover {
+    color: #667eea;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form Container */
+.form-container {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+    margin-bottom: 30px;
+}
+
+.form-section h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+}
+
+/* Editor Toolbar */
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 4px;
+    padding-right: 6px;
+    border-right: 1px solid #ddd;
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+.editor-toolbar button,
+.editor-toolbar select,
+.editor-toolbar input {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.editor-toolbar button:hover {
+    background: #e9ecef;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.editor-toolbar button.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.editor-toolbar select,
+.editor-toolbar input {
+    cursor: pointer;
+}
+
+.editor-toolbar input[type="color"] {
+    width: 36px;
+    height: 30px;
+    padding: 2px;
+}
+
+/* Editor Container */
+.editor-container {
+    border: 1px solid #ddd;
+    border-radius: 0 0 6px 6px;
+    background: white;
+    min-height: 350px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.editor-container:focus-within {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.ProseMirror {
+    outline: none;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.ProseMirror h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 15px 0 10px 0;
+}
+
+.ProseMirror h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 12px 0 8px 0;
+}
+
+.ProseMirror h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 10px 0 6px 0;
+}
+
+.ProseMirror p {
+    margin-bottom: 10px;
+}
+
+.ProseMirror strong {
+    font-weight: 700;
+}
+
+.ProseMirror em {
+    font-style: italic;
+}
+
+.ProseMirror u {
+    text-decoration: underline;
+}
+
+.ProseMirror s {
+    text-decoration: line-through;
+}
+
+.ProseMirror code {
+    background: #f1f3f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #e83e8c;
+}
+
+.ProseMirror pre {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.ProseMirror pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.ProseMirror li {
+    margin-bottom: 4px;
+}
+
+.ProseMirror blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 10px;
+    margin: 10px 0;
+    color: #666;
+}
+
+.ProseMirror a {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+.ProseMirror img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.ProseMirror mark {
+    background: #ffeb3b;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* Buttons */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary {
+    background: #e9ecef;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+}
+
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+table tr:hover {
+    background: #f8f9fa;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-draft {
+    background: #ffc107;
+    color: #333;
+}
+
+.status-published {
+    background: #28a745;
+    color: white;
+}
+
+.status-scheduled {
+    background: #17a2b8;
+    color: white;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: #28a745;
+    color: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease;
+    z-index: 2000;
+}
+
+.toast.error {
+    background: #dc3545;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+    }
+}

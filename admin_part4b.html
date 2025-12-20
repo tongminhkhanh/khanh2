@@ -1,0 +1,586 @@
+// Events
+async function fetchEvents() {
+const tbody = document.getElementById('events-list');
+tbody.innerHTML = Array(5).fill(0).map(() => `
+<tr class="skeleton-row">
+    <td class="px-6 py-4">
+        <div class="skeleton h-4 w-3/4 rounded"></div>
+    </td>
+    <td class="px-6 py-4">
+        <div class="skeleton h-4 w-1/2 rounded"></div>
+    </td>
+    <td class="px-6 py-4">
+        <div class="skeleton h-4 w-1/2 rounded"></div>
+    </td>
+    <td class="px-6 py-4">
+        <div class="skeleton h-4 w-1/4 rounded"></div>
+    </td>
+    <td class="px-6 py-4 text-right">
+        <div class="skeleton h-8 w-16 rounded ml-auto"></div>
+    </td>
+</tr>
+`).join('');
+
+try {
+const res = await fetch(`${API_URL}/admin/events`, { headers: { 'Authorization': `Bearer ${token}` } });
+const events = await res.json();
+
+if (!events || events.length === 0) {
+tbody.innerHTML = `<tr>
+    <td colspan="5" class="px-6 py-12 text-center text-gray-500">No events found</td>
+</tr>`;
+return;
+}
+
+tbody.innerHTML = events.map(e => `
+<tr>
+    <td class="px-6 py-4 font-medium">${e.title}</td>
+    <td class="px-6 py-4 text-gray-500">${new Date(e.startDate).toLocaleDateString('vi-VN')}</td>
+    <td class="px-6 py-4 text-gray-500">${e.location || '-'}</td>
+    <td class="px-6 py-4"><span
+            class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished
+            ? 'Published' : 'Draft'}</span></td>
+    <td class="px-6 py-4 text-right">
+        <button onclick="editEvent('${e._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+        <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">Delete</button>
+    </td>
+</tr>
+`).join('');
+} catch (err) {
+console.error(err);
+tbody.innerHTML = `<tr>
+    <td colspan="5" class="px-6 py-4 text-center text-red-500">Error loading data</td>
+</tr>`;
+}
+}
+
+document.getElementById('event-form').addEventListener('submit', async (e) => {
+e.preventDefault();
+const id = document.getElementById('event-id').value;
+const eventType = document.getElementById('event-type').value;
+const event = {
+title: document.getElementById('event-title').value,
+description: document.getElementById('event-description').value,
+startDate: document.getElementById('event-start').value,
+endDate: document.getElementById('event-end').value,
+type: eventType,
+location: document.getElementById('event-location').value,
+color: document.getElementById('event-color').value,
+isPublished: document.getElementById('event-published').checked,
+targetGrade: eventType === 'class' ? document.getElementById('event-target-grade').value : null,
+targetClass: eventType === 'class' ? document.getElementById('event-target-class').value : null
+};
+const method = id ? 'PUT' : 'POST';
+const url = id ? `${API_URL}/events/${id}` : `${API_URL}/events`;
+try {
+const res = await fetch(url, {
+method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+body: JSON.stringify(event)
+});
+if (res.ok) { resetEventForm(); fetchEvents(); alert('Event saved!'); }
+else { const d = await res.json(); alert('Error: ' + d.message); }
+} catch (err) { console.error(err); }
+});
+
+window.editEvent = async (id) => {
+const res = await fetch(`${API_URL}/admin/events`, { headers: { 'Authorization': `Bearer ${token}` } });
+const events = await res.json();
+const e = events.find(x => x._id === id);
+if (e) {
+document.getElementById('event-id').value = e._id;
+document.getElementById('event-title').value = e.title;
+document.getElementById('event-description').value = e.description || '';
+document.getElementById('event-start').value = new Date(e.startDate).toISOString().slice(0, 16);
+document.getElementById('event-end').value = new Date(e.endDate).toISOString().slice(0, 16);
+document.getElementById('event-type').value = e.type || 'public';
+document.getElementById('event-location').value = e.location || '';
+setEventCategoryByColor(e.color || '#dc2626');
+document.getElementById('event-color').value = e.color || '#dc2626';
+document.getElementById('event-published').checked = e.isPublished;
+document.getElementById('event-target-grade').value = e.targetGrade || '';
+document.getElementById('event-target-class').value = e.targetClass || '';
+toggleEventTargetFields();
+document.getElementById('cancel-event-edit').classList.remove('hidden');
+window.scrollTo(0, 0);
+}
+};
+
+window.deleteEvent = async (id) => {
+showConfirmDialog({
+title: 'Delete Event?',
+message: 'This event will be permanently deleted and cannot be undone.',
+confirmText: 'Delete',
+cancelText: 'Cancel',
+onConfirm: async () => {
+await fetch(`${API_URL}/events/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+fetchEvents();
+showToast('success', 'Event deleted!');
+}
+});
+};
+
+document.getElementById('cancel-event-edit').addEventListener('click', resetEventForm);
+
+function resetEventForm() {
+document.getElementById('event-form').reset();
+document.getElementById('event-id').value = '';
+document.getElementById('event-category').value = 'exam';
+document.getElementById('event-color').value = '#dc2626';
+document.getElementById('event-target-grade').value = '';
+document.getElementById('event-target-class').value = '';
+document.getElementById('event-target-container').style.display = 'none';
+document.getElementById('cancel-event-edit').classList.add('hidden');
+}
+
+function toggleEventTargetFields() {
+const eventType = document.getElementById('event-type').value;
+const container = document.getElementById('event-target-container');
+container.style.display = eventType === 'class' ? 'grid' : 'none';
+}
+
+document.getElementById('event-type').addEventListener('change', toggleEventTargetFields);
+
+function updateEventColor() {
+const select = document.getElementById('event-category');
+const color = select.options[select.selectedIndex].getAttribute('data-color');
+document.getElementById('event-color').value = color;
+}
+
+function setEventCategoryByColor(color) {
+const select = document.getElementById('event-category');
+const colorMap = {
+'#dc2626': 'exam',
+'#2563eb': 'activity',
+'#16a34a': 'holiday',
+'#6b7280': 'other'
+};
+select.value = colorMap[color] || 'other';
+}
+
+// Media
+async function fetchMedia() {
+const grid = document.getElementById('media-grid');
+grid.innerHTML = Array(6).fill(0).map(() => `<div class="skeleton h-24 w-full rounded"></div>`).join('');
+
+try {
+const res = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
+const media = await res.json();
+
+if (!media || media.length === 0) {
+grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500">No images found</div>`;
+return;
+}
+
+grid.innerHTML = media.map(m => `
+<div class="relative group">
+    <img src="${m.path}" class="w-full h-24 object-cover rounded cursor-pointer" onclick="copyMediaUrl('${m.path}')">
+    <button onclick="deleteMedia('${m._id}')"
+        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs opacity-0 group-hover:opacity-100 transition-opacity">&times;</button>
+</div>
+`).join('');
+} catch (err) {
+console.error(err);
+grid.innerHTML = `<div class="col-span-full py-4 text-center text-red-500">Error loading images</div>`;
+}
+}
+
+document.getElementById('media-upload').addEventListener('change', async (e) => {
+if (e.target.files[0]) {
+const formData = new FormData();
+formData.append('file', e.target.files[0]);
+try {
+const res = await fetch(`${API_URL}/upload`, {
+method: 'POST',
+headers: { 'Authorization': `Bearer ${token}` },
+body: formData
+});
+if (res.ok) { fetchMedia(); alert('Image uploaded!'); }
+else { const d = await res.json(); alert('Error: ' + d.message); }
+} catch (err) { console.error(err); }
+}
+});
+
+window.copyMediaUrl = (url) => {
+navigator.clipboard.writeText(url);
+alert('URL copied!');
+};
+
+window.deleteMedia = async (id) => {
+showConfirmDialog({
+title: 'Delete Image?',
+message: 'This image will be permanently deleted and cannot be undone.',
+confirmText: 'Delete',
+cancelText: 'Cancel',
+onConfirm: async () => {
+await fetch(`${API_URL}/media/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+fetchMedia();
+showToast('success', 'Image deleted!');
+}
+});
+};
+
+// Media Selector Modal
+window.openMediaSelector = async (inputId, callback) => {
+mediaSelectInputId = inputId;
+mediaSelectCallback = callback;
+const modal = document.getElementById('media-modal');
+modal.classList.remove('hidden');
+const grid = document.getElementById('modal-media-grid');
+grid.innerHTML = Array(4).fill(0).map(() => `<div class="skeleton h-24 w-full rounded"></div>`).join('');
+try {
+const res = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
+const media = await res.json();
+grid.innerHTML = media.map(m => `
+<img src="${m.path}" class="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500"
+    onclick="selectMedia('${m.path}')">
+`).join('');
+} catch (err) { console.error(err); }
+};
+
+window.selectMedia = (url) => {
+if (mediaSelectCallback) {
+mediaSelectCallback(url, { alt: 'Image' });
+} else if (mediaSelectInputId) {
+document.getElementById(mediaSelectInputId).value = url;
+// Trigger change event for preview
+document.getElementById(mediaSelectInputId).dispatchEvent(new Event('change'));
+}
+closeMediaModal();
+};
+
+window.closeMediaModal = () => {
+document.getElementById('media-modal').classList.add('hidden');
+mediaSelectCallback = null;
+mediaSelectInputId = null;
+};
+
+// Pages
+async function fetchPages() {
+const tbody = document.getElementById('pages-list');
+tbody.innerHTML = Array(3).fill(0).map(() => `
+<tr class="skeleton-row">
+    <td class="px-6 py-4">
+        <div class="skeleton h-4 w-3/4 rounded"></div>
+    </td>
+    <td class="px-6 py-4">
+        <div class="skeleton h-4 w-1/2 rounded"></div>
+    </td>
+    <td class="px-6 py-4">
+        <div class="skeleton h-4 w-1/4 rounded"></div>
+    </td>
+    <td class="px-6 py-4 text-right">
+        <div class="skeleton h-8 w-16 rounded ml-auto"></div>
+    </td>
+</tr>
+`).join('');
+
+try {
+const res = await fetch(`${API_URL}/admin/static-pages`, { headers: { 'Authorization': `Bearer ${token}` } });
+const pages = await res.json();
+
+if (!pages || pages.length === 0) {
+tbody.innerHTML = `<tr>
+    <td colspan="4" class="px-6 py-12 text-center text-gray-500">No pages found</td>
+</tr>`;
+return;
+}
+
+tbody.innerHTML = pages.map(p => `
+<tr>
+    <td class="px-6 py-4 font-medium">${p.title}</td>
+    <td class="px-6 py-4 text-gray-500">${p.slug}</td>
+    <td class="px-6 py-4"><span
+            class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished
+            ? 'Published' : 'Draft'}</span></td>
+    <td class="px-6 py-4 text-right">
+        <button onclick="editPage('${p._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+        <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">Delete</button>
+    </td>
+</tr>
+`).join('');
+} catch (err) {
+console.error(err);
+tbody.innerHTML = `<tr>
+    <td colspan="4" class="px-6 py-4 text-center text-red-500">Error loading data</td>
+</tr>`;
+}
+}
+
+window.generateSlug = () => {
+const title = document.getElementById('page-title-input').value;
+const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+document.getElementById('page-slug').value = slug;
+};
+
+document.getElementById('page-form').addEventListener('submit', async (e) => {
+e.preventDefault();
+const id = document.getElementById('page-id').value;
+const content = window.pageEditor ? window.pageEditor.getHTML() : '';
+const page = {
+title: document.getElementById('page-title-input').value,
+slug: document.getElementById('page-slug').value,
+content: content,
+isPublished: document.getElementById('page-published').checked
+};
+const method = id ? 'PUT' : 'POST';
+const url = id ? `${API_URL}/admin/static-pages/${id}` : `${API_URL}/admin/static-pages`;
+try {
+const res = await fetch(url, {
+method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+body: JSON.stringify(page)
+});
+if (res.ok) { resetPageForm(); fetchPages(); alert('Page saved!'); }
+else { const d = await res.json(); alert('Error: ' + d.message); }
+} catch (err) { console.error(err); }
+});
+
+window.editPage = async (id) => {
+const res = await fetch(`${API_URL}/admin/static-pages`, { headers: { 'Authorization': `Bearer ${token}` } });
+const pages = await res.json();
+const p = pages.find(x => x._id === id);
+if (p) {
+document.getElementById('page-id').value = p._id;
+document.getElementById('page-title-input').value = p.title;
+document.getElementById('page-slug').value = p.slug;
+if (window.pageEditor) window.pageEditor.commands.setContent(p.content || '');
+document.getElementById('page-published').checked = p.isPublished;
+document.getElementById('cancel-page-edit').classList.remove('hidden');
+window.scrollTo(0, 0);
+}
+};
+
+window.deletePage = async (id) => {
+showConfirmDialog({
+title: 'Delete Page?',
+message: 'This page will be permanently deleted and cannot be undone.',
+confirmText: 'Delete',
+cancelText: 'Cancel',
+onConfirm: async () => {
+await fetch(`${API_URL}/admin/static-pages/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+});
+fetchPages();
+showToast('success', 'Page deleted!');
+}
+});
+};
+
+document.getElementById('cancel-page-edit').addEventListener('click', resetPageForm);
+
+function resetPageForm() {
+document.getElementById('page-form').reset();
+document.getElementById('page-id').value = '';
+if (window.pageEditor) window.pageEditor.commands.setContent('');
+document.getElementById('cancel-page-edit').classList.add('hidden');
+}
+
+// Settings
+async function fetchSettings() {
+try {
+// Ticker Settings
+const tickerRes = await fetch(`${API_URL}/settings/ticker_settings`);
+const tickerData = await tickerRes.json();
+if (tickerData.value) {
+document.getElementById('ticker-enabled').checked = tickerData.value.isEnabled || false;
+document.getElementById('ticker-content-input').value = tickerData.value.content || '';
+}
+
+// Urgent Notice
+const urgentRes = await fetch(`${API_URL}/settings/urgent_notice`);
+const urgentData = await urgentRes.json();
+if (urgentData.value) {
+document.getElementById('urgent-enabled').checked = urgentData.value.isEnabled || false;
+document.getElementById('urgent-content').value = urgentData.value.content || '';
+document.getElementById('urgent-link').value = urgentData.value.link || '';
+}
+
+// Principal Message
+const principalRes = await fetch(`${API_URL}/settings/principal_message`);
+const principalData = await principalRes.json();
+if (principalData.value) {
+document.getElementById('principal-title').value = principalData.value.title || '';
+document.getElementById('principal-content').value = principalData.value.content || '';
+}
+} catch (err) { console.error(err); }
+}
+
+document.getElementById('urgent-notice-form').addEventListener('submit', async (e) => {
+e.preventDefault();
+const data = {
+isEnabled: document.getElementById('urgent-enabled').checked,
+content: document.getElementById('urgent-content').value,
+link: document.getElementById('urgent-link').value
+};
+try {
+const res = await fetch(`${API_URL}/admin/settings/urgent_notice`, {
+method: 'PUT',
+headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+body: JSON.stringify({ value: data, description: 'Urgent Notice' })
+});
+if (res.ok) alert('Settings saved!');
+else { const d = await res.json(); alert('Error: ' + d.message); }
+} catch (err) { console.error(err); }
+});
+
+document.getElementById('principal-message-form').addEventListener('submit', async (e) => {
+e.preventDefault();
+const data = {
+title: document.getElementById('principal-title').value,
+content: document.getElementById('principal-content').value
+};
+try {
+const res = await fetch(`${API_URL}/admin/settings/principal_message`, {
+method: 'PUT',
+headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+body: JSON.stringify({ value: data, description: 'Principal Message' })
+});
+if (res.ok) alert('Message saved!');
+else { const d = await res.json(); alert('Error: ' + d.message); }
+} catch (err) { console.error(err); }
+});
+
+document.getElementById('ticker-settings-form').addEventListener('submit', async (e) => {
+e.preventDefault();
+const data = {
+isEnabled: document.getElementById('ticker-enabled').checked,
+content: document.getElementById('ticker-content-input').value
+};
+try {
+const res = await fetch(`${API_URL}/admin/settings/ticker_settings`, {
+method: 'PUT',
+headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+body: JSON.stringify({ value: data, description: 'Ticker Bar Settings' })
+});
+if (res.ok) alert('Ticker settings saved!');
+else { const d = await res.json(); alert('Error: ' + d.message); }
+} catch (err) { console.error(err); }
+});
+
+// Init
+if (token) {
+try {
+const payload = JSON.parse(atob(token.split('.')[1]));
+currentUser = payload;
+showDashboard();
+} catch (e) {
+showAuth();
+}
+} else {
+showAuth();
+}
+</script>
+<!-- Admin UI Enhancements -->
+<script src="/public/admin-ui-enhancements.js"></script>
+<script>
+    // Tiptap Initialization
+    let editor;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('article-editor')) {
+            editor = new Tiptap.Editor({
+                element: document.getElementById('article-editor'),
+                extensions: [
+                    Tiptap.StarterKit,
+                    Tiptap.TextAlign.configure({
+                        types: ['heading', 'paragraph'],
+                        alignments: ['left', 'center', 'right'],
+                    }),
+                    Tiptap.Link.configure({ openOnClick: false }),
+                    Tiptap.Image.configure({ inline: true, allowBase64: true }),
+                    Tiptap.Highlight.configure({ multicolor: true }),
+                    Tiptap.Underline,
+                    Tiptap.TextStyle,
+                    Tiptap.Color,
+                ],
+                content: '',
+                onUpdate: () => updateToolbarState(),
+            });
+
+            // Expose editor to window for other functions
+            window.articleEditor = editor;
+
+            // Toolbar Event Listeners
+            setupToolbarListeners();
+        }
+    });
+
+    function setupToolbarListeners() {
+        const addListener = (id, callback) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('click', callback);
+        };
+
+        addListener('bold', () => { editor.chain().focus().toggleBold().run(); updateToolbarState(); });
+        addListener('italic', () => { editor.chain().focus().toggleItalic().run(); updateToolbarState(); });
+        addListener('underline', () => { editor.chain().focus().toggleUnderline().run(); updateToolbarState(); });
+        addListener('strike', () => { editor.chain().focus().toggleStrike().run(); updateToolbarState(); });
+
+        const textColor = document.getElementById('textColor');
+        if (textColor) {
+            textColor.addEventListener('change', (e) => {
+                editor.chain().focus().setColor(e.target.value).run();
+            });
+        }
+
+        const heading = document.getElementById('heading');
+        if (heading) {
+            heading.addEventListener('change', (e) => {
+                const level = e.target.value;
+                if (level === 'paragraph') {
+                    editor.chain().focus().setParagraph().run();
+                } else {
+                    editor.chain().focus().setHeading({ level: parseInt(level) }).run();
+                }
+                e.target.value = 'paragraph'; // Reset select
+                updateToolbarState();
+            });
+        }
+
+        addListener('bullet', () => { editor.chain().focus().toggleBulletList().run(); updateToolbarState(); });
+        addListener('ordered', () => { editor.chain().focus().toggleOrderedList().run(); updateToolbarState(); });
+        addListener('quote', () => { editor.chain().focus().toggleBlockquote().run(); updateToolbarState(); });
+        addListener('code', () => { editor.chain().focus().toggleCode().run(); updateToolbarState(); });
+        addListener('codeBlock', () => { editor.chain().focus().toggleCodeBlock().run(); updateToolbarState(); });
+
+        addListener('link', () => {
+            const url = prompt('Enter URL:', 'https://');
+            if (url) {
+                editor.chain().focus().setLink({ href: url }).run();
+            }
+        });
+
+        addListener('highlight', () => {
+            editor.chain().focus().toggleHighlight({ color: '#ffeb3b' }).run();
+        });
+
+        addListener('clear', () => {
+            editor.chain().focus().clearNodes().run();
+            editor.chain().focus().unsetAllMarks().run();
+        });
+
+        addListener('undo', () => { editor.chain().focus().undo().run(); });
+        addListener('redo', () => { editor.chain().focus().redo().run(); });
+    }
+
+    function updateToolbarState() {
+        if (!editor) return;
+
+        const toggleActive = (id, isActive) => {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('active', isActive);
+        };
+
+        toggleActive('bold', editor.isActive('bold'));
+        toggleActive('italic', editor.isActive('italic'));
+        toggleActive('underline', editor.isActive('underline'));
+        toggleActive('strike', editor.isActive('strike'));
+        toggleActive('bullet', editor.isActive('bulletList'));
+        toggleActive('ordered', editor.isActive('orderedList'));
+        toggleActive('quote', editor.isActive('blockquote'));
+        toggleActive('code', editor.isActive('code'));
+        toggleActive('codeBlock', editor.isActive('codeBlock'));
+        toggleActive('highlight', editor.isActive('highlight'));
+    }
+</script>
+</body>
+
+</html>

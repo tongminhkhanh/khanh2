@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script>
+        // Early auth check - redirect to login if no token
+        if (!localStorage.getItem('admin-token')) {
+            window.location.href = '/admin-login.html';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/public/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Trường Tiểu học Ít Ong</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/public/css/main.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+            <h2 class="text-2xl font-bold mb-4 text-center">Đăng nhập Admin</h2>
+            <form id="login-form" class="flex flex-col gap-4">
+                <input type="text" id="login-username" placeholder="Tên đăng nhập" class="border p-2 rounded" required>
+                <input type="password" id="login-password" placeholder="Mật khẩu" class="border p-2 rounded" required>
+                <button type="submit" class="btn btn-primary w-full">Đăng nhập</button>
+            </form>
+            <p id="auth-error" class="text-red-500 text-sm mt-2 hidden text-center"></p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 text-white flex flex-col">
+            <div class="p-4 border-b border-gray-700">
+                <h1 class="text-xl font-bold">Admin Panel</h1>
+            </div>
+            <nav class="flex-1 p-4">
+                <a href="#" id="nav-articles"
+                    class="flex items-center gap-2 px-4 py-2 rounded bg-blue-600 text-white mb-2">
+                    <span>Bài viết</span>
+                </a>
+                <a href="#" id="nav-events"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Sự kiện</span>
+                </a>
+                <a href="#" id="nav-media"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Thư viện ảnh</span>
+                </a>
+                <a href="#" id="nav-pages"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Trang tĩnh</span>
+                </a>
+                <a href="#" id="nav-settings"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>Cài đặt</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold"
+                        id="user-avatar">A</div>
+                    <div>
+                        <p class="text-sm font-medium" id="user-name">Admin</p>
+                        <p class="text-xs text-gray-400" id="user-role">Administrator</p>
+                    </div>
+                </div>
+                <button id="logout-btn" class="mt-4 w-full text-sm text-red-400 hover:text-red-300 text-left">Đăng
+                    xuất</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow z-10">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-2xl font-bold text-gray-900" id="page-title">Quản lý Bài viết</h1>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto bg-gray-100 p-6">
+                <!-- Articles Section -->
+                <div id="section-articles">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Thêm bài viết mới</h2>
+                        <form id="article-form" class="space-y-4">
+                            <input type="hidden" id="article-id">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                    <input type="text" id="title"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Danh mục</label>
+                                    <select id="category"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="Tin tuc">Tin tức</option>
+                                        <option value="Sự kiện">Sự kiện</option>
+                                        <option value="Hoat dong">Hoạt động</option>
+                                        <option value="Thong bao">Thông báo</option>
+                                        <option value="Thanh tich">Thành tích</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Trạng thái</label>
+                                    <select id="status"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="draft">Nháp</option>
+                                        <option value="pending">Chờ duyệt</option>
+                                        <option value="published">Đã xuất bản</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tags</label>
+                                    <input type="text" id="tags"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        placeholder="tag1, tag2">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Hình ảnh (URL)</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="image"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                    <button type="button" onclick="openMediaSelector('image')"
+                                        class="mt-1 bg-gray-200 px-3 rounded hover:bg-gray-300">Chọn</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <div class="border border-gray-300 rounded-md shadow-sm mt-1 bg-white">
+                                    <div id="article-toolbar"
+                                        class="border-b border-gray-300 p-2 bg-gray-50 flex gap-2 flex-wrap items-center">
+                                    </div>
+                                    <div id="article-editor"
+                                        class="p-4 min-h-[300px] prose max-w-none focus:outline-none"></div>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" class="btn btn-primary">Luu bai
+                                    viet</button>
+                                <button type="button" id="cancel-edit" class="btn btn-secondary hidden">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hinh
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tieu de
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Danh muc
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trang
+                                        thai</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Hanh
+                                        dong</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articles-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Events Section -->
+                <div id="section-events" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Quản lý Sự kiện</h2>
+                        <form id="event-form" class="space-y-4">
+                            <input type="hidden" id="event-id">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề sự kiện</label>
+                                    <input type="text" id="event-title"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Loại sự kiện</label>
+                                    <select id="event-type"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="public">Sự kiện chung</option>
+                                        <option value="class">Sự kiện lớp</option>
+                                        <option value="teacher">Sự kiện giáo viên</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Target Grade/Class (only for class events) -->
+                            <div id="event-target-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                style="display: none;">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Khối lớp tham dự</label>
+                                    <select id="event-target-grade"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                        <option value="">Tất cả các khối</option>
+                                        <option value="1">Khối 1</option>
+                                        <option value="2">Khối 2</option>
+                                        <option value="3">Khối 3</option>
+                                        <option value="4">Khối 4</option>
+                                        <option value="5">Khối 5</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Lớp cụ thể (tùy chọn)</label>
+                                    <input type="text" id="event-target-class"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        placeholder="VD: 1A, 2B, 3C...">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Ngày bắt đầu</label>
+                                    <input type="datetime-local" id="event-start"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Ngày kết thúc</label>
+                                    <input type="datetime-local" id="event-end"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Địa điểm</label>
+                                    <input type="text" id="event-location"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        placeholder="VD: Hoi truong, San truong...">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Danh mục sự kiện</label>
+                                    <select id="event-category"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        onchange="updateEventColor()">
+                                        <option value="exam" data-color="#dc2626">🔴 Lịch thi / Kiểm tra</option>
+                                        <option value="activity" data-color="#2563eb">🔵 Hoạt động ngoại khóa / Chào cờ
+                                        </option>
+                                        <option value="holiday" data-color="#16a34a">🟢 Lịch nghỉ lễ / Họp phụ huynh
+                                        </option>
+                                        <option value="other" data-color="#6b7280">⚪ Khác</option>
+                                    </select>
+                                    <input type="hidden" id="event-color" value="#dc2626">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Mô tả</label>
+                                <textarea id="event-description" rows="3"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="event-published"
+                                        class="form-checkbox h-5 w-5 text-blue-600" checked>
+                                    <span class="ml-2 text-gray-700">Xuất bản ngay</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" class="btn btn-primary">Luu su
+                                    kien</button>
+                                <button type="button" id="cancel-event-edit"
+                                    class="btn btn-secondary hidden">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tieu de
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Thoi
+                                        gian</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dia diem
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trang
+                                        thai</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Hanh
+                                        dong</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Media Section -->
+                <div id="section-media" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Thư viện Ảnh</h2>
+                            <label class="btn btn-primary cursor-pointer">
+                                <span>Tải ảnh lên</span>
+                                <input type="file" id="media-upload" class="hidden" accept="image/*">
+                            </label>
+                        </div>
+                        <div id="media-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+                    </div>
+                </div>
+
+                <!-- Pages Section -->
+                <div id="section-pages" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Quản lý Trang tĩnh</h2>
+                        <form id="page-form" class="space-y-4">
+                            <input type="hidden" id="page-id">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                    <input type="text" id="page-title-input"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                        required oninput="generateSlug()">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Slug (URL)</label>
+                                    <input type="text" id="page-slug"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-50"
+                                        required>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <div class="border border-gray-300 rounded-md shadow-sm mt-1 bg-white">
+                                    <div id="page-toolbar"
+                                        class="border-b border-gray-300 p-2 bg-gray-50 flex gap-2 flex-wrap items-center">
+                                    </div>
+                                    <div id="page-editor" class="p-4 min-h-[300px] prose max-w-none focus:outline-none">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="page-published"
+                                        class="form-checkbox h-5 w-5 text-blue-600">
+                                    <span class="ml-2 text-gray-700">Xuất bản ngay</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" class="btn btn-primary">Luu
+                                    trang</button>
+                                <button type="button" id="cancel-page-edit"
+                                    class="btn btn-secondary hidden">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tieu de
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trang
+                                        thai</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Hanh
+                                        dong</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pages-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="section-settings" class="hidden">
+
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Cài đặt Thanh thông báo (Ticker)</h2>
+                        <form id="ticker-settings-form" class="space-y-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="ticker-enabled"
+                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                <label for="ticker-enabled" class="ml-2 block text-sm text-gray-900">Bat thanh thong
+                                    bao</label>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nội dung hiển thị</label>
+                                <textarea id="ticker-content-input" rows="3"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                    placeholder="Nhập nội dung chạy trên thanh ticker..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Luu
+                                cai dat</button>
+                        </form>
+                    </div>
+
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Cài đặt chung</h2>
+                        <form id="urgent-notice-form" class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="urgent-enabled"
+                                        class="form-checkbox h-5 w-5 text-red-600">
+                                    <span class="ml-2 text-gray-700 font-bold">Bật thông báo khẩn</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nội dung thông báo</label>
+                                <textarea id="urgent-content" rows="3"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Đường dẫn (tùy chọn)</label>
+                                <input type="text" id="urgent-link"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                    placeholder="https://...">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Luu
+                                cai dat</button>
+                        </form>
+                    </div>
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-bold mb-4">Thông điệp từ Hiệu Trưởng</h2>
+                        <form id="principal-message-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                <input type="text" id="principal-title"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <textarea id="principal-content" rows="5"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Luu
+                                thong diep</button>
+                        </form>
+                    </div>
+            </main>
+        </div>
+    </div>
+    <!-- Media Modal -->
+    <div id="media-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">Chọn ảnh</h3>
+                <button onclick="closeMediaModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div id="modal-media-grid" class="grid grid-cols-4 gap-4"></div>
+        </div>
+    </div>
+
+    <!-- External JS Modules -->
+    <script src="/public/js/config.js"></script>
+    <script src="/public/js/utils.js"></script>
+    <script src="/public/js/api.js"></script>
+    <script src="/public/js/auth.js"></script>
+    <script src="/public/js/navigation.js"></script>
+    <script src="/public/js/articles.js"></script>
+    <script src="/public/js/events.js"></script>
+    <script src="/public/js/media.js"></script>
+    <script src="/public/js/pages.js"></script>
+    <script src="/public/js/settings.js"></script>
+
+    <script>
+        const API_URL = '/api';
+        let token = localStorage.getItem('admin-token');
+        let currentUser = null;
+
+        let mediaSelectCallback = null;
+        let mediaSelectInputId = null;
+        // Auth Functions - provided by auth.js module
+        // Login handler - provided by auth.js module
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('admin-token', data.token);
+                    token = data.token;
+                    currentUser = { username: data.username, role: data.role };
+                    showDashboard();
+                } else {
+                    showError(data.message || 'Login failed');
+                }
+            } catch (err) {
+                showError('Lỗi kết nối server');
+            }
+        });
+        // Logout handler - provided by auth.js module
+        // Navigation - provided by navigation.js module
+        // Articles - provided by articles.js module                if (res.ok) { resetArticleForm(); fetchArticles(); alert('Đã lưu bài viết!'); }
+                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+        // Events - provided by events.js module                if (res.ok) { resetEventForm(); fetchEvents(); alert('Đã lưu sự kiện!'); }
+                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+        // Add event listener for type change
+        // Update color based on category selection
+        // Set category dropdown based on saved color
+        // Media - provided by media.js module
+        // Pages - provided by pages.js module
+
+        // Settings
+        async function fetchSettings() {
+            try {
+                // Ticker Settings
+                const tickerRes = await fetch(`${API_URL}/settings/ticker_settings`);
+                const tickerData = await tickerRes.json();
+                if (tickerData.value) {
+                    document.getElementById('ticker-enabled').checked = tickerData.value.isEnabled || false;
+                    document.getElementById('ticker-content-input').value = tickerData.value.content || '';
+                }
+
+                // Urgent Notice
+                const urgentRes = await fetch(`${API_URL}/settings/urgent_notice`);
+                const urgentData = await urgentRes.json();
+                if (urgentData.value) {
+                    document.getElementById('urgent-enabled').checked = urgentData.value.isEnabled || false;
+                    document.getElementById('urgent-content').value = urgentData.value.content || '';
+                    document.getElementById('urgent-link').value = urgentData.value.link || '';
+                }
+
+                // Principal Message
+                const principalRes = await fetch(`${API_URL}/settings/principal_message`);
+                const principalData = await principalRes.json();
+                if (principalData.value) {
+                    document.getElementById('principal-title').value = principalData.value.title || '';
+                    document.getElementById('principal-content').value = principalData.value.content || '';
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        document.getElementById('urgent-notice-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                isEnabled: document.getElementById('urgent-enabled').checked,
+                content: document.getElementById('urgent-content').value,
+                link: document.getElementById('urgent-link').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/urgent_notice`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Thông báo khẩn' })
+                });
+                if (res.ok) alert('Đã lưu cài đặt!');
+                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        document.getElementById('principal-message-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('principal-title').value,
+                content: document.getElementById('principal-content').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/principal_message`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Thông điệp Hiệu Trưởng' })
+                });
+                if (res.ok) alert('Đã lưu thông điệp!');
+                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        document.getElementById('ticker-settings-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                isEnabled: document.getElementById('ticker-enabled').checked,
+                content: document.getElementById('ticker-content-input').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/admin/settings/ticker_settings`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ value: data, description: 'Cài đặt Ticker Bar' })
+                });
+                if (res.ok) alert('Đã lưu cài đặt Ticker!');
+                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+            } catch (err) { console.error(err); }
+        });
+
+        // Init
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                currentUser = payload;
+                showDashboard();
+            } catch (e) {
+                showAuth();
+            }
+        } else {
+            showAuth();
+        }
+    </script>
+
+    <script type="module">
+        import { Editor } from 'https://esm.sh/@tiptap/core';
+        import StarterKit from 'https://esm.sh/@tiptap/starter-kit';
+        import Image from 'https://esm.sh/@tiptap/extension-image';
+        import Youtube from 'https://esm.sh/@tiptap/extension-youtube';
+        import Link from 'https://esm.sh/@tiptap/extension-link';
+        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align';
+
+        function setupEditor(elementId, toolbarId) {
+            const editor = new Editor({
+                element: document.getElementById(elementId),
+                extensions: [
+                    StarterKit,
+                    Image.configure({
+                        inline: true,
+                        allowBase64: true,
+                    }),
+                    Youtube.configure({
+                        controls: false,
+                    }),
+                    Link.configure({
+                        openOnClick: false,
+                    }),
+                    TextAlign.configure({
+                        types: ['heading', 'paragraph'],
+                    }),
+                ],
+                content: '',
+                editorProps: {
+                    attributes: {
+                        class: 'prose max-w-none focus:outline-none',
+                    },
+                },
+            });
+
+            const toolbar = document.getElementById(toolbarId);
+
+            const buttons = [
+                { label: 'Bold', action: () => editor.chain().focus().toggleBold().run(), isActive: () => editor.isActive('bold') },
+                { label: 'Italic', action: () => editor.chain().focus().toggleItalic().run(), isActive: () => editor.isActive('italic') },
+                { label: 'H2', action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), isActive: () => editor.isActive('heading', { level: 2 }) },
+                { label: 'H3', action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(), isActive: () => editor.isActive('heading', { level: 3 }) },
+                { label: 'List', action: () => editor.chain().focus().toggleBulletList().run(), isActive: () => editor.isActive('bulletList') },
+                { label: 'Ordered', action: () => editor.chain().focus().toggleOrderedList().run(), isActive: () => editor.isActive('orderedList') },
+                {
+                    label: 'Link', action: () => {
+                        const previousUrl = editor.getAttributes('link').href;
+                        const url = window.prompt('URL', previousUrl);
+                        if (url === null) return;
+                        if (url === '') { editor.chain().focus().extendMarkRange('link').unsetLink().run(); return; }
+                        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+                    }, isActive: () => editor.isActive('link')
+                },
+                {
+                    label: 'Image', action: () => {
+                        window.openMediaSelector(null, (url) => {
+                            if (url) editor.chain().focus().setImage({ src: url }).run();
+                        });
+                    }, isActive: () => false
+                },
+                {
+                    label: 'YouTube', action: () => {
+                        const url = prompt('Enter YouTube URL');
+                        if (url) { editor.chain().focus().setYoutubeVideo({ src: url }).run(); }
+                    }, isActive: () => editor.isActive('youtube')
+                },
+                { label: 'Left', action: () => editor.chain().focus().setTextAlign('left').run(), isActive: () => editor.isActive({ textAlign: 'left' }) },
+                { label: 'Center', action: () => editor.chain().focus().setTextAlign('center').run(), isActive: () => editor.isActive({ textAlign: 'center' }) },
+                { label: 'Right', action: () => editor.chain().focus().setTextAlign('right').run(), isActive: () => editor.isActive({ textAlign: 'right' }) },
+            ];
+
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'toolbar-btn';
+                button.innerText = btn.label;
+                button.onclick = btn.action;
+                toolbar.appendChild(button);
+
+                // Update button state
+                editor.on('transaction', () => {
+                    if (btn.isActive()) button.classList.add('is-active');
+                    else button.classList.remove('is-active');
+                });
+            });
+
+            return editor;
+        }
+
+        // Initialize editors
+        window.articleEditor = setupEditor('article-editor', 'article-toolbar');
+        window.pageEditor = setupEditor('page-editor', 'page-toolbar');
+    </script>
+
+    <!-- Admin UI Enhancements -->
+    <script src="/public/admin-ui-enhancements.js"></script>
+</body>
+
+</html>

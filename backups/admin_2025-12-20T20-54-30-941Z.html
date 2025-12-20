@@ -450,10 +450,17 @@
         </div>
     </div>
 
-    <!-- External JS Modules (for future use) -->
+    <!-- External JS Modules -->
     <script src="/public/js/config.js"></script>
     <script src="/public/js/utils.js"></script>
     <script src="/public/js/api.js"></script>
+    <script src="/public/js/auth.js"></script>
+    <script src="/public/js/navigation.js"></script>
+    <script src="/public/js/articles.js"></script>
+    <script src="/public/js/events.js"></script>
+    <script src="/public/js/media.js"></script>
+    <script src="/public/js/pages.js"></script>
+    <script src="/public/js/settings.js"></script>
 
     <script>
         const API_URL = '/api';
@@ -462,40 +469,8 @@
 
         let mediaSelectCallback = null;
         let mediaSelectInputId = null;
-
-        // Auth Functions
-        function showAuth() {
-            document.getElementById('auth-modal').classList.remove('hidden');
-            document.getElementById('dashboard').classList.add('hidden');
-        }
-
-        function showDashboard() {
-            document.getElementById('auth-modal').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            if (currentUser) {
-                document.getElementById('user-name').innerText = currentUser.username;
-                document.getElementById('user-role').innerText = currentUser.role ? currentUser.role.toUpperCase() : 'USER';
-                document.getElementById('user-avatar').innerText = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'A';
-            }
-            fetchArticles();
-        }
-
-        function showError(msg) {
-            const el = document.getElementById('auth-error');
-            el.innerText = msg;
-            el.classList.remove('hidden');
-        }
-
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-            try {
-                const res = await fetch(`${API_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
+        // Auth Functions - provided by auth.js module
+        // Login handler - provided by auth.js module
                 const data = await res.json();
                 if (res.ok) {
                     localStorage.setItem('admin-token', data.token);
@@ -509,171 +484,12 @@
                 showError('Lỗi kết nối server');
             }
         });
-
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            localStorage.removeItem('admin-token');
-            window.location.href = '/admin-login.html';
-        });
-
-        // Navigation
-        const navLinks = {
-            'nav-articles': 'section-articles',
-            'nav-events': 'section-events',
-            'nav-media': 'section-media',
-            'nav-pages': 'section-pages',
-            'nav-settings': 'section-settings'
-        };
-        const titles = {
-            'nav-articles': 'Quản lý Bài viết',
-            'nav-events': 'Quản lý Sự kiện',
-            'nav-media': 'Thư viện Ảnh',
-            'nav-pages': 'Trang tĩnh',
-            'nav-settings': 'Cài đặt chung'
-        };
-
-        Object.keys(navLinks).forEach(id => {
-            document.getElementById(id).addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelectorAll('aside nav a').forEach(l => l.classList.remove('bg-blue-600', 'text-white'));
-                document.querySelectorAll('aside nav a').forEach(l => l.classList.add('text-gray-300'));
-                e.currentTarget.classList.remove('text-gray-300');
-                e.currentTarget.classList.add('bg-blue-600', 'text-white');
-                Object.values(navLinks).forEach(s => document.getElementById(s).classList.add('hidden'));
-                document.getElementById(navLinks[id]).classList.remove('hidden');
-                document.getElementById('page-title').textContent = titles[id];
-                if (id === 'nav-articles') fetchArticles();
-                if (id === 'nav-events') fetchEvents();
-                if (id === 'nav-media') fetchMedia();
-                if (id === 'nav-pages') fetchPages();
-                if (id === 'nav-settings') { fetchSettings(); }
-            });
-        });
-
-        // Articles
-        async function fetchArticles() {
-            const tbody = document.getElementById('articles-list');
-            // Skeleton loading
-            tbody.innerHTML = Array(5).fill(0).map(() => `
-                <tr class="skeleton-row">
-                    <td class="px-6 py-4"><div class="skeleton h-10 w-10 rounded"></div></td>
-                    <td class="px-6 py-4"><div class="skeleton h-4 w-3/4 rounded"></div></td>
-                    <td class="px-6 py-4"><div class="skeleton h-4 w-1/2 rounded"></div></td>
-                    <td class="px-6 py-4"><div class="skeleton h-4 w-1/4 rounded"></div></td>
-                    <td class="px-6 py-4 text-right"><div class="skeleton h-8 w-16 rounded ml-auto"></div></td>
-                </tr>
-            `).join('');
-
-            try {
-                const res = await fetch(`${API_URL}/articles`);
-                const articles = await res.json();
-
-                if (!articles || articles.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="px-6 py-12 text-center">
-                                <div class="flex flex-col items-center justify-center text-gray-500">
-                                    <svg class="w-12 h-12 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2v4a2 2 0 002 2h4"></path>
-                                    </svg>
-                                    <p class="text-lg font-medium">Chưa có bài viết nào</p>
-                                    <p class="text-sm">Hãy tạo bài viết đầu tiên của bạn.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                tbody.innerHTML = articles.map(a => `
-                    <tr>
-                        <td class="px-6 py-4">${a.image ? `<img src="${a.image}" class="h-10 w-10 rounded object-cover">` : '<div class="h-10 w-10 rounded bg-gray-200"></div>'}</td>
-                        <td class="px-6 py-4 font-medium">${a.title}</td>
-                        <td class="px-6 py-4 text-gray-500">${a.category}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${a.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${a.status}</span></td>
-                        <td class="px-6 py-4 text-right">
-                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
-                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
-                        </td>
-                    </tr>
-                `).join('');
-
-                // Ticker Settings (also fetch here to ensure it's loaded)
-                const tickerRes = await fetch(`${API_URL}/settings/ticker_settings`);
-                const tickerData = await tickerRes.json();
-                if (tickerData.value) {
-                    document.getElementById('ticker-enabled').checked = tickerData.value.isEnabled || false;
-                    document.getElementById('ticker-content-input').value = tickerData.value.content || '';
-                }
-            } catch (err) {
-                console.error(err);
-                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
-            }
-        }
-
-        document.getElementById('article-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('article-id').value;
-            const content = window.articleEditor ? window.articleEditor.getHTML() : '';
-            const article = {
-                title: document.getElementById('title').value,
-                content: content,
-                category: document.getElementById('category').value,
-                image: document.getElementById('image').value,
-                status: document.getElementById('status').value,
-                tags: document.getElementById('tags').value.split(',').map(t => t.trim()).filter(t => t)
-            };
-            const method = id ? 'PUT' : 'POST';
-            const url = id ? `${API_URL}/articles/${id}` : `${API_URL}/articles`;
-            try {
-                const res = await fetch(url, {
-                    method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify(article)
-                });
-                if (res.ok) { resetArticleForm(); fetchArticles(); alert('Đã lưu bài viết!'); }
+        // Logout handler - provided by auth.js module
+        // Navigation - provided by navigation.js module
+        // Articles - provided by articles.js module                if (res.ok) { resetArticleForm(); fetchArticles(); alert('Đã lưu bài viết!'); }
                 else { const d = await res.json(); alert('Lỗi: ' + d.message); }
             } catch (err) { console.error(err); }
         });
-
-        window.editArticle = async (id) => {
-            const res = await fetch(`${API_URL}/articles/${id}`);
-            const a = await res.json();
-            if (a) {
-                document.getElementById('article-id').value = a._id;
-                document.getElementById('title').value = a.title;
-                if (window.articleEditor) window.articleEditor.commands.setContent(a.content || '');
-                document.getElementById('category').value = a.category;
-                document.getElementById('image').value = a.image || '';
-                document.getElementById('status').value = a.status;
-                document.getElementById('tags').value = (a.tags || []).join(', ');
-                document.getElementById('cancel-edit').classList.remove('hidden');
-                window.scrollTo(0, 0);
-            }
-        };
-
-        window.deleteArticle = async (id) => {
-            showConfirmDialog({
-                title: 'Xóa bài viết?',
-                message: 'Bài viết sẽ bị xóa vĩnh viễn và không thể hoàn tác.',
-                confirmText: 'Xóa',
-                cancelText: 'Hủy',
-                onConfirm: async () => {
-                    await fetch(`${API_URL}/articles/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
-                    fetchArticles();
-                    showToast('success', 'Đã xóa bài viết!');
-                }
-            });
-        };
-
-        document.getElementById('cancel-edit').addEventListener('click', resetArticleForm);
-
-        function resetArticleForm() {
-            document.getElementById('article-form').reset();
-            document.getElementById('article-id').value = '';
-            if (window.articleEditor) window.articleEditor.commands.setContent('');
-            document.getElementById('cancel-edit').classList.add('hidden');
-        }
-
         // Events
         async function fetchEvents() {
             const tbody = document.getElementById('events-list');
@@ -1131,213 +947,14 @@
     </script>
 
     <script type="module">
-        import { Editor, Extension } from 'https://esm.sh/@tiptap/core@2.0.0';
-        import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.0.0';
-        import Image from 'https://esm.sh/@tiptap/extension-image@2.0.0';
-        import Youtube from 'https://esm.sh/@tiptap/extension-youtube@2.0.0';
-        import Link from 'https://esm.sh/@tiptap/extension-link@2.0.0';
-        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align@2.0.0';
-        import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.0.0';
-        import Underline from 'https://esm.sh/@tiptap/extension-underline@2.0.0';
-        import Color from 'https://esm.sh/@tiptap/extension-color@2.0.0';
-        import Highlight from 'https://esm.sh/@tiptap/extension-highlight@2.0.0';
-        import Table from 'https://esm.sh/@tiptap/extension-table@2.0.0';
-        import TableRow from 'https://esm.sh/@tiptap/extension-table-row@2.0.0';
-        import TableHeader from 'https://esm.sh/@tiptap/extension-table-header@2.0.0';
-        import TableCell from 'https://esm.sh/@tiptap/extension-table-cell@2.0.0';
-        import BubbleMenu from 'https://esm.sh/@tiptap/extension-bubble-menu@2.0.0';
-        import FloatingMenu from 'https://esm.sh/@tiptap/extension-floating-menu@2.0.0';
-        import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.0.0';
-
-        function createBubbleMenu(editor) {
-            const menu = document.createElement('div');
-            menu.className = 'bubble-menu';
-
-            const buttons = [
-                { label: 'Bold', action: () => editor.chain().focus().toggleBold().run(), isActive: () => editor.isActive('bold') },
-                { label: 'Italic', action: () => editor.chain().focus().toggleItalic().run(), isActive: () => editor.isActive('italic') },
-                { label: 'Strike', action: () => editor.chain().focus().toggleStrike().run(), isActive: () => editor.isActive('strike') },
-                {
-                    label: '⇥ 1.27',
-                    action: () => editor.chain().focus().toggleFirstLineIndent().run(),
-                    isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
-                },
-            ];
-
-            buttons.forEach(btn => {
-                const button = document.createElement('button');
-                button.innerText = btn.label;
-                button.onclick = btn.action;
-                menu.appendChild(button);
-            });
-
-            document.body.appendChild(menu);
-            return menu;
-        }
-
-        function createFloatingMenu(editor) {
-            const menu = document.createElement('div');
-            menu.className = 'floating-menu';
-
-            const buttons = [
-                { label: 'H1', action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(), isActive: () => editor.isActive('heading', { level: 1 }) },
-                { label: 'H2', action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), isActive: () => editor.isActive('heading', { level: 2 }) },
-                { label: 'List', action: () => editor.chain().focus().toggleBulletList().run(), isActive: () => editor.isActive('bulletList') },
-            ];
-
-            buttons.forEach(btn => {
-                const button = document.createElement('button');
-                button.innerText = btn.label;
-                button.onclick = btn.action;
-                menu.appendChild(button);
-            });
-
-            document.body.appendChild(menu);
-            return menu;
-        }
-
-        // Inline Indent Extension
-        const Indent = {
-            name: 'indent',
-            addOptions() {
-                return {
-                    types: ['paragraph', 'heading', 'blockquote'],
-                    indentLevels: [0, 30, 60, 90, 120, 150, 180, 210],
-                    defaultIndentLevel: 0,
-                }
-            },
-            addGlobalAttributes() {
-                return [
-                    {
-                        types: this.options.types,
-                        attributes: {
-                            indent: {
-                                default: this.options.defaultIndentLevel,
-                                renderHTML: attributes => {
-                                    if (attributes.indent === 0) {
-                                        return {}
-                                    }
-                                    return {
-                                        style: `margin-left: ${attributes.indent}px!important;`
-                                    }
-                                },
-                                parseHTML: element => {
-                                    const marginLeft = element.style.marginLeft
-                                    return marginLeft ? parseInt(marginLeft, 10) : 0
-                                },
-                            },
-                        },
-                    },
-                ]
-            },
-            addCommands() {
-                return {
-                    indent: () => ({ tr, state, dispatch }) => {
-                        const { selection } = state
-                        const { tr: transaction } = state
-
-                        transaction.selection.ranges.forEach(range => {
-                            state.doc.nodesBetween(range.$from.pos, range.$to.pos, (node, pos) => {
-                                if (this.options.types.includes(node.type.name)) {
-                                    const currentIndent = node.attrs.indent || 0
-                                    const indentLevels = this.options.indentLevels
-                                    const nextLevel = indentLevels.find(level => level > currentIndent) || currentIndent
-
-                                    if (nextLevel > currentIndent) {
-                                        transaction.setNodeMarkup(pos, undefined, {
-                                            ...node.attrs,
-                                            indent: nextLevel
-                                        })
-                                    }
-                                }
-                            })
-                        })
-
-                        if (dispatch) dispatch(transaction)
-                        return true
-                    },
-                    outdent: () => ({ tr, state, dispatch }) => {
-                        const { selection } = state
-                        const { tr: transaction } = state
-
-                        transaction.selection.ranges.forEach(range => {
-                            state.doc.nodesBetween(range.$from.pos, range.$to.pos, (node, pos) => {
-                                if (this.options.types.includes(node.type.name)) {
-                                    const currentIndent = node.attrs.indent || 0
-                                    const indentLevels = this.options.indentLevels
-                                    const prevLevel = [...indentLevels].reverse().find(level => level < currentIndent) || 0
-
-                                    if (prevLevel < currentIndent) {
-                                        transaction.setNodeMarkup(pos, undefined, {
-                                            ...node.attrs,
-                                            indent: prevLevel
-                                        })
-                                    }
-                                }
-                            })
-                        })
-
-                        if (dispatch) dispatch(transaction)
-                        return true
-                    },
-                }
-            },
-            addKeyboardShortcuts() {
-                return {
-                    'Tab': () => this.editor.commands.indent(),
-                    'Shift-Tab': () => this.editor.commands.outdent(),
-                }
-            },
-        };
-
-        // Wrap in Extension.create to ensure proper Tiptap structure
-        const IndentExtension = Extension.create(Indent);
-        // First Line Indent Extension (1.27cm)
-        const FirstLineIndent = Extension.create({
-            name: 'firstLineIndent',
-            addGlobalAttributes() {
-                return [{
-                    types: ['paragraph'],
-                    attributes: {
-                        firstLineIndent: {
-                            default: false,
-                            renderHTML: attributes => {
-                                if (!attributes.firstLineIndent) return {}
-                                return {
-                                    style: 'text-indent: 1.27cm'
-                                }
-                            },
-                            parseHTML: element => {
-                                return element.style.textIndent === '1.27cm'
-                            },
-                        }
-                    }
-                }]
-            },
-            addCommands() {
-                return {
-                    toggleFirstLineIndent: () => ({ editor, commands }) => {
-                        const isActive = editor.getAttributes('paragraph').firstLineIndent === true;
-                        return commands.updateAttributes('paragraph', {
-                            firstLineIndent: !isActive
-                        });
-                    },
-                }
-            }
-        });
-
+        import { Editor } from 'https://esm.sh/@tiptap/core';
+        import StarterKit from 'https://esm.sh/@tiptap/starter-kit';
+        import Image from 'https://esm.sh/@tiptap/extension-image';
+        import Youtube from 'https://esm.sh/@tiptap/extension-youtube';
+        import Link from 'https://esm.sh/@tiptap/extension-link';
+        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align';
 
         function setupEditor(elementId, toolbarId) {
-            // 1. Create Menu Elements (empty first)
-            const bubbleMenuEl = document.createElement('div');
-            bubbleMenuEl.className = 'bubble-menu';
-            document.body.appendChild(bubbleMenuEl);
-
-            const floatingMenuEl = document.createElement('div');
-            floatingMenuEl.className = 'floating-menu';
-            document.body.appendChild(floatingMenuEl);
-
-            // 2. Initialize Editor
             const editor = new Editor({
                 element: document.getElementById(elementId),
                 extensions: [
@@ -1355,23 +972,6 @@
                     TextAlign.configure({
                         types: ['heading', 'paragraph'],
                     }),
-                    TextStyle,
-                    Underline,
-                    Color,
-                    Highlight.configure({ multicolor: true }),
-                    Table.configure({ resizable: true }),
-                    TableRow,
-                    TableHeader,
-                    TableCell,
-                    BubbleMenu.configure({
-                        element: bubbleMenuEl,
-                    }),
-                    FloatingMenu.configure({
-                        element: floatingMenuEl,
-                    }),
-                    FontFamily,
-                    IndentExtension,
-                    FirstLineIndent,
                 ],
                 content: '',
                 editorProps: {
@@ -1381,7 +981,6 @@
                 },
             });
 
-            // 3. Setup Toolbar
             const toolbar = document.getElementById(toolbarId);
 
             const buttons = [
@@ -1416,23 +1015,6 @@
                 { label: 'Left', action: () => editor.chain().focus().setTextAlign('left').run(), isActive: () => editor.isActive({ textAlign: 'left' }) },
                 { label: 'Center', action: () => editor.chain().focus().setTextAlign('center').run(), isActive: () => editor.isActive({ textAlign: 'center' }) },
                 { label: 'Right', action: () => editor.chain().focus().setTextAlign('right').run(), isActive: () => editor.isActive({ textAlign: 'right' }) },
-                { label: 'U', action: () => editor.chain().focus().toggleUnderline().run(), isActive: () => editor.isActive('underline') },
-                { label: '🎨', action: () => { const c = prompt('Màu (hex):', '#ff0000'); if (c) editor.chain().focus().setColor(c).run(); }, isActive: () => false },
-                { label: '🖌', action: () => { editor.chain().focus().toggleHighlight({ color: 'yellow' }).run(); }, isActive: () => editor.isActive('highlight') },
-                { label: '📊', action: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), isActive: () => false },
-                {
-                    label: 'Aa',
-                    action: () => {
-                        const font = prompt('Font Family (e.g., Arial, serif, monospace):', 'Arial');
-                        if (font) editor.chain().focus().setFontFamily(font).run();
-                    },
-                    isActive: () => false
-                },
-                {
-                    label: '⇥ 1.27',
-                    action: () => editor.chain().focus().toggleFirstLineIndent().run(),
-                    isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
-                },
             ];
 
             buttons.forEach(btn => {
@@ -1461,3 +1043,5 @@
     <!-- Admin UI Enhancements -->
     <script src="/public/admin-ui-enhancements.js"></script>
 </body>
+
+</html>

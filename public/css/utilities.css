@@ -1,0 +1,132 @@
+/* =========================================
+   UTILITY CLASSES
+   ========================================= */
+
+/* Display */
+.block {
+    display: block !important;
+}
+
+.flex {
+    display: flex !important;
+}
+
+.grid {
+    display: grid !important;
+}
+
+/* Flexbox Helpers */
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.gap-2 {
+    gap: var(--spacing-2);
+}
+
+.gap-4 {
+    gap: var(--spacing-4);
+}
+
+/* Text */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-bold {
+    font-weight: var(--font-weight-bold);
+}
+
+.text-sm {
+    font-size: var(--font-size-sm);
+}
+
+.text-xs {
+    font-size: var(--font-size-xs);
+}
+
+/* Colors */
+.text-red-500 {
+    color: var(--color-danger-500);
+}
+
+.text-blue-600 {
+    color: var(--color-primary-600);
+}
+
+.text-gray-500 {
+    color: var(--color-gray-500);
+}
+
+/* Spacing */
+.mt-2 {
+    margin-top: var(--spacing-2);
+}
+
+.mt-4 {
+    margin-top: var(--spacing-4);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-4);
+}
+
+.p-4 {
+    padding: var(--spacing-4);
+}
+
+.p-6 {
+    padding: var(--spacing-6);
+}
+
+/* Width/Height */
+.w-full {
+    width: 100%;
+}
+
+.h-screen {
+    height: 100vh;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+/* Z-index */
+.z-50 {
+    z-index: 50;
+}
+
+/* Screen Reader Only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Utility: Hidden must override all display properties */
+.hidden {
+    display: none !important;
+}

@@ -1,0 +1,250 @@
+<script>
+    const API_URL = '/api';
+    let token = localStorage.getItem('admin-token');
+    let currentUser = null;
+    let mediaSelectCallback = null;
+    let mediaSelectInputId = null;
+
+    // Auth Functions
+    function showAuth() {
+        document.getElementById('auth-modal').classList.remove('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+    }
+
+    function showDashboard() {
+        document.getElementById('auth-modal').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        if (currentUser) {
+            document.getElementById('user-name').innerText = currentUser.username;
+            document.getElementById('user-role').innerText = currentUser.role ? currentUser.role.toUpperCase() : 'USER';
+            document.getElementById('user-avatar').innerText = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'A';
+            const adminNameEl = document.getElementById('admin-name');
+            if (adminNameEl) adminNameEl.innerText = `≡ƒæñ ${currentUser.username}`;
+        }
+        switchTab('articles');
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('auth-error');
+        el.innerText = msg;
+        el.classList.remove('hidden');
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+        try {
+            const res = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('admin-token', data.token);
+                token = data.token;
+                currentUser = { username: data.username, role: data.role };
+                showDashboard();
+            } else {
+                showError(data.message || 'Login failed');
+            }
+        } catch (err) {
+            showError('Connection error');
+        }
+    });
+
+    window.logout = () => {
+        localStorage.removeItem('admin-token');
+        window.location.href = '/admin-login.html';
+    };
+
+    // Navigation
+    function switchTab(tabId) {
+        // Update tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            const onClick = btn.getAttribute('onclick');
+            if (onClick && onClick.includes(`'${tabId}'`)) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Update sidebar
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.classList.remove('active');
+            const onClick = link.getAttribute('onclick');
+            const href = link.getAttribute('href');
+            if ((onClick && onClick.includes(`'${tabId}'`)) || (href && href.includes(`'${tabId}'`))) {
+                link.classList.add('active');
+            }
+        });
+
+        // Hide all main sections
+        const sections = ['articles', 'events', 'media', 'settings', 'pages'];
+        sections.forEach(s => {
+            const el = document.getElementById(`section-${s}`);
+            if (el) el.classList.add('hidden');
+        });
+
+        // Handle Article Sub-views
+        if (tabId === 'articles') {
+            document.getElementById('section-articles').classList.remove('hidden');
+            document.getElementById('articles-list-container').classList.remove('hidden');
+            document.getElementById('article-editor-container').classList.add('hidden');
+            document.getElementById('page-title').textContent = 'Article Management';
+            fetchArticles();
+        } else if (tabId === 'add-article') {
+            document.getElementById('section-articles').classList.remove('hidden');
+            document.getElementById('articles-list-container').classList.add('hidden');
+            document.getElementById('article-editor-container').classList.remove('hidden');
+            document.getElementById('page-title').textContent = 'Add New Article';
+            resetArticleForm();
+        } else {
+            const el = document.getElementById(`section-${tabId}`);
+            if (el) el.classList.remove('hidden');
+
+            const titles = {
+                'events': 'Event Management',
+                'media': 'Media Library',
+                'settings': 'System Settings',
+                'pages': 'Static Page Management'
+            };
+            document.getElementById('page-title').textContent = titles[tabId] || 'Admin Panel';
+
+            if (tabId === 'events') fetchEvents();
+            if (tabId === 'media') fetchMedia();
+            if (tabId === 'pages') fetchPages();
+            if (tabId === 'settings') fetchSettings();
+        }
+    }
+
+    // Articles
+    async function fetchArticles() {
+        const tbody = document.getElementById('articles-list');
+        tbody.innerHTML = Array(5).fill(0).map(() => `
+                <tr class="skeleton-row">
+                    <td class="px-6 py-4"><div class="skeleton h-10 w-10 rounded"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-3/4 rounded"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-1/2 rounded"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton h-4 w-1/4 rounded"></div></td>
+                    <td class="px-6 py-4 text-right"><div class="skeleton h-8 w-16 rounded ml-auto"></div></td>
+                </tr>
+            `).join('');
+
+        try {
+            const res = await fetch(`${API_URL}/articles`);
+            const articles = await res.json();
+
+            if (!articles || articles.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">No articles found</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = articles.map(a => `
+                    <tr>
+                        <td class="px-6 py-4">${a.image ? `<img src="${a.image}" class="h-10 w-10 rounded object-cover">` : '<div class="h-10 w-10 rounded bg-gray-200"></div>'}</td>
+                        <td class="px-6 py-4 font-medium">${a.title}</td>
+                        <td class="px-6 py-4 text-gray-500">${a.category}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${a.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${a.status}</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+        } catch (err) {
+            console.error(err);
+            tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Error loading data</td></tr>`;
+        }
+    }
+
+    document.getElementById('article-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        saveArticle('published');
+    });
+
+    document.getElementById('save-draft-btn').addEventListener('click', () => {
+        saveArticle('draft');
+    });
+
+    async function saveArticle(statusOverride) {
+        const id = document.getElementById('article-id').value;
+        const content = window.articleEditor ? window.articleEditor.getHTML() : '';
+        const article = {
+            title: document.getElementById('title').value,
+            content: content,
+            category: document.getElementById('category').value,
+            image: document.getElementById('image').value,
+            status: statusOverride || document.getElementById('status').value,
+            tags: document.getElementById('tags').value.split(',').map(t => t.trim()).filter(t => t),
+            metaDescription: document.getElementById('meta-desc').value
+        };
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `${API_URL}/articles/${id}` : `${API_URL}/articles`;
+        try {
+            const res = await fetch(url, {
+                method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(article)
+            });
+            if (res.ok) {
+                resetArticleForm();
+                switchTab('articles');
+                showToast('success', 'Article saved!');
+            } else {
+                const d = await res.json();
+                alert('Error: ' + d.message);
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    window.editArticle = async (id) => {
+        const res = await fetch(`${API_URL}/articles/${id}`);
+        const a = await res.json();
+        if (a) {
+            switchTab('add-article');
+            document.getElementById('article-id').value = a._id;
+            document.getElementById('title').value = a.title;
+            if (window.articleEditor) window.articleEditor.commands.setContent(a.content || '');
+            document.getElementById('category').value = a.category;
+            document.getElementById('image').value = a.image || '';
+            document.getElementById('status').value = a.status;
+            document.getElementById('tags').value = (a.tags || []).join(', ');
+            document.getElementById('meta-desc').value = a.metaDescription || '';
+
+            // Update image preview
+            const preview = document.getElementById('image-preview');
+            if (a.image) {
+                preview.innerHTML = `<img src="${a.image}" class="w-full h-full object-cover">`;
+            } else {
+                preview.innerHTML = '<span class="text-gray-400 text-sm">No image</span>';
+            }
+            document.getElementById('page-title').textContent = 'Edit Article';
+        }
+    };
+
+    window.deleteArticle = async (id) => {
+        if (confirm('Delete this article?')) {
+            await fetch(`${API_URL}/articles/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+            fetchArticles();
+        }
+    };
+
+    function resetArticleForm() {
+        document.getElementById('article-form').reset();
+        document.getElementById('article-id').value = '';
+        if (window.articleEditor) window.articleEditor.commands.setContent('');
+        document.getElementById('image-preview').innerHTML = '<span class="text-gray-400 text-sm">No image</span>';
+        document.getElementById('page-title').textContent = 'Add New Article';
+    }
+
+    // Image input change listener for preview
+    document.getElementById('image').addEventListener('change', (e) => {
+        const url = e.target.value;
+        const preview = document.getElementById('image-preview');
+        if (url) {
+            preview.innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
+        } else {
+            preview.innerHTML = '<span class="text-gray-400 text-sm">No image</span>';
+        }
+    });

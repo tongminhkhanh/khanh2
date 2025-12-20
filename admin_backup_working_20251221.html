@@ -1131,213 +1131,14 @@
     </script>
 
     <script type="module">
-        import { Editor, Extension } from 'https://esm.sh/@tiptap/core@2.0.0';
-        import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.0.0';
-        import Image from 'https://esm.sh/@tiptap/extension-image@2.0.0';
-        import Youtube from 'https://esm.sh/@tiptap/extension-youtube@2.0.0';
-        import Link from 'https://esm.sh/@tiptap/extension-link@2.0.0';
-        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align@2.0.0';
-        import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.0.0';
-        import Underline from 'https://esm.sh/@tiptap/extension-underline@2.0.0';
-        import Color from 'https://esm.sh/@tiptap/extension-color@2.0.0';
-        import Highlight from 'https://esm.sh/@tiptap/extension-highlight@2.0.0';
-        import Table from 'https://esm.sh/@tiptap/extension-table@2.0.0';
-        import TableRow from 'https://esm.sh/@tiptap/extension-table-row@2.0.0';
-        import TableHeader from 'https://esm.sh/@tiptap/extension-table-header@2.0.0';
-        import TableCell from 'https://esm.sh/@tiptap/extension-table-cell@2.0.0';
-        import BubbleMenu from 'https://esm.sh/@tiptap/extension-bubble-menu@2.0.0';
-        import FloatingMenu from 'https://esm.sh/@tiptap/extension-floating-menu@2.0.0';
-        import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.0.0';
-
-        function createBubbleMenu(editor) {
-            const menu = document.createElement('div');
-            menu.className = 'bubble-menu';
-
-            const buttons = [
-                { label: 'Bold', action: () => editor.chain().focus().toggleBold().run(), isActive: () => editor.isActive('bold') },
-                { label: 'Italic', action: () => editor.chain().focus().toggleItalic().run(), isActive: () => editor.isActive('italic') },
-                { label: 'Strike', action: () => editor.chain().focus().toggleStrike().run(), isActive: () => editor.isActive('strike') },
-                {
-                    label: '⇥ 1.27',
-                    action: () => editor.chain().focus().toggleFirstLineIndent().run(),
-                    isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
-                },
-            ];
-
-            buttons.forEach(btn => {
-                const button = document.createElement('button');
-                button.innerText = btn.label;
-                button.onclick = btn.action;
-                menu.appendChild(button);
-            });
-
-            document.body.appendChild(menu);
-            return menu;
-        }
-
-        function createFloatingMenu(editor) {
-            const menu = document.createElement('div');
-            menu.className = 'floating-menu';
-
-            const buttons = [
-                { label: 'H1', action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(), isActive: () => editor.isActive('heading', { level: 1 }) },
-                { label: 'H2', action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), isActive: () => editor.isActive('heading', { level: 2 }) },
-                { label: 'List', action: () => editor.chain().focus().toggleBulletList().run(), isActive: () => editor.isActive('bulletList') },
-            ];
-
-            buttons.forEach(btn => {
-                const button = document.createElement('button');
-                button.innerText = btn.label;
-                button.onclick = btn.action;
-                menu.appendChild(button);
-            });
-
-            document.body.appendChild(menu);
-            return menu;
-        }
-
-        // Inline Indent Extension
-        const Indent = {
-            name: 'indent',
-            addOptions() {
-                return {
-                    types: ['paragraph', 'heading', 'blockquote'],
-                    indentLevels: [0, 30, 60, 90, 120, 150, 180, 210],
-                    defaultIndentLevel: 0,
-                }
-            },
-            addGlobalAttributes() {
-                return [
-                    {
-                        types: this.options.types,
-                        attributes: {
-                            indent: {
-                                default: this.options.defaultIndentLevel,
-                                renderHTML: attributes => {
-                                    if (attributes.indent === 0) {
-                                        return {}
-                                    }
-                                    return {
-                                        style: `margin-left: ${attributes.indent}px!important;`
-                                    }
-                                },
-                                parseHTML: element => {
-                                    const marginLeft = element.style.marginLeft
-                                    return marginLeft ? parseInt(marginLeft, 10) : 0
-                                },
-                            },
-                        },
-                    },
-                ]
-            },
-            addCommands() {
-                return {
-                    indent: () => ({ tr, state, dispatch }) => {
-                        const { selection } = state
-                        const { tr: transaction } = state
-
-                        transaction.selection.ranges.forEach(range => {
-                            state.doc.nodesBetween(range.$from.pos, range.$to.pos, (node, pos) => {
-                                if (this.options.types.includes(node.type.name)) {
-                                    const currentIndent = node.attrs.indent || 0
-                                    const indentLevels = this.options.indentLevels
-                                    const nextLevel = indentLevels.find(level => level > currentIndent) || currentIndent
-
-                                    if (nextLevel > currentIndent) {
-                                        transaction.setNodeMarkup(pos, undefined, {
-                                            ...node.attrs,
-                                            indent: nextLevel
-                                        })
-                                    }
-                                }
-                            })
-                        })
-
-                        if (dispatch) dispatch(transaction)
-                        return true
-                    },
-                    outdent: () => ({ tr, state, dispatch }) => {
-                        const { selection } = state
-                        const { tr: transaction } = state
-
-                        transaction.selection.ranges.forEach(range => {
-                            state.doc.nodesBetween(range.$from.pos, range.$to.pos, (node, pos) => {
-                                if (this.options.types.includes(node.type.name)) {
-                                    const currentIndent = node.attrs.indent || 0
-                                    const indentLevels = this.options.indentLevels
-                                    const prevLevel = [...indentLevels].reverse().find(level => level < currentIndent) || 0
-
-                                    if (prevLevel < currentIndent) {
-                                        transaction.setNodeMarkup(pos, undefined, {
-                                            ...node.attrs,
-                                            indent: prevLevel
-                                        })
-                                    }
-                                }
-                            })
-                        })
-
-                        if (dispatch) dispatch(transaction)
-                        return true
-                    },
-                }
-            },
-            addKeyboardShortcuts() {
-                return {
-                    'Tab': () => this.editor.commands.indent(),
-                    'Shift-Tab': () => this.editor.commands.outdent(),
-                }
-            },
-        };
-
-        // Wrap in Extension.create to ensure proper Tiptap structure
-        const IndentExtension = Extension.create(Indent);
-        // First Line Indent Extension (1.27cm)
-        const FirstLineIndent = Extension.create({
-            name: 'firstLineIndent',
-            addGlobalAttributes() {
-                return [{
-                    types: ['paragraph'],
-                    attributes: {
-                        firstLineIndent: {
-                            default: false,
-                            renderHTML: attributes => {
-                                if (!attributes.firstLineIndent) return {}
-                                return {
-                                    style: 'text-indent: 1.27cm'
-                                }
-                            },
-                            parseHTML: element => {
-                                return element.style.textIndent === '1.27cm'
-                            },
-                        }
-                    }
-                }]
-            },
-            addCommands() {
-                return {
-                    toggleFirstLineIndent: () => ({ editor, commands }) => {
-                        const isActive = editor.getAttributes('paragraph').firstLineIndent === true;
-                        return commands.updateAttributes('paragraph', {
-                            firstLineIndent: !isActive
-                        });
-                    },
-                }
-            }
-        });
-
+        import { Editor } from 'https://esm.sh/@tiptap/core';
+        import StarterKit from 'https://esm.sh/@tiptap/starter-kit';
+        import Image from 'https://esm.sh/@tiptap/extension-image';
+        import Youtube from 'https://esm.sh/@tiptap/extension-youtube';
+        import Link from 'https://esm.sh/@tiptap/extension-link';
+        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align';
 
         function setupEditor(elementId, toolbarId) {
-            // 1. Create Menu Elements (empty first)
-            const bubbleMenuEl = document.createElement('div');
-            bubbleMenuEl.className = 'bubble-menu';
-            document.body.appendChild(bubbleMenuEl);
-
-            const floatingMenuEl = document.createElement('div');
-            floatingMenuEl.className = 'floating-menu';
-            document.body.appendChild(floatingMenuEl);
-
-            // 2. Initialize Editor
             const editor = new Editor({
                 element: document.getElementById(elementId),
                 extensions: [
@@ -1355,23 +1156,6 @@
                     TextAlign.configure({
                         types: ['heading', 'paragraph'],
                     }),
-                    TextStyle,
-                    Underline,
-                    Color,
-                    Highlight.configure({ multicolor: true }),
-                    Table.configure({ resizable: true }),
-                    TableRow,
-                    TableHeader,
-                    TableCell,
-                    BubbleMenu.configure({
-                        element: bubbleMenuEl,
-                    }),
-                    FloatingMenu.configure({
-                        element: floatingMenuEl,
-                    }),
-                    FontFamily,
-                    IndentExtension,
-                    FirstLineIndent,
                 ],
                 content: '',
                 editorProps: {
@@ -1381,7 +1165,6 @@
                 },
             });
 
-            // 3. Setup Toolbar
             const toolbar = document.getElementById(toolbarId);
 
             const buttons = [
@@ -1416,23 +1199,6 @@
                 { label: 'Left', action: () => editor.chain().focus().setTextAlign('left').run(), isActive: () => editor.isActive({ textAlign: 'left' }) },
                 { label: 'Center', action: () => editor.chain().focus().setTextAlign('center').run(), isActive: () => editor.isActive({ textAlign: 'center' }) },
                 { label: 'Right', action: () => editor.chain().focus().setTextAlign('right').run(), isActive: () => editor.isActive({ textAlign: 'right' }) },
-                { label: 'U', action: () => editor.chain().focus().toggleUnderline().run(), isActive: () => editor.isActive('underline') },
-                { label: '🎨', action: () => { const c = prompt('Màu (hex):', '#ff0000'); if (c) editor.chain().focus().setColor(c).run(); }, isActive: () => false },
-                { label: '🖌', action: () => { editor.chain().focus().toggleHighlight({ color: 'yellow' }).run(); }, isActive: () => editor.isActive('highlight') },
-                { label: '📊', action: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), isActive: () => false },
-                {
-                    label: 'Aa',
-                    action: () => {
-                        const font = prompt('Font Family (e.g., Arial, serif, monospace):', 'Arial');
-                        if (font) editor.chain().focus().setFontFamily(font).run();
-                    },
-                    isActive: () => false
-                },
-                {
-                    label: '⇥ 1.27',
-                    action: () => editor.chain().focus().toggleFirstLineIndent().run(),
-                    isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
-                },
             ];
 
             buttons.forEach(btn => {
@@ -1461,3 +1227,5 @@
     <!-- Admin UI Enhancements -->
     <script src="/public/admin-ui-enhancements.js"></script>
 </body>
+
+</html>
