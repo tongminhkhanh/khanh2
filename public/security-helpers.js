@@ -12,15 +12,15 @@ const Security = {
     },
 
     setToken: (token) => {
-        sessionStorage.setItem('admin-token', token);
+        localStorage.setItem('admin-token', token);
     },
 
     getToken: () => {
-        return sessionStorage.getItem('admin-token');
+        return localStorage.getItem('admin-token');
     },
 
     removeToken: () => {
-        sessionStorage.removeItem('admin-token');
+        localStorage.removeItem('admin-token');
     }
 };
 

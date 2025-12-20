@@ -2,6 +2,12 @@
 <html lang="vi">
 
 <head>
+    <script>
+        // Early auth check - redirect to login if no token
+        if (!localStorage.getItem('admin-token')) {
+            window.location.href = '/admin-login.html';
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Truong Tieu hoc It Ong</title>
@@ -515,7 +521,7 @@
 
         document.getElementById('logout-btn').addEventListener('click', () => {
             localStorage.removeItem('admin-token');
-            location.reload();
+            window.location.href = '/admin-login.html';
         });
 
         // Navigation

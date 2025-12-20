@@ -266,7 +266,7 @@
                     SecureStorage.setToken(data.token);
                 } else {
                     // Fallback if security-helpers not loaded
-                    sessionStorage.setItem('admin-token', data.token);
+                    localStorage.setItem('admin-token', data.token);
                 }
 
                 // Redirect
@@ -284,7 +284,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             // Check if already logged in
-            const token = window.SecureStorage ? SecureStorage.getToken() : sessionStorage.getItem('admin-token');
+            const token = window.SecureStorage ? SecureStorage.getToken() : localStorage.getItem('admin-token');
             if (token) {
                 window.location.href = '/admin';
                 return;
