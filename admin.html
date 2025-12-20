@@ -444,7 +444,13 @@
         <div class="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-bold">Chon anh</h3>
-                <button onclick="closeMediaModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                <div class="flex items-center gap-4">
+                    <label class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer text-sm">
+                        <span>Tai anh len</span>
+                        <input type="file" id="modal-media-upload" class="hidden" accept="image/*">
+                    </label>
+                    <button onclick="closeMediaModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
             </div>
             <div id="modal-media-grid" class="grid grid-cols-4 gap-4"></div>
         </div>
@@ -1007,6 +1013,35 @@
                 if (res.ok) alert('Da luu cai dat Ticker!');
                 else { const d = await res.json(); alert('Loi: ' + d.message); }
             } catch (err) { console.error(err); }
+        });
+
+        
+        // Modal Upload Logic
+        document.getElementById('modal-media-upload').addEventListener('change', async (e) => {
+            if (e.target.files[0]) {
+                const formData = new FormData();
+                formData.append('file', e.target.files[0]);
+                try {
+                    const res = await fetch(`${API_URL}/upload`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        body: formData
+                    });
+                    if (res.ok) {
+                        // Refresh the modal grid
+                        const mediaRes = await fetch(`${API_URL}/media`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        const media = await mediaRes.json();
+                        const grid = document.getElementById('modal-media-grid');
+                        grid.innerHTML = media.map(m => `
+                            <img src="${m.path}" class="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500" onclick="selectMedia('${m.path}')">
+                        `).join('');
+                        alert('Da tai anh len!');
+                    } else {
+                        const d = await res.json();
+                        alert('Loi: ' + d.message);
+                    }
+                } catch (err) { console.error(err); }
+            }
         });
 
         // Init
