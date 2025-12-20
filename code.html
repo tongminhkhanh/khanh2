@@ -127,22 +127,7 @@
 
             <!-- Right Side: Search & Actions -->
             <div class="flex items-center gap-3">
-                <!-- Search Bar -->
-                <div class="hidden md:flex items-center relative group">
-                    <div class="relative">
-                        <input type="text" id="nav-search" placeholder="Tìm kiếm bài viết..."
-                            class="text-sm pl-10 pr-4 py-2 rounded-full border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-primary focus:bg-white dark:focus:bg-gray-700 w-48 focus:w-64 transition-all duration-300"
-                            onkeypress="if(event.key==='Enter') searchArticles()">
-                        <span
-                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">search</span>
-                    </div>
-                </div>
-
-                <!-- Mobile Search Toggle -->
-                <button class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    onclick="toggleMobileSearch()">
-                    <span class="material-symbols-outlined text-text-main dark:text-white">search</span>
-                </button>
+                
 
                 <!-- Admin Login Button -->
                 <a href="/admin"
@@ -162,16 +147,7 @@
             </div>
         </div>
 
-        <!-- Mobile Search Bar (Hidden by default) -->
-        <div id="mobile-search-bar" class="hidden md:hidden px-4 pb-3">
-            <div class="relative">
-                <input type="text" id="nav-search-mobile" placeholder="Tìm kiếm bài viết..."
-                    class="w-full text-sm pl-10 pr-4 py-2.5 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-primary"
-                    onkeypress="if(event.key==='Enter') searchArticles()">
-                <span
-                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">search</span>
-            </div>
-        </div>
+        
     </header>
 
     <style>
@@ -499,6 +475,32 @@
         /* Mobile buttons color */
         .blue-header button .material-symbols-outlined {
             color: white !important;
+        }
+    
+        /* Ticker Bar Styles */
+        #ticker-bar {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark #ticker-bar {
+            background: linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @keyframes ticker-scroll {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .animate-ticker {
+            animation: ticker-scroll 25s linear infinite;
+            padding-left: 20px;
+        }
+
+        #ticker-bar:hover .animate-ticker {
+            animation-play-state: paused;
         }
     </style>
 
@@ -1482,6 +1484,57 @@
 
     <!-- UI Enhancements Script -->
     <script src="/public/ui-enhancements.js"></script>
+
+
+    <script>
+        // Ticker Logic
+        function updateTickerTime() {
+            const now = new Date();
+            const days = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
+            const day = days[now.getDay()];
+            const date = now.toLocaleDateString('vi-VN');
+            const time = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            const tickerTime = document.getElementById('ticker-datetime');
+            if (tickerTime) tickerTime.textContent = `${day}, ${date} - ${time}`;
+        }
+
+        async function loadTickerSettings() {
+            try {
+                const res = await fetch('/api/settings/ticker_settings');
+                if (res.ok) {
+                    const data = await res.json();
+                    const tickerContentContainer = document.getElementById('ticker-content-container');
+                    const tickerContent = document.getElementById('ticker-content');
+                    if (data.value && data.value.isEnabled) {
+                        tickerContentContainer.classList.remove('hidden');
+                        tickerContent.textContent = data.value.content || 'Chào mừng bạn đến với cổng thông tin điện tử của Trường Tiểu học Ít Ong';
+                    } else {
+                        tickerContentContainer.classList.add('hidden');
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading ticker:', err);
+            }
+        }
+
+        function toggleMobileSearch() {
+            const searchBar = document.getElementById('mobile-search-bar');
+            if (searchBar) {
+                searchBar.classList.toggle('hidden');
+                if (!searchBar.classList.contains('hidden')) {
+                    const input = document.getElementById('nav-search-mobile');
+                    if (input) input.focus();
+                }
+            }
+        }
+
+        // Initialize Ticker
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTickerTime();
+            setInterval(updateTickerTime, 60000);
+            loadTickerSettings();
+        });
+    </script>
 
 </body>
 
