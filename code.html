@@ -149,6 +149,46 @@
 
         
     </header>
+    <!-- Scrolling Ticker Bar -->
+    <div id="ticker-bar" class="w-full border-b border-white/10 py-2.5 overflow-hidden">
+        <div class="max-w-[1440px] mx-auto px-4 lg:px-10 flex items-center gap-6">
+            <!-- Date & Time -->
+            <div class="flex items-center gap-2 text-sm text-white/90 whitespace-nowrap border-r border-white/20 pr-4">
+                <span class="material-symbols-outlined text-lg text-white/80">schedule</span>
+                <span id="ticker-datetime">Đang tải...</span>
+            </div>
+            <!-- Scrolling Text Container -->
+            <div id="ticker-content-container" class="flex-1 overflow-hidden relative h-6">
+                <div id="ticker-content" class="absolute whitespace-nowrap text-sm font-bold text-white animate-ticker">
+                    <!-- Content injected here -->
+                </div>
+            </div>
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden md:block w-72 shrink-0">
+                <div class="relative group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-base group-focus-within:text-white transition-colors">search</span>
+                    <input type="text" id="nav-search" placeholder="Tìm kiếm bài viết..."
+                        class="text-xs pl-10 pr-4 py-1.5 rounded-full border border-white/20 bg-white/10 text-white placeholder-white/60 focus:outline-none focus:bg-white/20 focus:border-white/40 focus:ring-2 focus:ring-white/10 w-full transition-all"
+                        onkeypress="if(event.key==='Enter') searchArticles()">
+                </div>
+            </div>
+            <!-- Search Toggle (Mobile) -->
+            <button class="md:hidden p-1.5 rounded-lg hover:bg-white/10 transition-colors shrink-0"
+                onclick="toggleMobileSearch()">
+                <span class="material-symbols-outlined text-white/80">search</span>
+            </button>
+        </div>
+        <!-- Mobile Search Input (Hidden by default) -->
+        <div id="mobile-search-bar" class="hidden px-4 pb-2 pt-2 bg-blue-700/50 md:hidden">
+             <div class="relative">
+                <input type="text" id="nav-search-mobile" placeholder="Tìm kiếm..."
+                    class="w-full text-sm pl-10 pr-4 py-2 rounded-full border border-white/20 bg-white/10 text-white placeholder-white/60 focus:outline-none focus:bg-white/20"
+                    onkeypress="if(event.key==='Enter') searchArticles()">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-sm">search</span>
+            </div>
+        </div>
+    </div>
+
 
     <style>
         /* ===== PROFESSIONAL BLUE NAVIGATION THEME ===== */
