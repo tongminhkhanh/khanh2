@@ -894,48 +894,6 @@
             scroll-behavior: smooth;
         }
     </style>
-    <script>
-        // Load images for slider
-        async function loadSliderImages() {
-            try {
-                let images = [];
-                // Try load from settings first
-                const resS = await fetch('/api/settings/slider_images');
-                if (resS.ok) {
-                    const s = await resS.json();
-                    if (s.value && s.value.images && s.value.images.length > 0) images = s.value.images;
-                }
-                // Fallback to all media
-                if (images.length === 0) {
-                    const resM = await fetch('/api/public/media');
-                    const media = await resM.json();
-                    images = media.map(m => m.path);
-                }
-                const slider = document.getElementById('image-slider');
-                if (images.length > 0) {
-                    let html = '';
-                    images.forEach(p => {
-                        html += `<img src="${p}" alt="Slider" onerror="this.style.display='none'" loading="lazy">`;
-                    });
-                    slider.innerHTML = html + html;
-                    slider.classList.add('slider-animate');
-                    // Check if any images loaded successfully
-                    setTimeout(() => {
-                        const visibleImages = slider.querySelectorAll('img:not([style*="display: none"])');
-                        if (visibleImages.length === 0) {
-                            document.getElementById('image-slider-container').classList.add('hidden');
-                        }
-                    }, 2000);
-                } else {
-                    document.getElementById('image-slider-container').classList.add('hidden');
-                }
-            } catch (err) {
-                console.error('Error loading slider:', err);
-                document.getElementById('image-slider-container').classList.add('hidden');
-            }
-        }
-        loadSliderImages();
-    </script>
     <!-- Main Content -->
     <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 lg:px-10 py-8 flex flex-col gap-10">
         <!-- Hero Section -->
