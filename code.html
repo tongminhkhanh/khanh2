@@ -83,6 +83,25 @@
       ]
     }
     </script>
+    <style>
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            z-index: 9999;
+            user-select: none;
+            cursor: default;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            color: #FFFFFF;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
 </head>
 
 <body
@@ -550,12 +569,11 @@
         #ticker-bar:hover .animate-ticker {
             animation-play-state: paused;
         }
-    
+
         /* First line indent for paragraphs */
         p.indent-first-line {
             text-indent: 1.27cm;
         }
-
     </style>
 
     <script>
@@ -1590,6 +1608,53 @@
         });
     </script>
 
+    <script>
+        (function () {
+            var snowflakes = [],
+                browserWidth, browserHeight,
+                numberOfSnowflakes = 50, // Số lượng bông tuyết
+                resetPosition = false;
+
+            function setup() {
+                window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
+                window.addEventListener("resize", setResetFlag, false);
+            }
+
+            function setResetFlag(e) {
+                resetPosition = true;
+            }
+
+            function generateSnowflakes() {
+
+                var originalSnowflake = document.createElement("div");
+                originalSnowflake.classList.add("snowflake");
+                originalSnowflake.innerHTML = "❄";
+                originalSnowflake.style.fontSize = "20px"; // Kích thước cơ bản
+
+                var snowflakeContainer = document.body;
+
+                browserWidth = document.documentElement.clientWidth;
+                browserHeight = document.documentElement.clientHeight;
+
+                for (var i = 0; i < numberOfSnowflakes; i++) {
+                    var snowflakeClone = originalSnowflake.cloneNode(true);
+                    snowflakeContainer.appendChild(snowflakeClone);
+
+                    var initialX = Math.floor(Math.random() * browserWidth);
+                    var fallDuration = Math.floor(Math.random() * 10) + 5 + "s";
+                    var snowflakeSize = Math.floor(Math.random() * 20) + 10 + "px"; // Random kích thước
+                    var delay = Math.floor(Math.random() * 5) + "s";
+
+                    snowflakeClone.style.left = initialX + "px";
+                    snowflakeClone.style.animationDuration = fallDuration;
+                    snowflakeClone.style.fontSize = snowflakeSize;
+                    snowflakeClone.style.animationDelay = delay;
+                    snowflakeClone.style.opacity = Math.random(); // Độ mờ ngẫu nhiên
+                }
+            }
+            setup();
+        })();
+    </script>
 </body>
 
 </html>
