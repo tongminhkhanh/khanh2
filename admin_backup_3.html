@@ -422,13 +422,6 @@
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
                         <h2 class="text-xl font-bold mb-4">Thông điệp từ Hiệu Trưởng</h2>
                         <form id="principal-message-form" class="space-y-4">
-                            <div class="flex items-center gap-4">
-                                <label class="flex items-center">
-                                    <input type="checkbox" id="principal-enabled"
-                                        class="form-checkbox h-5 w-5 text-blue-600">
-                                    <span class="ml-2 text-gray-700 font-bold">Hiển thị thông điệp</span>
-                                </label>
-                            </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
                                 <input type="text" id="principal-title"
@@ -1065,7 +1058,6 @@
                 const principalRes = await fetch(`${API_URL}/settings/principal_message`);
                 const principalData = await principalRes.json();
                 if (principalData.value) {
-                    document.getElementById('principal-enabled').checked = principalData.value.isEnabled || false;
                     document.getElementById('principal-title').value = principalData.value.title || '';
                     document.getElementById('principal-content').value = principalData.value.content || '';
                 }
@@ -1093,7 +1085,6 @@
         document.getElementById('principal-message-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const data = {
-                isEnabled: document.getElementById('principal-enabled').checked,
                 title: document.getElementById('principal-title').value,
                 content: document.getElementById('principal-content').value
             };

@@ -102,58 +102,6 @@
             }
         }
     </style>
-    <style>
-        /* Vertical Scrolling News Animation */
-        @keyframes scrollUp {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
-        .scrolling-news-animation {
-            animation: scrollUp 15s linear infinite;
-        }
-        #scrolling-news-container:hover .scrolling-news-animation {
-            animation-play-state: paused;
-        }
-        .news-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .news-item:hover {
-            background-color: rgba(43, 140, 238, 0.05);
-        }
-        .dark .news-item {
-            border-bottom-color: #374151;
-        }
-        .dark .news-item:hover {
-            background-color: rgba(43, 140, 238, 0.1);
-        }
-        .news-category {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 4px;
-        }
-        .news-category.tin-tuc {
-            background-color: #dbeafe;
-            color: #1d4ed8;
-        }
-        .news-category.su-kien {
-            background-color: #fee2e2;
-            color: #dc2626;
-        }
-        .dark .news-category.tin-tuc {
-            background-color: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-        }
-        .dark .news-category.su-kien {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-        }
-    </style>
 </head>
 
 <body
@@ -1025,187 +973,132 @@
         <!-- Hero Section -->
         <section id="featured-section"
             class="hidden flex flex-col lg:flex-row gap-6 lg:gap-10 items-stretch bg-surface-light dark:bg-surface-dark rounded-xl p-4 lg:p-6 shadow-sm border border-[#cfdbe7] dark:border-gray-800">
-            <!-- Main Featured Article with Slider -->
+            <!-- Main Featured Article -->
             <div id="featured-main"
-                class="w-full lg:w-3/5 relative group cursor-pointer overflow-hidden rounded-lg aspect-video lg:aspect-auto min-h-[300px]">
+                class="w-full lg:w-3/5 relative group cursor-pointer overflow-hidden rounded-lg aspect-video lg:aspect-auto min-h-[300px]"
+                onclick="">
                 <img id="featured-main-bg" src="" alt="Featured Article"
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                
-                <!-- Navigation Arrows -->
-                <button id="featured-prev" 
-                    class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                    <span class="material-symbols-outlined">chevron_left</span>
-                </button>
-                <button id="featured-next" 
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </button>
-                
-                <!-- Slide Indicators -->
-                <div id="featured-indicators" class="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                    <!-- Dots will be injected here -->
-                </div>
-                
                 <div class="absolute bottom-0 left-0 p-6 flex flex-col gap-2">
                     <span id="featured-main-category"
                         class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-primary text-white text-xs font-bold w-fit mb-2">
                         Tiêu điểm
                     </span>
-                    <h1 id="featured-main-title"
-                        class="text-white text-2xl lg:text-3xl font-bold leading-tight drop-shadow-md">
-                        <!-- Title -->
-                    </h1>
+                    <h1 id="featured-main-title" <span class="w-1 h-6 bg-primary rounded-full"></span>
+                        Tin mới nhất
+                        </h3>
+                        <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Skeleton Loading Cards - will be replaced by API data -->
+                            <article
+                                class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                                <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
+                                <div class="p-5 flex flex-col flex-1">
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                                </div>
+                            </article>
+                            <article
+                                class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                                <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
+                                <div class="p-5 flex flex-col flex-1">
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                                </div>
+                            </article>
+                            <article
+                                class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                                <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
+                                <div class="p-5 flex flex-col flex-1">
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                                </div>
+                            </article>
+                            <article
+                                class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
+                                <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
+                                <div class="p-5 flex flex-col flex-1">
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                                    <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="flex justify-center mt-4">
+                            <button id="load-more-btn" onclick="loadMoreArticles()"
+                                class="px-6 py-2 border border-[#cfdbe7] dark:border-gray-700 rounded-lg text-text-secondary dark:text-gray-300 font-medium hover:bg-white dark:hover:bg-gray-800 transition-colors">
+                                Xem thêm tin cũ hơn
+                            </button>
+                        </div>
                 </div>
-            </div>
-            <!-- Side Featured Articles -->
-            <div class="w-full lg:w-2/5 flex flex-col justify-center gap-6">
-                <div id="principal-message-container">
-                    <h2 id="principal-message-title" class="text-text-main dark:text-white text-xl font-bold mb-3">
-                        Thông
-                        điệp từ Hiệu Trưởng</h2>
-                    <p id="principal-message-content"
-                        class="text-text-secondary dark:text-gray-400 text-base leading-relaxed">
-                        Hân hoan chào đón các em học sinh bước vào năm học mới với nhiều niềm vui và hứng khởi. Cùng
-                        nhìn lại những khoảnh khắc đáng nhớ trong ngày hội đến trường, nơi ươm mầm những ước mơ
-                        xanh.
-                    </p>
-                </div>
-                <!-- Vertical Scrolling News -->
-                <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
-                    <div id="scrolling-news-container" class="relative h-48 overflow-hidden">
-                        <div id="scrolling-news-list" class="scrolling-news-animation">
-                            <!-- News items will be injected here -->
+                <!-- Right Column: Sidebar (4 cols) -->
+                <aside class="lg:col-span-4 flex flex-col gap-8">
+                    <!-- Upcoming Events Widget -->
+                    <div
+                        class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 border border-[#cfdbe7] dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-text-main dark:text-white">Sự kiện sắp tới</h3>
+                            <a class="text-xs text-primary font-bold hover:underline" href="/su-kien">Xem lịch</a>
+                        </div>
+                        <div id="upcoming-events-list" class="flex flex-col gap-4">
+                            <!-- Events will be loaded dynamically -->
+                            <p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Đang tải sự
+                                kiện...
+                            </p>
                         </div>
                     </div>
-                </div>
-                <button onclick="window.location.href='/thong-bao'"
-                    class="mt-2 w-fit flex items-center gap-2 text-primary font-bold hover:text-primary-dark transition-colors group">
-                    Xem tất cả tiêu điểm
-                    <span
-                        class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                </button>
-            </div>
-        </section>
+                    <script>
+                        // Load upcoming events
+                        async function loadUpcomingEvents() {
+                            try {
+                                const res = await fetch('/api/events');
+                                const events = await res.json();
+                                const container = document.getElementById('upcoming-events-list');
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Left Column: News Grid (8 cols) -->
-            <div class="lg:col-span-8 flex flex-col gap-8">
-                <h3 class="text-xl font-bold text-text-main dark:text-white flex items-center gap-2">
-                    <span class="w-1 h-6 bg-primary rounded-full"></span>
-                    Tin mới nhất
-                </h3>
-                <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Skeleton Loading Cards - will be replaced by API data -->
-                    <article
-                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
-                        <div class="p-5 flex flex-col flex-1">
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
-                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
-                        </div>
-                    </article>
-                    <article
-                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
-                        <div class="p-5 flex flex-col flex-1">
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
-                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
-                        </div>
-                    </article>
-                    <article
-                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
-                        <div class="p-5 flex flex-col flex-1">
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
-                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
-                        </div>
-                    </article>
-                    <article
-                        class="skeleton-card flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 animate-pulse">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700"></div>
-                        <div class="p-5 flex flex-col flex-1">
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-3"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                            <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
-                            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
-                        </div>
-                    </article>
-                </div>
-                <div class="flex justify-center mt-4">
-                    <button id="load-more-btn" onclick="loadMoreArticles()"
-                        class="px-6 py-2 border border-[#cfdbe7] dark:border-gray-700 rounded-lg text-text-secondary dark:text-gray-300 font-medium hover:bg-white dark:hover:bg-gray-800 transition-colors">
-                        Xem thêm tin cũ hơn
-                    </button>
-                </div>
-            </div>
-            <!-- Right Column: Sidebar (4 cols) -->
-            <aside class="lg:col-span-4 flex flex-col gap-8">
-                <!-- Upcoming Events Widget -->
-                <div
-                    class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 border border-[#cfdbe7] dark:border-gray-800 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-text-main dark:text-white">Sự kiện sắp tới</h3>
-                        <a class="text-xs text-primary font-bold hover:underline" href="/su-kien">Xem lịch</a>
-                    </div>
-                    <div id="upcoming-events-list" class="flex flex-col gap-4">
-                        <!-- Events will be loaded dynamically -->
-                        <p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Đang tải sự
-                            kiện...
-                        </p>
-                    </div>
-                </div>
-                <script>
-                    // Load upcoming events
-                    async function loadUpcomingEvents() {
-                        try {
-                            const res = await fetch('/api/events');
-                            const events = await res.json();
-                            const container = document.getElementById('upcoming-events-list');
+                                // Filter only future events and sort by date
+                                const now = new Date();
+                                const upcomingEvents = events
+                                    .filter(event => new Date(event.startDate) >= now && event.isPublished)
+                                    .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+                                    .slice(0, 5); // Show only 5 upcoming events
 
-                            // Filter only future events and sort by date
-                            const now = new Date();
-                            const upcomingEvents = events
-                                .filter(event => new Date(event.startDate) >= now && event.isPublished)
-                                .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-                                .slice(0, 5); // Show only 5 upcoming events
+                                if (upcomingEvents.length === 0) {
+                                    container.innerHTML = '<p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Không có sự kiện sắp tới</p>';
+                                    return;
+                                }
 
-                            if (upcomingEvents.length === 0) {
-                                container.innerHTML = '<p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Không có sự kiện sắp tới</p>';
-                                return;
-                            }
+                                container.innerHTML = upcomingEvents.map(event => {
+                                    const startDate = new Date(event.startDate);
+                                    const endDate = new Date(event.endDate);
+                                    const day = startDate.getDate();
+                                    const month = 'T' + (startDate.getMonth() + 1);
 
-                            container.innerHTML = upcomingEvents.map(event => {
-                                const startDate = new Date(event.startDate);
-                                const endDate = new Date(event.endDate);
-                                const day = startDate.getDate();
-                                const month = 'T' + (startDate.getMonth() + 1);
+                                    // Format time
+                                    const startTime = startDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                                    const endTime = endDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 
-                                // Format time
-                                const startTime = startDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-                                const endTime = endDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                                    // Check if all day event (same time or more than 12 hours)
+                                    const duration = (endDate - startDate) / (1000 * 60 * 60);
+                                    const timeDisplay = duration >= 12 ? 'Cả ngày' : startTime + ' - ' + endTime;
+                                    const locationDisplay = event.location || 'Trường học';
 
-                                // Check if all day event (same time or more than 12 hours)
-                                const duration = (endDate - startDate) / (1000 * 60 * 60);
-                                const timeDisplay = duration >= 12 ? 'Cả ngày' : startTime + ' - ' + endTime;
-                                const locationDisplay = event.location || 'Trường học';
-
-                                return `
+                                    return `
                                     <div class="flex gap-3 group cursor-pointer" onclick="window.location.href='/su-kien'">
                                         <div class="flex flex-col items-center justify-center bg-blue-50 dark:bg-blue-900/30 w-12 h-14 rounded-lg shrink-0 border border-blue-100 dark:border-blue-800">
                                             <span class="text-xs text-primary font-bold uppercase pt-1">${month}</span>
@@ -1219,93 +1112,93 @@
                                         </div>
                                     </div>
                                 `;
-                            }).join('');
-                        } catch (err) {
-                            console.error('Error loading events:', err);
-                            document.getElementById('upcoming-events-list').innerHTML =
-                                '<p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Không thể tải sự kiện</p>';
-                        }
-                    }
-                    loadUpcomingEvents();
-                </script>
-                <!-- Newsletter Signup -->
-                <div class="bg-primary/10 dark:bg-primary/5 rounded-xl p-6 border border-primary/20">
-                    <div class="flex items-center gap-3 mb-3 text-primary">
-                        <span class="material-symbols-outlined text-3xl">mark_email_unread</span>
-                        <h3 class="text-lg font-bold text-text-main dark:text-white">Đăng ký bản tin</h3>
-                    </div>
-                    <p class="text-sm text-text-secondary dark:text-gray-300 mb-4">
-                        Nhận thông báo mới nhất về hoạt động và sự kiện của trường qua email hàng tuần.
-                    </p>
-                    <form class="flex flex-col gap-3" id="newsletter-form">
-                        <input
-                            class="w-full h-10 px-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-                            id="newsletter-email" placeholder="Email của phụ huynh" type="email" required />
-                        <button
-                            class="w-full h-10 bg-primary hover:bg-primary-dark text-white text-sm font-bold rounded-lg transition-colors shadow-sm"
-                            type="submit">
-                            Đăng ký ngay
-                        </button>
-                    </form>
-                    <script>
-                        document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
-                            e.preventDefault();
-                            const email = document.getElementById('newsletter-email').value;
-
-                            try {
-                                const response = await fetch('/api/subscribe', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({ email })
-                                });
-
-                                const data = await response.json();
-
-                                if (data.success) {
-                                    alert(data.message);
-                                    document.getElementById('newsletter-email').value = '';
-                                } else {
-                                    alert('Có lỗi xảy ra: ' + data.message);
-                                }
-                            } catch (error) {
-                                console.error('Error:', error);
-                                alert('Có lỗi xảy ra khi đăng ký.');
+                                }).join('');
+                            } catch (err) {
+                                console.error('Error loading events:', err);
+                                document.getElementById('upcoming-events-list').innerHTML =
+                                    '<p class="text-sm text-text-secondary dark:text-gray-400 text-center py-4">Không thể tải sự kiện</p>';
                             }
-                        });
+                        }
+                        loadUpcomingEvents();
                     </script>
-                </div>
-                <!-- Quick Links -->
-                <div
-                    class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 border border-[#cfdbe7] dark:border-gray-800 shadow-sm">
-                    <h3 class="text-lg font-bold text-text-main dark:text-white mb-4">Liên kết nhanh</h3>
-                    <ul class="flex flex-col gap-2">
-                        <li>
-                            <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
-                                href="#">
-                                <span class="material-symbols-outlined text-base">chevron_right</span>
-                                Thời khóa biểu
-                            </a>
-                        </li>
-                        <li>
-                            <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
-                                href="#">
-                                <span class="material-symbols-outlined text-base">chevron_right</span>
-                                Thư viện ảnh
-                            </a>
-                        </li>
-                        <li>
-                            <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
-                                href="#">
-                                <span class="material-symbols-outlined text-base">chevron_right</span>
-                                Văn bản &amp; Biểu mẫu
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-        </div>
+                    <!-- Newsletter Signup -->
+                    <div class="bg-primary/10 dark:bg-primary/5 rounded-xl p-6 border border-primary/20">
+                        <div class="flex items-center gap-3 mb-3 text-primary">
+                            <span class="material-symbols-outlined text-3xl">mark_email_unread</span>
+                            <h3 class="text-lg font-bold text-text-main dark:text-white">Đăng ký bản tin</h3>
+                        </div>
+                        <p class="text-sm text-text-secondary dark:text-gray-300 mb-4">
+                            Nhận thông báo mới nhất về hoạt động và sự kiện của trường qua email hàng tuần.
+                        </p>
+                        <form class="flex flex-col gap-3" id="newsletter-form">
+                            <input
+                                class="w-full h-10 px-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                                id="newsletter-email" placeholder="Email của phụ huynh" type="email" required />
+                            <button
+                                class="w-full h-10 bg-primary hover:bg-primary-dark text-white text-sm font-bold rounded-lg transition-colors shadow-sm"
+                                type="submit">
+                                Đăng ký ngay
+                            </button>
+                        </form>
+                        <script>
+                            document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+                                e.preventDefault();
+                                const email = document.getElementById('newsletter-email').value;
+
+                                try {
+                                    const response = await fetch('/api/subscribe', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ email })
+                                    });
+
+                                    const data = await response.json();
+
+                                    if (data.success) {
+                                        alert(data.message);
+                                        document.getElementById('newsletter-email').value = '';
+                                    } else {
+                                        alert('Có lỗi xảy ra: ' + data.message);
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    alert('Có lỗi xảy ra khi đăng ký.');
+                                }
+                            });
+                        </script>
+                    </div>
+                    <!-- Quick Links -->
+                    <div
+                        class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 border border-[#cfdbe7] dark:border-gray-800 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main dark:text-white mb-4">Liên kết nhanh</h3>
+                        <ul class="flex flex-col gap-2">
+                            <li>
+                                <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
+                                    href="#">
+                                    <span class="material-symbols-outlined text-base">chevron_right</span>
+                                    Thời khóa biểu
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
+                                    href="#">
+                                    <span class="material-symbols-outlined text-base">chevron_right</span>
+                                    Thư viện ảnh
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-300 hover:text-primary transition-colors"
+                                    href="#">
+                                    <span class="material-symbols-outlined text-base">chevron_right</span>
+                                    Văn bản &amp; Biểu mẫu
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
     </main>
     <!-- Footer -->
     <footer class="bg-white dark:bg-[#151f2b] border-t border-[#e7edf3] dark:border-gray-700 mt-auto">
@@ -1371,239 +1264,23 @@
                 <div class="flex gap-4">
                     <a class="text-text-secondary dark:text-gray-400 hover:text-primary" href="#"><span
                             class="material-symbols-outlined">public</span></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const newsGrid = document.getElementById('news-grid');
+                    const articles = window.allArticles || [];
+                    const start = window.currentArticleIndex || 4;
+                    const end = start + 4;
+                    const moreArticles = articles.slice(start, end);
 
-            // Fetch Urgent Notice
-            try {
-                const response = await fetch('/api/settings/urgent_notice');
-                if (response.ok) {
-                    const setting = await response.json();
-                    const data = setting.value || {};
-
-                    if (data.isEnabled) {
-                        document.getElementById('urgent-notice-container').classList.remove('hidden');
-                        document.getElementById('urgent-notice-content').innerText = data.content;
-
-                        if (data.link) {
-                            const linkBtn = document.getElementById('urgent-notice-link');
-                            linkBtn.classList.remove('hidden');
-                            linkBtn.onclick = () => window.location.href = data.link;
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching urgent notice:', error);
-            }
-
-            // Fetch Principal Message
-            try {
-                const response = await fetch('/api/settings/principal_message');
-                if (response.ok) {
-                    const setting = await response.json();
-                    const data = setting.value || {};
-                    const container = document.getElementById('principal-message-container');
-
-                    if (data && data.isEnabled) {
-                        if (container) container.classList.remove('hidden');
-                        if (data.title) document.getElementById('principal-message-title').innerText = data.title;
-                        if (data.content) document.getElementById('principal-message-content').innerText = data.content;
-                    } else {
-                        if (container) container.classList.add('hidden');
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching principal message:', error);
-            }
-
-            // Fetch and Populate Scrolling News
-            try {
-                const scrollingResponse = await fetch('/api/articles');
-                const scrollingArticles = await scrollingResponse.json();
-                const scrollingList = document.getElementById('scrolling-news-list');
-                
-                if (scrollingArticles.length > 0 && scrollingList) {
-                    // Take first 6 articles for scrolling
-                    const newsItems = scrollingArticles.slice(0, 6);
-                    
-                    // Create items twice for seamless loop
-                    const createNewsItem = (article) => {
-                        const categoryClass = article.category === 'su-kien' ? 'su-kien' : 'tin-tuc';
-                        const categoryText = article.category === 'su-kien' ? 'Sự kiện' : 'Tin tức';
-                        return `
-                            <div class="news-item" onclick="window.location.href='/bai-viet/${article.slug || article._id}'">
-                                <span class="news-category ${categoryClass}">${categoryText}</span>
-                                <h4 class="text-sm font-semibold text-text-main dark:text-white line-clamp-2">${article.title}</h4>
-                            </div>
-                        `;
-                    };
-                    
-                    // Duplicate items for seamless scrolling
-                    const itemsHtml = newsItems.map(createNewsItem).join('');
-                    scrollingList.innerHTML = itemsHtml + itemsHtml;
-                }
-            } catch (error) {
-                console.error('Error fetching scrolling news:', error);
-            }
-
-            try {
-                const response = await fetch('/api/articles');
-                const articles = await response.json();
-
-                if (articles.length > 0) {
-                    // Populate Featured Section
-                    const featuredSection = document.getElementById('featured-section');
-                    const mainArticle = articles[0];
-                    const sideArticles = articles.slice(1, 3);
-
-                    // Featured Slider Setup
-                    const featuredArticles = articles.slice(0, 5); // Use first 5 for slider
-                    let currentSlide = 0;
-                    
-                    function showSlide(index) {
-                        if (index < 0) index = featuredArticles.length - 1;
-                        if (index >= featuredArticles.length) index = 0;
-                        currentSlide = index;
-                        
-                        const article = featuredArticles[currentSlide];
-                        document.getElementById('featured-main-bg').src = article.image || 'https://via.placeholder.com/800x400';
-                        document.getElementById('featured-main-title').innerText = article.title;
-                        document.getElementById('featured-main-category').innerText = article.category || 'Tiêu điểm';
-                        document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${article.slug || article._id}`;
-                        
-                        // Update indicators
-                        document.querySelectorAll('#featured-indicators button').forEach((dot, i) => {
-                            dot.classList.toggle('bg-white', i === currentSlide);
-                            dot.classList.toggle('bg-white/50', i !== currentSlide);
-                        });
-                    }
-                    
-                    if (featuredArticles.length > 0) {
-                        featuredSection.classList.remove('hidden');
-                        
-                        // Create indicators
-                        const indicators = document.getElementById('featured-indicators');
-                        indicators.innerHTML = featuredArticles.map((_, i) => 
-                            `<button class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'} hover:bg-white transition-colors" onclick="event.stopPropagation()"></button>`
-                        ).join('');
-                        
-                        // Add click handlers to indicators
-                        indicators.querySelectorAll('button').forEach((dot, i) => {
-                            dot.onclick = (e) => { e.stopPropagation(); showSlide(i); };
-                        });
-                        
-                        // Navigation buttons
-                        document.getElementById('featured-prev').onclick = (e) => { e.stopPropagation(); showSlide(currentSlide - 1); };
-                        document.getElementById('featured-next').onclick = (e) => { e.stopPropagation(); showSlide(currentSlide + 1); };
-                        
-                        // Show first slide
-                        showSlide(0);
-                        
-                        // Auto-slide every 5 seconds
-                        setInterval(() => showSlide(currentSlide + 1), 5000);
-                    }
-
-                    // Side list replaced by scrolling news - no action needed here
-
-                    // Populate Grid (skip first 3 if you want distinct featured, or show all)
-                    // Showing all in grid for now as per usual news site pattern or skipping featured?
-                    // Let's skip the main one at least to avoid duplication if desired, but user didn't specify.
-                    // I'll display ALL in grid for completeness, or maybe slice(3). 
-                    // Let's display ALL in grid for now to ensure nothing is hidden, 
-                    // or maybe slice(0) is fine.
-
-                    newsGrid.innerHTML = ''; // Clear skeleton content
-                    let articlesToShow = articles.slice(0, 4); // Show only 4 initially
-                    window.allArticles = articles; // Store all articles
-                    window.currentArticleIndex = 4;
-
-                    articlesToShow.forEach((article, index) => {
-                        const date = new Date(article.createdAt).toLocaleDateString('vi-VN');
-                        const imageUrl = article.image || 'https://via.placeholder.com/400x200?text=No+Image';
-
-                        const articleHtml = `
-                            <article class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group fade-in" style="animation-delay: ${index * 0.1}s">
-                                <div class="relative h-48 overflow-hidden">
-                                    <img src="${imageUrl}" alt="${article.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
-                                    <span class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
-                                        ${article.category || 'Tin tức'}
-                                    </span>
-                                </div>
-                                <div class="p-5 flex flex-col flex-1">
-                                    <div class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                                        ${date}
-                                    </div>
-                                    <h3 class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
-                                        <a href="/bai-viet/${article.slug || article._id}">${article.title}</a>
-                                    </h3>
-                                    <div class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
-                                        ${article.content} 
-                                    </div>
-                                    <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article.slug || article._id}">
-                                        Xem chi tiết
-                                    </a>
-                                </div>
-                            </article>
-                        `;
-                        newsGrid.innerHTML += articleHtml;
-                    });
-
-                    // Hide load more button if no more articles
-                    if (articles.length <= 4) {
-                        document.getElementById('load-more-btn').style.display = 'none';
-                    } else {
-                        document.getElementById('load-more-btn').classList.remove('loading-hidden');
-                    }
-                } else {
-                    // No articles - show empty state
-                    newsGrid.innerHTML = `
-                        <div class="col-span-2 text-center py-12 fade-in">
-                            <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-4">article</span>
-                            <p class="text-text-secondary dark:text-gray-400">Chưa có bài viết nào.</p>
-                        </div>
-                    `;
-                    document.getElementById('load-more-btn').style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Error fetching articles:', error);
-                // Show error message to user
-                const newsGrid = document.getElementById('news-grid');
-                newsGrid.innerHTML = `
-                    <div class="col-span-2 text-center py-12 fade-in">
-                        <span class="material-symbols-outlined text-6xl text-red-300 dark:text-red-600 mb-4">cloud_off</span>
-                        <p class="text-text-secondary dark:text-gray-400 mb-2">Không thể tải bài viết.</p>
-                        <button onclick="location.reload()" class="text-primary hover:underline text-sm font-medium">
-                            <span class="material-symbols-outlined text-sm align-middle">refresh</span>
-                            Thử lại
-                        </button>
-                    </div>
-                `;
-                document.getElementById('load-more-btn').style.display = 'none';
-            }
-        });
-
-        // Load more articles function
-        function loadMoreArticles() {
-            const newsGrid = document.getElementById('news-grid');
-            const articles = window.allArticles || [];
-            const start = window.currentArticleIndex || 4;
-            const end = start + 4;
-            const moreArticles = articles.slice(start, end);
-
-            moreArticles.forEach(article => {
-                const date = new Date(article.createdAt).toLocaleDateString('vi-VN');
-                const imageUrl = article.image || 'https://via.placeholder.com/400x200?text=No+Image';
-                const articleHtml = `
-                    <article class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
+                    moreArticles.forEach(article => {
+                    const date = new Date(article.createdAt).toLocaleDateString('vi-VN');
+                    const imageUrl = article.image || 'https://via.placeholder.com/400x200?text=No+Image';
+                    const articleHtml = `
+                    < article
+                        class="flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-[#cfdbe7] dark:border-gray-800 hover:shadow-lg transition-shadow duration-300 group">
                         <div class="relative h-48 overflow-hidden">
-                            <img src="${imageUrl}" alt="${article.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
-                            <span class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
+                            <img src="${imageUrl}" alt="${article.title}"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                loading="lazy">
+                            <span
+                                class="absolute top-3 left-3 bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded border border-blue-200">
                                 ${article.category || 'Tin tức'}
                             </span>
                         </div>
@@ -1612,181 +1289,183 @@
                                 <span class="material-symbols-outlined text-[16px]">calendar_today</span>
                                 ${date}
                             </div>
-                            <h3 class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
+                            <h3
+                                class="text-lg font-bold text-text-main dark:text-white mb-2 leading-tight group-hover:text-primary transition-colors">
                                 <a href="/bai-viet/${article.slug || article._id}">${article.title}</a>
                             </h3>
                             <div class="text-text-secondary dark:text-gray-400 text-sm line-clamp-3 mb-4 flex-1">
-                                ${article.content} 
+                                ${article.content}
                             </div>
-                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline" href="/bai-viet/${article.slug || article._id}">
+                            <a class="inline-flex items-center text-primary text-sm font-bold hover:underline"
+                                href="/bai-viet/${article.slug || article._id}">
                                 Xem chi tiết
                             </a>
                         </div>
-                    </article>
-                `;
-                newsGrid.innerHTML += articleHtml;
-            });
+                        </article>
+                        `;
+                        newsGrid.innerHTML += articleHtml;
+                        });
 
-            window.currentArticleIndex = end;
+                        window.currentArticleIndex = end;
 
-            // Hide button if no more articles
-            if (end >= articles.length) {
-                document.getElementById('load-more-btn').style.display = 'none';
-            }
-        }
+                        // Hide button if no more articles
+                        if (end >= articles.length) {
+                        document.getElementById('load-more-btn').style.display = 'none';
+                        }
+                        }
 
-        // Search function
-        function searchArticles() {
-            const query = document.getElementById('nav-search').value.trim();
-            if (query) {
-                window.location.href = '/search?q=' + encodeURIComponent(query);
-            }
-        }
+                        // Search function
+                        function searchArticles() {
+                        const query = document.getElementById('nav-search').value.trim();
+                        if (query) {
+                        window.location.href = '/search?q=' + encodeURIComponent(query);
+                        }
+                        }
 
-        // ===== BACK TO TOP BUTTON FUNCTIONALITY =====
-        const backToTopBtn = document.getElementById('back-to-top');
+                        // ===== BACK TO TOP BUTTON FUNCTIONALITY =====
+                        const backToTopBtn = document.getElementById('back-to-top');
 
-        // Show/hide button based on scroll position
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
+                        // Show/hide button based on scroll position
+                        window.addEventListener('scroll', () => {
+                        if (window.scrollY > 400) {
+                        backToTopBtn.classList.add('visible');
+                        } else {
+                        backToTopBtn.classList.remove('visible');
+                        }
+                        });
 
-        // Smooth scroll to top
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
+                        // Smooth scroll to top
+                        function scrollToTop() {
+                        window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                        });
+                        }
 
-        // ===== PAGE TRANSITION HANDLING =====
-        // Add smooth transition when navigating to internal links
-        document.querySelectorAll('a[href^="/"], a[href^="./"]').forEach(link => {
-            link.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                // Skip external links and anchor links
-                if (href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript:')) return;
+                        // ===== PAGE TRANSITION HANDLING =====
+                        // Add smooth transition when navigating to internal links
+                        document.querySelectorAll('a[href^="/"], a[href^="./"]').forEach(link => {
+                        link.addEventListener('click', function (e) {
+                        const href = this.getAttribute('href');
+                        // Skip external links and anchor links
+                        if (href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript:')) return;
 
-                e.preventDefault();
-                document.body.classList.add('page-exit');
+                        e.preventDefault();
+                        document.body.classList.add('page-exit');
 
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 300);
-            });
-        });
-    </script>
+                        setTimeout(() => {
+                        window.location.href = href;
+                        }, 300);
+                        });
+                        });
+                        </script>
 
-    <!-- Back to Top Button -->
-    <button id="back-to-top" onclick="scrollToTop()" aria-label="Về đầu trang" title="Về đầu trang">
-        <span class="material-symbols-outlined">arrow_upward</span>
-    </button>
+                        <!-- Back to Top Button -->
+                        <button id="back-to-top" onclick="scrollToTop()" aria-label="Về đầu trang" title="Về đầu trang">
+                            <span class="material-symbols-outlined">arrow_upward</span>
+                        </button>
 
-    <!-- UI Enhancements Script -->
-    <script src="/public/ui-enhancements.js"></script>
+                        <!-- UI Enhancements Script -->
+                        <script src="/public/ui-enhancements.js"></script>
 
 
-    <script>
-        // Ticker Logic
-        function updateTickerTime() {
-            const now = new Date();
-            const days = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
-            const day = days[now.getDay()];
-            const date = now.toLocaleDateString('vi-VN');
-            const time = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-            const tickerTime = document.getElementById('ticker-datetime');
-            if (tickerTime) tickerTime.textContent = `${day}, ${date} - ${time}`;
-        }
+                        <script>
+                            // Ticker Logic
+                            function updateTickerTime() {
+                                const now = new Date();
+                                const days = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
+                                const day = days[now.getDay()];
+                                const date = now.toLocaleDateString('vi-VN');
+                                const time = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                                const tickerTime = document.getElementById('ticker-datetime');
+                                if (tickerTime) tickerTime.textContent = `${day}, ${date} - ${time}`;
+                            }
 
-        async function loadTickerSettings() {
-            try {
-                const res = await fetch('/api/settings/ticker_settings');
-                if (res.ok) {
-                    const data = await res.json();
-                    const tickerContentContainer = document.getElementById('ticker-content-container');
-                    const tickerContent = document.getElementById('ticker-content');
-                    if (data.value && data.value.isEnabled) {
-                        tickerContentContainer.classList.remove('hidden');
-                        tickerContent.textContent = data.value.content || 'Chào mừng bạn đến với cổng thông tin điện tử của Trường Tiểu học Ít Ong';
-                    } else {
-                        tickerContentContainer.classList.add('hidden');
-                    }
-                }
-            } catch (err) {
-                console.error('Error loading ticker:', err);
-            }
-        }
+                            async function loadTickerSettings() {
+                                try {
+                                    const res = await fetch('/api/settings/ticker_settings');
+                                    if (res.ok) {
+                                        const data = await res.json();
+                                        const tickerContentContainer = document.getElementById('ticker-content-container');
+                                        const tickerContent = document.getElementById('ticker-content');
+                                        if (data.value && data.value.isEnabled) {
+                                            tickerContentContainer.classList.remove('hidden');
+                                            tickerContent.textContent = data.value.content || 'Chào mừng bạn đến với cổng thông tin điện tử của Trường Tiểu học Ít Ong';
+                                        } else {
+                                            tickerContentContainer.classList.add('hidden');
+                                        }
+                                    }
+                                } catch (err) {
+                                    console.error('Error loading ticker:', err);
+                                }
+                            }
 
-        function toggleMobileSearch() {
-            const searchBar = document.getElementById('mobile-search-bar');
-            if (searchBar) {
-                searchBar.classList.toggle('hidden');
-                if (!searchBar.classList.contains('hidden')) {
-                    const input = document.getElementById('nav-search-mobile');
-                    if (input) input.focus();
-                }
-            }
-        }
+                            function toggleMobileSearch() {
+                                const searchBar = document.getElementById('mobile-search-bar');
+                                if (searchBar) {
+                                    searchBar.classList.toggle('hidden');
+                                    if (!searchBar.classList.contains('hidden')) {
+                                        const input = document.getElementById('nav-search-mobile');
+                                        if (input) input.focus();
+                                    }
+                                }
+                            }
 
-        // Initialize Ticker
-        document.addEventListener('DOMContentLoaded', () => {
-            updateTickerTime();
-            setInterval(updateTickerTime, 60000);
-            loadTickerSettings();
-        });
-    </script>
+                            // Initialize Ticker
+                            document.addEventListener('DOMContentLoaded', () => {
+                                updateTickerTime();
+                                setInterval(updateTickerTime, 60000);
+                                loadTickerSettings();
+                            });
+                        </script>
 
-    <script>
-        (function () {
-            var snowflakes = [],
-                browserWidth, browserHeight,
-                numberOfSnowflakes = 50, // Số lượng bông tuyết
-                resetPosition = false;
+                        <script>
+                            (function () {
+                                var snowflakes = [],
+                                    browserWidth, browserHeight,
+                                    numberOfSnowflakes = 50, // Số lượng bông tuyết
+                                    resetPosition = false;
 
-            function setup() {
-                window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
-                window.addEventListener("resize", setResetFlag, false);
-            }
+                                function setup() {
+                                    window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
+                                    window.addEventListener("resize", setResetFlag, false);
+                                }
 
-            function setResetFlag(e) {
-                resetPosition = true;
-            }
+                                function setResetFlag(e) {
+                                    resetPosition = true;
+                                }
 
-            function generateSnowflakes() {
+                                function generateSnowflakes() {
 
-                var originalSnowflake = document.createElement("div");
-                originalSnowflake.classList.add("snowflake");
-                originalSnowflake.innerHTML = "❄";
-                originalSnowflake.style.fontSize = "20px"; // Kích thước cơ bản
+                                    var originalSnowflake = document.createElement("div");
+                                    originalSnowflake.classList.add("snowflake");
+                                    originalSnowflake.innerHTML = "❄";
+                                    originalSnowflake.style.fontSize = "20px"; // Kích thước cơ bản
 
-                var snowflakeContainer = document.body;
+                                    var snowflakeContainer = document.body;
 
-                browserWidth = document.documentElement.clientWidth;
-                browserHeight = document.documentElement.clientHeight;
+                                    browserWidth = document.documentElement.clientWidth;
+                                    browserHeight = document.documentElement.clientHeight;
 
-                for (var i = 0; i < numberOfSnowflakes; i++) {
-                    var snowflakeClone = originalSnowflake.cloneNode(true);
-                    snowflakeContainer.appendChild(snowflakeClone);
+                                    for (var i = 0; i < numberOfSnowflakes; i++) {
+                                        var snowflakeClone = originalSnowflake.cloneNode(true);
+                                        snowflakeContainer.appendChild(snowflakeClone);
 
-                    var initialX = Math.floor(Math.random() * browserWidth);
-                    var fallDuration = Math.floor(Math.random() * 10) + 5 + "s";
-                    var snowflakeSize = Math.floor(Math.random() * 20) + 10 + "px"; // Random kích thước
-                    var delay = Math.floor(Math.random() * 5) + "s";
+                                        var initialX = Math.floor(Math.random() * browserWidth);
+                                        var fallDuration = Math.floor(Math.random() * 10) + 5 + "s";
+                                        var snowflakeSize = Math.floor(Math.random() * 20) + 10 + "px"; // Random kích thước
+                                        var delay = Math.floor(Math.random() * 5) + "s";
 
-                    snowflakeClone.style.left = initialX + "px";
-                    snowflakeClone.style.animationDuration = fallDuration;
-                    snowflakeClone.style.fontSize = snowflakeSize;
-                    snowflakeClone.style.animationDelay = delay;
-                    snowflakeClone.style.opacity = Math.random(); // Độ mờ ngẫu nhiên
-                }
-            }
-            setup();
-        })();
-    </script>
+                                        snowflakeClone.style.left = initialX + "px";
+                                        snowflakeClone.style.animationDuration = fallDuration;
+                                        snowflakeClone.style.fontSize = snowflakeSize;
+                                        snowflakeClone.style.animationDelay = delay;
+                                        snowflakeClone.style.opacity = Math.random(); // Độ mờ ngẫu nhiên
+                                    }
+                                }
+                                setup();
+                            })();
+                        </script>
 </body>
 
 </html>

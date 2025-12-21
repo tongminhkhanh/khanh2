@@ -102,58 +102,6 @@
             }
         }
     </style>
-    <style>
-        /* Vertical Scrolling News Animation */
-        @keyframes scrollUp {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
-        .scrolling-news-animation {
-            animation: scrollUp 15s linear infinite;
-        }
-        #scrolling-news-container:hover .scrolling-news-animation {
-            animation-play-state: paused;
-        }
-        .news-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .news-item:hover {
-            background-color: rgba(43, 140, 238, 0.05);
-        }
-        .dark .news-item {
-            border-bottom-color: #374151;
-        }
-        .dark .news-item:hover {
-            background-color: rgba(43, 140, 238, 0.1);
-        }
-        .news-category {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 4px;
-        }
-        .news-category.tin-tuc {
-            background-color: #dbeafe;
-            color: #1d4ed8;
-        }
-        .news-category.su-kien {
-            background-color: #fee2e2;
-            color: #dc2626;
-        }
-        .dark .news-category.tin-tuc {
-            background-color: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-        }
-        .dark .news-category.su-kien {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-        }
-    </style>
 </head>
 
 <body
@@ -1025,29 +973,14 @@
         <!-- Hero Section -->
         <section id="featured-section"
             class="hidden flex flex-col lg:flex-row gap-6 lg:gap-10 items-stretch bg-surface-light dark:bg-surface-dark rounded-xl p-4 lg:p-6 shadow-sm border border-[#cfdbe7] dark:border-gray-800">
-            <!-- Main Featured Article with Slider -->
+            <!-- Main Featured Article -->
             <div id="featured-main"
-                class="w-full lg:w-3/5 relative group cursor-pointer overflow-hidden rounded-lg aspect-video lg:aspect-auto min-h-[300px]">
+                class="w-full lg:w-3/5 relative group cursor-pointer overflow-hidden rounded-lg aspect-video lg:aspect-auto min-h-[300px]"
+                onclick="">
                 <img id="featured-main-bg" src="" alt="Featured Article"
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                
-                <!-- Navigation Arrows -->
-                <button id="featured-prev" 
-                    class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                    <span class="material-symbols-outlined">chevron_left</span>
-                </button>
-                <button id="featured-next" 
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </button>
-                
-                <!-- Slide Indicators -->
-                <div id="featured-indicators" class="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                    <!-- Dots will be injected here -->
-                </div>
-                
                 <div class="absolute bottom-0 left-0 p-6 flex flex-col gap-2">
                     <span id="featured-main-category"
                         class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-primary text-white text-xs font-bold w-fit mb-2">
@@ -1061,7 +994,7 @@
             </div>
             <!-- Side Featured Articles -->
             <div class="w-full lg:w-2/5 flex flex-col justify-center gap-6">
-                <div id="principal-message-container">
+                <div>
                     <h2 id="principal-message-title" class="text-text-main dark:text-white text-xl font-bold mb-3">
                         Thông
                         điệp từ Hiệu Trưởng</h2>
@@ -1072,13 +1005,9 @@
                         xanh.
                     </p>
                 </div>
-                <!-- Vertical Scrolling News -->
-                <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
-                    <div id="scrolling-news-container" class="relative h-48 overflow-hidden">
-                        <div id="scrolling-news-list" class="scrolling-news-animation">
-                            <!-- News items will be injected here -->
-                        </div>
-                    </div>
+                <div id="featured-side-list"
+                    class="flex flex-col gap-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <!-- Side items injected here -->
                 </div>
                 <button onclick="window.location.href='/thong-bao'"
                     class="mt-2 w-fit flex items-center gap-2 text-primary font-bold hover:text-primary-dark transition-colors group">
@@ -1407,48 +1336,11 @@
                 if (response.ok) {
                     const setting = await response.json();
                     const data = setting.value || {};
-                    const container = document.getElementById('principal-message-container');
-
-                    if (data && data.isEnabled) {
-                        if (container) container.classList.remove('hidden');
-                        if (data.title) document.getElementById('principal-message-title').innerText = data.title;
-                        if (data.content) document.getElementById('principal-message-content').innerText = data.content;
-                    } else {
-                        if (container) container.classList.add('hidden');
-                    }
+                    if (data.title) document.getElementById('principal-message-title').innerText = data.title;
+                    if (data.content) document.getElementById('principal-message-content').innerText = data.content;
                 }
             } catch (error) {
                 console.error('Error fetching principal message:', error);
-            }
-
-            // Fetch and Populate Scrolling News
-            try {
-                const scrollingResponse = await fetch('/api/articles');
-                const scrollingArticles = await scrollingResponse.json();
-                const scrollingList = document.getElementById('scrolling-news-list');
-                
-                if (scrollingArticles.length > 0 && scrollingList) {
-                    // Take first 6 articles for scrolling
-                    const newsItems = scrollingArticles.slice(0, 6);
-                    
-                    // Create items twice for seamless loop
-                    const createNewsItem = (article) => {
-                        const categoryClass = article.category === 'su-kien' ? 'su-kien' : 'tin-tuc';
-                        const categoryText = article.category === 'su-kien' ? 'Sự kiện' : 'Tin tức';
-                        return `
-                            <div class="news-item" onclick="window.location.href='/bai-viet/${article.slug || article._id}'">
-                                <span class="news-category ${categoryClass}">${categoryText}</span>
-                                <h4 class="text-sm font-semibold text-text-main dark:text-white line-clamp-2">${article.title}</h4>
-                            </div>
-                        `;
-                    };
-                    
-                    // Duplicate items for seamless scrolling
-                    const itemsHtml = newsItems.map(createNewsItem).join('');
-                    scrollingList.innerHTML = itemsHtml + itemsHtml;
-                }
-            } catch (error) {
-                console.error('Error fetching scrolling news:', error);
             }
 
             try {
@@ -1461,54 +1353,30 @@
                     const mainArticle = articles[0];
                     const sideArticles = articles.slice(1, 3);
 
-                    // Featured Slider Setup
-                    const featuredArticles = articles.slice(0, 5); // Use first 5 for slider
-                    let currentSlide = 0;
-                    
-                    function showSlide(index) {
-                        if (index < 0) index = featuredArticles.length - 1;
-                        if (index >= featuredArticles.length) index = 0;
-                        currentSlide = index;
-                        
-                        const article = featuredArticles[currentSlide];
-                        document.getElementById('featured-main-bg').src = article.image || 'https://via.placeholder.com/800x400';
-                        document.getElementById('featured-main-title').innerText = article.title;
-                        document.getElementById('featured-main-category').innerText = article.category || 'Tiêu điểm';
-                        document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${article.slug || article._id}`;
-                        
-                        // Update indicators
-                        document.querySelectorAll('#featured-indicators button').forEach((dot, i) => {
-                            dot.classList.toggle('bg-white', i === currentSlide);
-                            dot.classList.toggle('bg-white/50', i !== currentSlide);
-                        });
-                    }
-                    
-                    if (featuredArticles.length > 0) {
+                    if (mainArticle) {
                         featuredSection.classList.remove('hidden');
-                        
-                        // Create indicators
-                        const indicators = document.getElementById('featured-indicators');
-                        indicators.innerHTML = featuredArticles.map((_, i) => 
-                            `<button class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'} hover:bg-white transition-colors" onclick="event.stopPropagation()"></button>`
-                        ).join('');
-                        
-                        // Add click handlers to indicators
-                        indicators.querySelectorAll('button').forEach((dot, i) => {
-                            dot.onclick = (e) => { e.stopPropagation(); showSlide(i); };
-                        });
-                        
-                        // Navigation buttons
-                        document.getElementById('featured-prev').onclick = (e) => { e.stopPropagation(); showSlide(currentSlide - 1); };
-                        document.getElementById('featured-next').onclick = (e) => { e.stopPropagation(); showSlide(currentSlide + 1); };
-                        
-                        // Show first slide
-                        showSlide(0);
-                        
-                        // Auto-slide every 5 seconds
-                        setInterval(() => showSlide(currentSlide + 1), 5000);
+                        document.getElementById('featured-main-bg').src = mainArticle.image || 'https://via.placeholder.com/800x400';
+                        document.getElementById('featured-main-title').innerText = mainArticle.title;
+                        document.getElementById('featured-main-category').innerText = mainArticle.category || 'Tiêu điểm';
+                        document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${mainArticle.slug || mainArticle._id}`;
                     }
 
-                    // Side list replaced by scrolling news - no action needed here
+                    const sideList = document.getElementById('featured-side-list');
+                    sideList.innerHTML = '';
+                    sideArticles.forEach(article => {
+                        const html = `
+                            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='/bai-viet/${article.slug || article._id}'">
+                                <img src="${article.image || 'https://via.placeholder.com/100x100'}" alt="${article.title}" class="w-20 h-14 rounded-md object-cover shrink-0" loading="lazy">
+                                <div>
+                                    <p class="text-xs text-primary font-semibold mb-1">${article.category || 'Tin tức'}</p>
+                                    <h3 class="text-sm font-bold text-text-main dark:text-white group-hover:text-primary transition-colors line-clamp-2">
+                                        ${article.title}
+                                    </h3>
+                                </div>
+                            </div>
+                        `;
+                        sideList.innerHTML += html;
+                    });
 
                     // Populate Grid (skip first 3 if you want distinct featured, or show all)
                     // Showing all in grid for now as per usual news site pattern or skipping featured?
