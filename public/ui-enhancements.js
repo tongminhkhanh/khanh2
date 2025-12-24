@@ -100,7 +100,7 @@
                     <a href="/hoat-dong"><span class="material-symbols-outlined">celebration</span> Hoạt động</a>
                     <a href="/thanh-tich"><span class="material-symbols-outlined">emoji_events</span> Thành tích</a>
                     <a href="/su-kien"><span class="material-symbols-outlined">event</span> Sự kiện</a>
-                    <a href="http://thitong.site" target="_blank"><span class="material-symbols-outlined">smart_toy</span> Trợ lý AI</a>
+                    <a href="http://thitong.site" target="_blank"><span class="material-symbols-outlined">smart_toy</span> Học Cùng IO</a>
                     <a href="/admin"><span class="material-symbols-outlined">admin_panel_settings</span> Đăng nhập</a>
                 </nav>
             `;
