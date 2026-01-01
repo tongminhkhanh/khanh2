@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
@@ -11,21 +11,22 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/public/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Trường Tiểu học Ít Ong</title>
+    <title>Admin Panel - TrÆ°á»ng Tiá»ƒu há»c Ãt Ong</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/public/css/main.css">
-    <link rel="stylesheet" href="/public/css/admin-ui.css">
 </head>
 
 <body class="bg-gray-100 min-h-screen">
     <!-- Auth Modal -->
     <div id="auth-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
         <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-            <h2 class="text-2xl font-bold mb-4 text-center">Đăng nhập Admin</h2>
+            <h2 class="text-2xl font-bold mb-4 text-center">ÄÄƒng nháº­p Admin</h2>
             <form id="login-form" class="flex flex-col gap-4">
-                <input type="text" id="login-username" placeholder="Tên đăng nhập" class="border p-2 rounded" required>
-                <input type="password" id="login-password" placeholder="Mật khẩu" class="border p-2 rounded" required>
-                <button type="submit" class="btn btn-primary w-full">Đăng nhập</button>
+                <input type="text" id="login-username" placeholder="TÃªn Ä‘Äƒng nháº­p" class="border p-2 rounded"
+                    required>
+                <input type="password" id="login-password" placeholder="Máº­t kháº©u" class="border p-2 rounded"
+                    required>
+                <button type="submit" class="btn btn-primary w-full">ÄÄƒng nháº­p</button>
             </form>
             <p id="auth-error" class="text-red-500 text-sm mt-2 hidden text-center"></p>
         </div>
@@ -41,23 +42,27 @@
             <nav class="flex-1 p-4">
                 <a href="#" id="nav-articles"
                     class="flex items-center gap-2 px-4 py-2 rounded bg-blue-600 text-white mb-2">
-                    <span>Bài viết</span>
+                    <span>BÃ i viáº¿t</span>
                 </a>
                 <a href="#" id="nav-events"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Sự kiện</span>
+                    <span>Sá»± kiá»‡n</span>
                 </a>
                 <a href="#" id="nav-media"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Thư viện ảnh</span>
+                    <span>ThÆ° viá»‡n áº£nh</span>
                 </a>
                 <a href="#" id="nav-pages"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Trang tĩnh</span>
+                    <span>Trang tÄ©nh</span>
                 </a>
                 <a href="#" id="nav-settings"
                     class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
-                    <span>Cài đặt</span>
+                    <span>CÃ i Ä‘áº·t</span>
+                </a>
+                <a href="#" id="nav-subscribers"
+                    class="flex items-center gap-2 px-4 py-2 rounded text-gray-300 hover:bg-gray-700 mb-2">
+                    <span>ðŸ“§ Subscribers</span>
                 </a>
             </nav>
             <div class="p-4 border-t border-gray-700">
@@ -69,8 +74,8 @@
                         <p class="text-xs text-gray-400" id="user-role">Administrator</p>
                     </div>
                 </div>
-                <button id="logout-btn" class="mt-4 w-full text-sm text-red-400 hover:text-red-300 text-left">Đăng
-                    xuất</button>
+                <button id="logout-btn" class="mt-4 w-full text-sm text-red-400 hover:text-red-300 text-left">ÄÄƒng
+                    xuáº¥t</button>
             </div>
         </aside>
 
@@ -78,7 +83,7 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <header class="bg-white shadow z-10">
                 <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                    <h1 class="text-2xl font-bold text-gray-900" id="page-title">Quản lý Bài viết</h1>
+                    <h1 class="text-2xl font-bold text-gray-900" id="page-title">Quáº£n lÃ½ BÃ i viáº¿t</h1>
                 </div>
             </header>
 
@@ -86,36 +91,36 @@
                 <!-- Articles Section -->
                 <div id="section-articles">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Thêm bài viết mới</h2>
+                        <h2 class="text-xl font-bold mb-4">ThÃªm bÃ i viáº¿t má»›i</h2>
                         <form id="article-form" class="space-y-4">
                             <input type="hidden" id="article-id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                    <label class="block text-sm font-medium text-gray-700">TiÃªu Ä‘á»</label>
                                     <input type="text" id="title"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Danh mục</label>
+                                    <label class="block text-sm font-medium text-gray-700">Danh má»¥c</label>
                                     <select id="category"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="Tin tuc">Tin tức</option>
-                                        <option value="Sự kiện">Sự kiện</option>
-                                        <option value="Hoat dong">Hoạt động</option>
-                                        <option value="Thong bao">Thông báo</option>
-                                        <option value="Thanh tich">Thành tích</option>
+                                        <option value="Tin tuc">Tin tá»©c</option>
+                                        <option value="Sá»± kiá»‡n">Sá»± kiá»‡n</option>
+                                        <option value="Hoat dong">Hoáº¡t Ä‘á»™ng</option>
+                                        <option value="Thong bao">ThÃ´ng bÃ¡o</option>
+                                        <option value="Thanh tich">ThÃ nh tÃ­ch</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Trạng thái</label>
+                                    <label class="block text-sm font-medium text-gray-700">Tráº¡ng thÃ¡i</label>
                                     <select id="status"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="draft">Nháp</option>
-                                        <option value="pending">Chờ duyệt</option>
-                                        <option value="published">Đã xuất bản</option>
+                                        <option value="draft">NhÃ¡p</option>
+                                        <option value="pending">Chá» duyá»‡t</option>
+                                        <option value="published">ÄÃ£ xuáº¥t báº£n</option>
                                     </select>
                                 </div>
                                 <div>
@@ -126,16 +131,16 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Hình ảnh (URL)</label>
+                                <label class="block text-sm font-medium text-gray-700">HÃ¬nh áº£nh (URL)</label>
                                 <div class="flex gap-2">
                                     <input type="text" id="image"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                                     <button type="button" onclick="openMediaSelector('image')"
-                                        class="mt-1 bg-gray-200 px-3 rounded hover:bg-gray-300">Chọn</button>
+                                        class="mt-1 bg-gray-200 px-3 rounded hover:bg-gray-300">Chá»n</button>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <label class="block text-sm font-medium text-gray-700">Ná»™i dung</label>
                                 <div class="border border-gray-300 rounded-md shadow-sm mt-1 bg-white">
                                     <div id="article-toolbar"
                                         class="border-b border-gray-300 p-2 bg-gray-50 flex gap-2 flex-wrap items-center">
@@ -147,7 +152,7 @@
                             <div class="flex gap-2">
                                 <button type="submit" class="btn btn-primary">Luu bai
                                     viet</button>
-                                <button type="button" id="cancel-edit" class="btn btn-secondary hidden">Hủy</button>
+                                <button type="button" id="cancel-edit" class="btn btn-secondary hidden">Há»§y</button>
                             </div>
                         </form>
                     </div>
@@ -175,23 +180,24 @@
                 <!-- Events Section -->
                 <div id="section-events" class="hidden">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Quản lý Sự kiện</h2>
+                        <h2 class="text-xl font-bold mb-4">Quáº£n lÃ½ Sá»± kiá»‡n</h2>
                         <form id="event-form" class="space-y-4">
                             <input type="hidden" id="event-id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề sự kiện</label>
+                                    <label class="block text-sm font-medium text-gray-700">TiÃªu Ä‘á» sá»±
+                                        kiá»‡n</label>
                                     <input type="text" id="event-title"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Loại sự kiện</label>
+                                    <label class="block text-sm font-medium text-gray-700">Loáº¡i sá»± kiá»‡n</label>
                                     <select id="event-type"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="public">Sự kiện chung</option>
-                                        <option value="class">Sự kiện lớp</option>
-                                        <option value="teacher">Sự kiện giáo viên</option>
+                                        <option value="public">Sá»± kiá»‡n chung</option>
+                                        <option value="class">Sá»± kiá»‡n lá»›p</option>
+                                        <option value="teacher">Sá»± kiá»‡n giÃ¡o viÃªn</option>
                                     </select>
                                 </div>
                             </div>
@@ -199,19 +205,21 @@
                             <div id="event-target-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"
                                 style="display: none;">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Khối lớp tham dự</label>
+                                    <label class="block text-sm font-medium text-gray-700">Khá»‘i lá»›p tham
+                                        dá»±</label>
                                     <select id="event-target-grade"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                                        <option value="">Tất cả các khối</option>
-                                        <option value="1">Khối 1</option>
-                                        <option value="2">Khối 2</option>
-                                        <option value="3">Khối 3</option>
-                                        <option value="4">Khối 4</option>
-                                        <option value="5">Khối 5</option>
+                                        <option value="">Táº¥t cáº£ cÃ¡c khá»‘i</option>
+                                        <option value="1">Khá»‘i 1</option>
+                                        <option value="2">Khá»‘i 2</option>
+                                        <option value="3">Khá»‘i 3</option>
+                                        <option value="4">Khá»‘i 4</option>
+                                        <option value="5">Khá»‘i 5</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Lớp cụ thể (tùy chọn)</label>
+                                    <label class="block text-sm font-medium text-gray-700">Lá»›p cá»¥ thá»ƒ (tÃ¹y
+                                        chá»n)</label>
                                     <input type="text" id="event-target-class"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         placeholder="VD: 1A, 2B, 3C...">
@@ -219,13 +227,13 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Ngày bắt đầu</label>
+                                    <label class="block text-sm font-medium text-gray-700">NgÃ y báº¯t Ä‘áº§u</label>
                                     <input type="datetime-local" id="event-start"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Ngày kết thúc</label>
+                                    <label class="block text-sm font-medium text-gray-700">NgÃ y káº¿t thÃºc</label>
                                     <input type="datetime-local" id="event-end"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required>
@@ -233,28 +241,31 @@
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Địa điểm</label>
+                                    <label class="block text-sm font-medium text-gray-700">Äá»‹a Ä‘iá»ƒm</label>
                                     <input type="text" id="event-location"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         placeholder="VD: Hoi truong, San truong...">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Danh mục sự kiện</label>
+                                    <label class="block text-sm font-medium text-gray-700">Danh má»¥c sá»±
+                                        kiá»‡n</label>
                                     <select id="event-category"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         onchange="updateEventColor()">
-                                        <option value="exam" data-color="#dc2626">🔴 Lịch thi / Kiểm tra</option>
-                                        <option value="activity" data-color="#2563eb">🔵 Hoạt động ngoại khóa / Chào cờ
+                                        <option value="exam" data-color="#dc2626">ðŸ”´ Lá»‹ch thi / Kiá»ƒm tra</option>
+                                        <option value="activity" data-color="#2563eb">ðŸ”µ Hoáº¡t Ä‘á»™ng ngoáº¡i khÃ³a
+                                            / ChÃ o cá»
                                         </option>
-                                        <option value="holiday" data-color="#16a34a">🟢 Lịch nghỉ lễ / Họp phụ huynh
+                                        <option value="holiday" data-color="#16a34a">ðŸŸ¢ Lá»‹ch nghá»‰ lá»… / Há»p
+                                            phá»¥ huynh
                                         </option>
-                                        <option value="other" data-color="#6b7280">⚪ Khác</option>
+                                        <option value="other" data-color="#6b7280">âšª KhÃ¡c</option>
                                     </select>
                                     <input type="hidden" id="event-color" value="#dc2626">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Mô tả</label>
+                                <label class="block text-sm font-medium text-gray-700">MÃ´ táº£</label>
                                 <textarea id="event-description" rows="3"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
                             </div>
@@ -262,14 +273,14 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" id="event-published"
                                         class="form-checkbox h-5 w-5 text-blue-600" checked>
-                                    <span class="ml-2 text-gray-700">Xuất bản ngay</span>
+                                    <span class="ml-2 text-gray-700">Xuáº¥t báº£n ngay</span>
                                 </label>
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit" class="btn btn-primary">Luu su
                                     kien</button>
                                 <button type="button" id="cancel-event-edit"
-                                    class="btn btn-secondary hidden">Hủy</button>
+                                    class="btn btn-secondary hidden">Há»§y</button>
                             </div>
                         </form>
                     </div>
@@ -298,9 +309,9 @@
                 <div id="section-media" class="hidden">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold">Thư viện Ảnh</h2>
+                            <h2 class="text-xl font-bold">ThÆ° viá»‡n áº¢nh</h2>
                             <label class="btn btn-primary cursor-pointer">
-                                <span>Tải ảnh lên</span>
+                                <span>Táº£i áº£nh lÃªn</span>
                                 <input type="file" id="media-upload" class="hidden" accept="image/*">
                             </label>
                         </div>
@@ -311,12 +322,12 @@
                 <!-- Pages Section -->
                 <div id="section-pages" class="hidden">
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Quản lý Trang tĩnh</h2>
+                        <h2 class="text-xl font-bold mb-4">Quáº£n lÃ½ Trang tÄ©nh</h2>
                         <form id="page-form" class="space-y-4">
                             <input type="hidden" id="page-id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                    <label class="block text-sm font-medium text-gray-700">TiÃªu Ä‘á»</label>
                                     <input type="text" id="page-title-input"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                         required oninput="generateSlug()">
@@ -329,7 +340,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <label class="block text-sm font-medium text-gray-700">Ná»™i dung</label>
                                 <div class="border border-gray-300 rounded-md shadow-sm mt-1 bg-white">
                                     <div id="page-toolbar"
                                         class="border-b border-gray-300 p-2 bg-gray-50 flex gap-2 flex-wrap items-center">
@@ -342,14 +353,14 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" id="page-published"
                                         class="form-checkbox h-5 w-5 text-blue-600">
-                                    <span class="ml-2 text-gray-700">Xuất bản ngay</span>
+                                    <span class="ml-2 text-gray-700">Xuáº¥t báº£n ngay</span>
                                 </label>
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit" class="btn btn-primary">Luu
                                     trang</button>
                                 <button type="button" id="cancel-page-edit"
-                                    class="btn btn-secondary hidden">Hủy</button>
+                                    class="btn btn-secondary hidden">Há»§y</button>
                             </div>
                         </form>
                     </div>
@@ -376,7 +387,7 @@
                 <div id="section-settings" class="hidden">
 
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Cài đặt Thanh thông báo (Ticker)</h2>
+                        <h2 class="text-xl font-bold mb-4">CÃ i Ä‘áº·t Thanh thÃ´ng bÃ¡o (Ticker)</h2>
                         <form id="ticker-settings-form" class="space-y-4">
                             <div class="flex items-center">
                                 <input type="checkbox" id="ticker-enabled"
@@ -385,10 +396,10 @@
                                     bao</label>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung hiển thị</label>
+                                <label class="block text-sm font-medium text-gray-700">Ná»™i dung hiá»ƒn thá»‹</label>
                                 <textarea id="ticker-content-input" rows="3"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                                    placeholder="Nhập nội dung chạy trên thanh ticker..."></textarea>
+                                    placeholder="Nháº­p ná»™i dung cháº¡y trÃªn thanh ticker..."></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Luu
                                 cai dat</button>
@@ -396,22 +407,23 @@
                     </div>
 
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Cài đặt chung</h2>
+                        <h2 class="text-xl font-bold mb-4">CÃ i Ä‘áº·t chung</h2>
                         <form id="urgent-notice-form" class="space-y-4">
                             <div class="flex items-center gap-4">
                                 <label class="flex items-center">
                                     <input type="checkbox" id="urgent-enabled"
                                         class="form-checkbox h-5 w-5 text-red-600">
-                                    <span class="ml-2 text-gray-700 font-bold">Bật thông báo khẩn</span>
+                                    <span class="ml-2 text-gray-700 font-bold">Báº­t thÃ´ng bÃ¡o kháº©n</span>
                                 </label>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung thông báo</label>
+                                <label class="block text-sm font-medium text-gray-700">Ná»™i dung thÃ´ng bÃ¡o</label>
                                 <textarea id="urgent-content" rows="3"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Đường dẫn (tùy chọn)</label>
+                                <label class="block text-sm font-medium text-gray-700">ÄÆ°á»ng dáº«n (tÃ¹y
+                                    chá»n)</label>
                                 <input type="text" id="urgent-link"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                     placeholder="https://...">
@@ -421,22 +433,22 @@
                         </form>
                     </div>
                     <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
-                        <h2 class="text-xl font-bold mb-4">Thông điệp từ Hiệu Trưởng</h2>
+                        <h2 class="text-xl font-bold mb-4">ThÃ´ng Ä‘iá»‡p tá»« Hiá»‡u TrÆ°á»Ÿng</h2>
                         <form id="principal-message-form" class="space-y-4">
                             <div class="flex items-center gap-4">
                                 <label class="flex items-center">
                                     <input type="checkbox" id="principal-enabled"
                                         class="form-checkbox h-5 w-5 text-blue-600">
-                                    <span class="ml-2 text-gray-700 font-bold">Hiển thị thông điệp</span>
+                                    <span class="ml-2 text-gray-700 font-bold">Hiá»ƒn thá»‹ thÃ´ng Ä‘iá»‡p</span>
                                 </label>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+                                <label class="block text-sm font-medium text-gray-700">TiÃªu Ä‘á»</label>
                                 <input type="text" id="principal-title"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nội dung</label>
+                                <label class="block text-sm font-medium text-gray-700">Ná»™i dung</label>
                                 <textarea id="principal-content" rows="5"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
                             </div>
@@ -444,6 +456,46 @@
                                 thong diep</button>
                         </form>
                     </div>
+                </div>
+
+                <!-- Subscribers Section -->
+                <div id="section-subscribers" class="hidden">
+                    <div class="bg-white shadow sm:rounded-lg p-6 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h2 class="text-xl font-bold">Quáº£n lÃ½ Subscribers</h2>
+                                <p class="text-gray-500 text-sm">Danh sÃ¡ch email Ä‘Äƒng kÃ½ nháº­n báº£n tin</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <span id="subscriber-count"
+                                    class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">0
+                                    subscribers</span>
+                                <button onclick="exportSubscribersCSV()"
+                                    class="btn btn-secondary flex items-center gap-1">
+                                    <span>ðŸ“¥</span> Xuáº¥t CSV
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">STT
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Email</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            NgÃ y
+                                            Ä‘Äƒng kÃ½</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                                            HÃ nh Ä‘á»™ng</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subscribers-list" class="bg-white divide-y divide-gray-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -451,7 +503,7 @@
     <div id="media-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold">Chọn ảnh</h3>
+                <h3 class="text-lg font-bold">Chá»n áº£nh</h3>
                 <button onclick="closeMediaModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
             </div>
             <div id="modal-media-grid" class="grid grid-cols-4 gap-4"></div>
@@ -514,7 +566,7 @@
                     showError(data.message || 'Login failed');
                 }
             } catch (err) {
-                showError('Lỗi kết nối server');
+                showError('Lá»—i káº¿t ná»‘i server');
             }
         });
 
@@ -529,14 +581,16 @@
             'nav-events': 'section-events',
             'nav-media': 'section-media',
             'nav-pages': 'section-pages',
-            'nav-settings': 'section-settings'
+            'nav-settings': 'section-settings',
+            'nav-subscribers': 'section-subscribers'
         };
         const titles = {
-            'nav-articles': 'Quản lý Bài viết',
-            'nav-events': 'Quản lý Sự kiện',
-            'nav-media': 'Thư viện Ảnh',
-            'nav-pages': 'Trang tĩnh',
-            'nav-settings': 'Cài đặt chung'
+            'nav-articles': 'Quáº£n lÃ½ BÃ i viáº¿t',
+            'nav-events': 'Quáº£n lÃ½ Sá»± kiá»‡n',
+            'nav-media': 'ThÆ° viá»‡n áº¢nh',
+            'nav-pages': 'Trang tÄ©nh',
+            'nav-settings': 'CÃ i Ä‘áº·t chung',
+            'nav-subscribers': 'Quáº£n lÃ½ Subscribers'
         };
 
         Object.keys(navLinks).forEach(id => {
@@ -554,6 +608,7 @@
                 if (id === 'nav-media') fetchMedia();
                 if (id === 'nav-pages') fetchPages();
                 if (id === 'nav-settings') { fetchSettings(); }
+                if (id === 'nav-subscribers') fetchSubscribers();
             });
         });
 
@@ -584,8 +639,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2v4a2 2 0 002 2h4"></path>
                                     </svg>
-                                    <p class="text-lg font-medium">Chưa có bài viết nào</p>
-                                    <p class="text-sm">Hãy tạo bài viết đầu tiên của bạn.</p>
+                                    <p class="text-lg font-medium">ChÆ°a cÃ³ bÃ i viáº¿t nÃ o</p>
+                                    <p class="text-sm">HÃ£y táº¡o bÃ i viáº¿t Ä‘áº§u tiÃªn cá»§a báº¡n.</p>
                                 </div>
                             </td>
                         </tr>
@@ -600,8 +655,8 @@
                         <td class="px-6 py-4 text-gray-500">${a.category}</td>
                         <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${a.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${a.status}</span></td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
-                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
+                            <button onclick="editArticle('${a._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sá»­a</button>
+                            <button onclick="deleteArticle('${a._id}')" class="text-red-600 hover:text-red-900">XÃ³a</button>
                         </td>
                     </tr>
                 `).join('');
@@ -615,7 +670,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Lá»—i khi táº£i dá»¯ liá»‡u</td></tr>`;
             }
         }
 
@@ -638,8 +693,8 @@
                     method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(article)
                 });
-                if (res.ok) { resetArticleForm(); fetchArticles(); alert('Đã lưu bài viết!'); }
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) { resetArticleForm(); fetchArticles(); alert('ÄÃ£ lÆ°u bÃ i viáº¿t!'); }
+                else { const d = await res.json(); alert('Lá»—i: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -661,14 +716,14 @@
 
         window.deleteArticle = async (id) => {
             showConfirmDialog({
-                title: 'Xóa bài viết?',
-                message: 'Bài viết sẽ bị xóa vĩnh viễn và không thể hoàn tác.',
-                confirmText: 'Xóa',
-                cancelText: 'Hủy',
+                title: 'XÃ³a bÃ i viáº¿t?',
+                message: 'BÃ i viáº¿t sáº½ bá»‹ xÃ³a vÄ©nh viá»…n vÃ  khÃ´ng thá»ƒ hoÃ n tÃ¡c.',
+                confirmText: 'XÃ³a',
+                cancelText: 'Há»§y',
                 onConfirm: async () => {
                     await fetch(`${API_URL}/articles/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                     fetchArticles();
-                    showToast('success', 'Đã xóa bài viết!');
+                    showToast('success', 'ÄÃ£ xÃ³a bÃ i viáº¿t!');
                 }
             });
         };
@@ -708,8 +763,8 @@
                                     <svg class="w-12 h-12 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                     </svg>
-                                    <p class="text-lg font-medium">Chưa có sự kiện nào</p>
-                                    <p class="text-sm">Hãy tạo sự kiện đầu tiên của bạn.</p>
+                                    <p class="text-lg font-medium">ChÆ°a cÃ³ sá»± kiá»‡n nÃ o</p>
+                                    <p class="text-sm">HÃ£y táº¡o sá»± kiá»‡n Ä‘áº§u tiÃªn cá»§a báº¡n.</p>
                                 </div>
                             </td>
                         </tr>
@@ -722,16 +777,16 @@
                         <td class="px-6 py-4 font-medium">${e.title}</td>
                         <td class="px-6 py-4 text-gray-500">${new Date(e.startDate).toLocaleDateString('vi-VN')}</td>
                         <td class="px-6 py-4 text-gray-500">${e.location || '-'}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished ? 'Đã xuất bản' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${e.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${e.isPublished ? 'ÄÃ£ xuáº¥t báº£n' : 'Nhap'}</span></td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editEvent('${e._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
-                            <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
+                            <button onclick="editEvent('${e._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sá»­a</button>
+                            <button onclick="deleteEvent('${e._id}')" class="text-red-600 hover:text-red-900">XÃ³a</button>
                         </td>
                     </tr>
                 `).join('');
             } catch (err) {
                 console.error(err);
-                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Lá»—i khi táº£i dá»¯ liá»‡u</td></tr>`;
             }
         }
 
@@ -758,8 +813,8 @@
                     method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(event)
                 });
-                if (res.ok) { resetEventForm(); fetchEvents(); alert('Đã lưu sự kiện!'); }
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) { resetEventForm(); fetchEvents(); alert('ÄÃ£ lÆ°u sá»± kiá»‡n!'); }
+                else { const d = await res.json(); alert('Lá»—i: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -788,14 +843,14 @@
 
         window.deleteEvent = async (id) => {
             showConfirmDialog({
-                title: 'Xóa sự kiện?',
-                message: 'Sự kiện sẽ bị xóa vĩnh viễn và không thể hoàn tác.',
-                confirmText: 'Xóa',
-                cancelText: 'Hủy',
+                title: 'XÃ³a sá»± kiá»‡n?',
+                message: 'Sá»± kiá»‡n sáº½ bá»‹ xÃ³a vÄ©nh viá»…n vÃ  khÃ´ng thá»ƒ hoÃ n tÃ¡c.',
+                confirmText: 'XÃ³a',
+                cancelText: 'Há»§y',
                 onConfirm: async () => {
                     await fetch(`${API_URL}/events/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                     fetchEvents();
-                    showToast('success', 'Đã xóa sự kiện!');
+                    showToast('success', 'ÄÃ£ xÃ³a sá»± kiá»‡n!');
                 }
             });
         };
@@ -855,7 +910,7 @@
                 const media = await res.json();
 
                 if (!media || media.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500">Chưa có ảnh nào</div>`;
+                    grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500">ChÆ°a cÃ³ áº£nh nÃ o</div>`;
                     return;
                 }
 
@@ -867,7 +922,7 @@
                 `).join('');
             } catch (err) {
                 console.error(err);
-                grid.innerHTML = `<div class="col-span-full py-4 text-center text-red-500">Lỗi khi tải ảnh</div>`;
+                grid.innerHTML = `<div class="col-span-full py-4 text-center text-red-500">Lá»—i khi táº£i áº£nh</div>`;
             }
         }
 
@@ -881,27 +936,27 @@
                         headers: { 'Authorization': `Bearer ${token}` },
                         body: formData
                     });
-                    if (res.ok) { fetchMedia(); alert('Đã tải ảnh lên!'); }
-                    else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                    if (res.ok) { fetchMedia(); alert('ÄÃ£ táº£i áº£nh lÃªn!'); }
+                    else { const d = await res.json(); alert('Lá»—i: ' + d.message); }
                 } catch (err) { console.error(err); }
             }
         });
 
         window.copyMediaUrl = (url) => {
             navigator.clipboard.writeText(url);
-            alert('Đã sao chép URL!');
+            alert('ÄÃ£ sao chÃ©p URL!');
         };
 
         window.deleteMedia = async (id) => {
             showConfirmDialog({
-                title: 'Xóa ảnh?',
-                message: 'Ảnh sẽ bị xóa vĩnh viễn và không thể hoàn tác.',
-                confirmText: 'Xóa',
-                cancelText: 'Hủy',
+                title: 'XÃ³a áº£nh?',
+                message: 'áº¢nh sáº½ bá»‹ xÃ³a vÄ©nh viá»…n vÃ  khÃ´ng thá»ƒ hoÃ n tÃ¡c.',
+                confirmText: 'XÃ³a',
+                cancelText: 'Há»§y',
                 onConfirm: async () => {
                     await fetch(`${API_URL}/media/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                     fetchMedia();
-                    showToast('success', 'Đã xóa ảnh!');
+                    showToast('success', 'ÄÃ£ xÃ³a áº£nh!');
                 }
             });
         };
@@ -955,7 +1010,7 @@
                 const pages = await res.json();
 
                 if (!pages || pages.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">Chưa có trang nào</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">ChÆ°a cÃ³ trang nÃ o</td></tr>`;
                     return;
                 }
 
@@ -963,16 +1018,16 @@
                     <tr>
                         <td class="px-6 py-4 font-medium">${p.title}</td>
                         <td class="px-6 py-4 text-gray-500">${p.slug}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished ? 'Đã xuất bản' : 'Nhap'}</span></td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${p.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${p.isPublished ? 'ÄÃ£ xuáº¥t báº£n' : 'Nhap'}</span></td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editPage('${p._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
-                            <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
+                            <button onclick="editPage('${p._id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sá»­a</button>
+                            <button onclick="deletePage('${p._id}')" class="text-red-600 hover:text-red-900">XÃ³a</button>
                         </td>
                     </tr>
                 `).join('');
             } catch (err) {
                 console.error(err);
-                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Lá»—i khi táº£i dá»¯ liá»‡u</td></tr>`;
             }
         }
 
@@ -999,8 +1054,8 @@
                     method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(page)
                 });
-                if (res.ok) { resetPageForm(); fetchPages(); alert('Đã lưu trang!'); }
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) { resetPageForm(); fetchPages(); alert('ÄÃ£ lÆ°u trang!'); }
+                else { const d = await res.json(); alert('Lá»—i: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1021,14 +1076,14 @@
 
         window.deletePage = async (id) => {
             showConfirmDialog({
-                title: 'Xóa trang?',
-                message: 'Trang sẽ bị xóa vĩnh viễn và không thể hoàn tác.',
-                confirmText: 'Xóa',
-                cancelText: 'Hủy',
+                title: 'XÃ³a trang?',
+                message: 'Trang sáº½ bá»‹ xÃ³a vÄ©nh viá»…n vÃ  khÃ´ng thá»ƒ hoÃ n tÃ¡c.',
+                confirmText: 'XÃ³a',
+                cancelText: 'Há»§y',
                 onConfirm: async () => {
                     await fetch(`${API_URL}/admin/static-pages/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
                     fetchPages();
-                    showToast('success', 'Đã xóa trang!');
+                    showToast('success', 'ÄÃ£ xÃ³a trang!');
                 }
             });
         };
@@ -1084,10 +1139,10 @@
                 const res = await fetch(`${API_URL}/admin/settings/urgent_notice`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ value: data, description: 'Thông báo khẩn' })
+                    body: JSON.stringify({ value: data, description: 'ThÃ´ng bÃ¡o kháº©n' })
                 });
-                if (res.ok) alert('Đã lưu cài đặt!');
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) alert('ÄÃ£ lÆ°u cÃ i Ä‘áº·t!');
+                else { const d = await res.json(); alert('Lá»—i: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1102,10 +1157,10 @@
                 const res = await fetch(`${API_URL}/admin/settings/principal_message`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ value: data, description: 'Thông điệp Hiệu Trưởng' })
+                    body: JSON.stringify({ value: data, description: 'ThÃ´ng Ä‘iá»‡p Hiá»‡u TrÆ°á»Ÿng' })
                 });
-                if (res.ok) alert('Đã lưu thông điệp!');
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) alert('ÄÃ£ lÆ°u thÃ´ng Ä‘iá»‡p!');
+                else { const d = await res.json(); alert('Lá»—i: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1119,10 +1174,10 @@
                 const res = await fetch(`${API_URL}/admin/settings/ticker_settings`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ value: data, description: 'Cài đặt Ticker Bar' })
+                    body: JSON.stringify({ value: data, description: 'CÃ i Ä‘áº·t Ticker Bar' })
                 });
-                if (res.ok) alert('Đã lưu cài đặt Ticker!');
-                else { const d = await res.json(); alert('Lỗi: ' + d.message); }
+                if (res.ok) alert('ÄÃ£ lÆ°u cÃ i Ä‘áº·t Ticker!');
+                else { const d = await res.json(); alert('Lá»—i: ' + d.message); }
             } catch (err) { console.error(err); }
         });
 
@@ -1168,7 +1223,7 @@
                 { label: 'Italic', action: () => editor.chain().focus().toggleItalic().run(), isActive: () => editor.isActive('italic') },
                 { label: 'Strike', action: () => editor.chain().focus().toggleStrike().run(), isActive: () => editor.isActive('strike') },
                 {
-                    label: '⇥ 1.27',
+                    label: 'â‡¥ 1.27',
                     action: () => editor.chain().focus().toggleFirstLineIndent().run(),
                     isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
                 },
@@ -1427,9 +1482,9 @@
                 { label: 'Center', action: () => editor.chain().focus().setTextAlign('center').run(), isActive: () => editor.isActive({ textAlign: 'center' }) },
                 { label: 'Right', action: () => editor.chain().focus().setTextAlign('right').run(), isActive: () => editor.isActive({ textAlign: 'right' }) },
                 { label: 'U', action: () => editor.chain().focus().toggleUnderline().run(), isActive: () => editor.isActive('underline') },
-                { label: '🎨', action: () => { const c = prompt('Màu (hex):', '#ff0000'); if (c) editor.chain().focus().setColor(c).run(); }, isActive: () => false },
-                { label: '🖌', action: () => { editor.chain().focus().toggleHighlight({ color: 'yellow' }).run(); }, isActive: () => editor.isActive('highlight') },
-                { label: '📊', action: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), isActive: () => false },
+                { label: 'ðŸŽ¨', action: () => { const c = prompt('MÃ u (hex):', '#ff0000'); if (c) editor.chain().focus().setColor(c).run(); }, isActive: () => false },
+                { label: 'ðŸ–Œ', action: () => { editor.chain().focus().toggleHighlight({ color: 'yellow' }).run(); }, isActive: () => editor.isActive('highlight') },
+                { label: 'ðŸ“Š', action: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), isActive: () => false },
                 {
                     label: 'Aa',
                     action: () => {
@@ -1439,7 +1494,7 @@
                     isActive: () => false
                 },
                 {
-                    label: '⇥ 1.27',
+                    label: 'â‡¥ 1.27',
                     action: () => editor.chain().focus().toggleFirstLineIndent().run(),
                     isActive: () => editor.getAttributes('paragraph').firstLineIndent === true
                 },
@@ -1470,4 +1525,7 @@
 
     <!-- Admin UI Enhancements -->
     <script src="/public/admin-ui-enhancements.js"></script>
+    <script src="/public/js/subscribers.js"></script>
 </body>
+
+</html>

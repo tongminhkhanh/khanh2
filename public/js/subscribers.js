@@ -22,7 +22,7 @@ async function fetchSubscribers() {
         if (countEl) countEl.textContent = `${subscriptions.length} subscribers`;
 
         if (!subscriptions || subscriptions.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">Chưa có ai đăng ký newsletter</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">No subscribers yet</td></tr>`;
             return;
         }
 
@@ -30,20 +30,20 @@ async function fetchSubscribers() {
             <tr>
                 <td class="px-6 py-4 text-gray-500">${idx + 1}</td>
                 <td class="px-6 py-4 font-medium">${s.email}</td>
-                <td class="px-6 py-4 text-gray-500">${new Date(s.createdAt).toLocaleDateString('vi-VN')}</td>
+                <td class="px-6 py-4 text-gray-500">${new Date(s.createdAt).toLocaleDateString('en-US')}</td>
                 <td class="px-6 py-4 text-right">
-                    <button onclick="deleteSubscriber('${s._id}')" class="text-red-600 hover:text-red-900">Xóa</button>
+                    <button onclick="deleteSubscriber('${s._id}')" class="text-red-600 hover:text-red-900">Delete</button>
                 </td>
             </tr>
         `).join('');
     } catch (err) {
         console.error('Error fetching subscribers:', err);
-        tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Lỗi khi tải dữ liệu</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Error loading data</td></tr>`;
     }
 }
 
 window.deleteSubscriber = async (id) => {
-    if (!confirm('Xóa subscriber này khỏi danh sách?')) return;
+    if (!confirm('Remove this subscriber from the list?')) return;
 
     const token = localStorage.getItem('admin-token');
     try {
@@ -55,31 +55,31 @@ window.deleteSubscriber = async (id) => {
         if (res.ok) {
             fetchSubscribers();
             if (typeof showToast === 'function') {
-                showToast('success', 'Đã xóa subscriber!');
+                showToast('success', 'Subscriber deleted!');
             } else {
-                alert('Đã xóa subscriber!');
+                alert('Subscriber deleted!');
             }
         } else {
-            alert('Lỗi khi xóa subscriber');
+            alert('Error deleting subscriber');
         }
     } catch (err) {
         console.error('Error deleting subscriber:', err);
-        alert('Lỗi khi xóa subscriber');
+        alert('Error deleting subscriber');
     }
 };
 
 window.exportSubscribersCSV = () => {
     if (!subscribersData || subscribersData.length === 0) {
-        alert('Không có dữ liệu để xuất!');
+        alert('No data to export!');
         return;
     }
 
     // Create CSV content with headers
-    const headers = ['STT', 'Email', 'Ngày đăng ký'];
+    const headers = ['No.', 'Email', 'Registered Date'];
     const rows = subscribersData.map((s, idx) => [
         idx + 1,
         s.email,
-        new Date(s.createdAt).toLocaleDateString('vi-VN')
+        new Date(s.createdAt).toLocaleDateString('en-US')
     ]);
 
     const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
@@ -92,8 +92,8 @@ window.exportSubscribersCSV = () => {
     link.click();
 
     if (typeof showToast === 'function') {
-        showToast('success', 'Đã xuất file CSV!');
+        showToast('success', 'CSV file exported!');
     } else {
-        alert('Đã xuất file CSV!');
+        alert('CSV file exported!');
     }
 };
