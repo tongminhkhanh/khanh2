@@ -1,0 +1,111 @@
+<!-- AI Topic Suggestions Modal -->
+<div id="topic-suggestions-modal"
+    class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[85vh] overflow-auto shadow-2xl">
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                        </path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">Gợi ý chủ đề bài viết</h3>
+                    <p class="text-sm text-gray-500">Powered by Perplexity AI</p>
+                </div>
+            </div>
+            <button onclick="closeTopicSuggestionsModal()"
+                class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nhập chủ đề bạn muốn tìm kiếm</label>
+            <div class="flex gap-2">
+                <input type="text" id="topic-search-input"
+                    class="flex-1 border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    placeholder="VD: hoạt động ngoại khóa, khai giảng, thi đua học tốt...">
+                <button type="button" onclick="searchTopicSuggestions()" id="search-topics-btn"
+                    class="bg-purple-600 text-white px-5 py-3 rounded-lg hover:bg-purple-700 transition flex items-center gap-2">
+                    <span id="search-topics-text">Tìm kiếm</span>
+                    <div id="search-topics-spinner"
+                        class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin">
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div id="topic-suggestions-loading" class="hidden text-center py-8">
+            <div class="inline-block w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin">
+            </div>
+            <p class="mt-3 text-gray-500">Đang tìm kiếm ý tưởng bài viết...</p>
+        </div>
+
+        <div id="topic-suggestions-error"
+            class="hidden bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-4">
+            <p id="topic-suggestions-error-text"></p>
+        </div>
+
+        <div id="topic-suggestions-results" class="space-y-3"></div>
+
+        <div id="topic-suggestions-empty" class="text-center py-8 text-gray-400">
+            <svg class="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                </path>
+            </svg>
+            <p>Nhập chủ đề và nhấn "Tìm kiếm" để nhận gợi ý</p>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/ai-suggestions.js"></script>
+
+<script>
+    // Inject AI suggestion buttons into admin forms
+    // Run immediately since DOM is already loaded when this component is fetched
+    (function () {
+        // Add AI topic suggestion button to article form header
+        const articleFormContainer = document.querySelector('#section-articles .bg-white h2');
+        if (articleFormContainer && articleFormContainer.textContent.includes('bài viết mới')) {
+            const header = articleFormContainer.parentElement;
+            header.className = 'flex justify-between items-center mb-4';
+            articleFormContainer.className = 'text-xl font-bold';
+
+            const aiButton = document.createElement('button');
+            aiButton.type = 'button';
+            aiButton.onclick = openTopicSuggestions;
+            aiButton.className = 'bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition flex items-center gap-2 text-sm';
+            aiButton.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+            Gợi ý chủ đề (AI)
+        `;
+            header.appendChild(aiButton);
+        }
+
+        // Add AI tag suggestion button next to tags input
+        const tagsInput = document.getElementById('tags');
+        if (tagsInput && !document.getElementById('suggest-tags-btn')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex gap-2';
+            tagsInput.parentNode.insertBefore(wrapper, tagsInput);
+            wrapper.appendChild(tagsInput);
+
+            const suggestBtn = document.createElement('button');
+            suggestBtn.type = 'button';
+            suggestBtn.id = 'suggest-tags-btn';
+            suggestBtn.onclick = suggestTagsFromTitle;
+            suggestBtn.className = 'mt-1 bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 text-sm whitespace-nowrap flex items-center gap-1';
+            suggestBtn.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+            </svg>
+            Gợi ý
+        `;
+            wrapper.appendChild(suggestBtn);
+        }
+    })();
+</script>

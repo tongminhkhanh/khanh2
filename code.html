@@ -6,34 +6,33 @@
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/public/logo.png">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Tin tức và Sự kiện - Trường Tiểu học Ít Ong</title>
+    <title>Tin tức và Sự kiện - Tin tức Xã Mường La</title>
 
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="Ox4ZF3TqJUtol9XU_L0IoeaDoMWJadlstnFngObxn5Q" />
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Trường Tiểu học Ít Ong - Mường La, Sơn La. Nơi ươm mầm tài năng và nhân cách. Cập nhật tin tức, hoạt động, sự kiện và thông báo mới nhất." />
-    <meta name="keywords" content="Trường Tiểu học Ít Ong, Mường La, Sơn La, giáo dục tiểu học, thitong" />
-    <meta name="author" content="Trường Tiểu học Ít Ong" />
+        content="Tin tức Xã Mường La - Mường La, Sơn La. Nơi ươm mầm tài năng và nhân cách. Cập nhật tin tức, hoạt động, sự kiện và thông báo mới nhất." />
+    <meta name="keywords" content="Tin tức Xã Mường La, Mường La, Sơn La, giáo dục tiểu học, thitong" />
+    <meta name="author" content="Tin tức Xã Mường La" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://thitong.io.vn/" />
-
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://thitong.io.vn/" />
-    <meta property="og:title" content="Trường Tiểu học Ít Ong - Tin tức và Sự kiện" />
+    <meta property="og:title" content="Tin tức Xã Mường La - Tin tức và Sự kiện" />
     <meta property="og:description"
         content="Nơi ươm mầm tài năng và nhân cách. Cập nhật tin tức, hoạt động, sự kiện và thông báo mới nhất của nhà trường." />
     <meta property="og:image" content="https://thitong.io.vn/public/logo_school.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="vi_VN" />
-    <meta property="og:site_name" content="Trường Tiểu học Ít Ong" />
+    <meta property="og:site_name" content="Tin tức Xã Mường La" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Trường Tiểu học Ít Ong - Tin tức và Sự kiện" />
+    <meta name="twitter:title" content="Tin tức Xã Mường La - Tin tức và Sự kiện" />
     <meta name="twitter:description"
         content="Nơi ươm mầm tài năng và nhân cách. Cập nhật tin tức, hoạt động và sự kiện mới nhất." />
     <meta name="twitter:image" content="https://thitong.io.vn/public/logo_school.jpg" />
@@ -60,11 +59,11 @@
     {
       "@context": "https://schema.org",
       "@type": "School",
-      "name": "Trường Tiểu học Ít Ong",
+      "name": "Tin tức Xã Mường La",
       "url": "https://thitong.io.vn/",
       "logo": "https://thitong.io.vn/public/logo_school.jpg",
       "image": "https://thitong.io.vn/public/logo_school.jpg",
-      "description": "Trường Tiểu học Ít Ong - Mường La, Sơn La. Nơi ươm mầm tài năng và nhân cách.",
+      "description": "Tin tức Xã Mường La - Mường La, Sơn La. Nơi ươm mầm tài năng và nhân cách.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Tiểu khu 1, xã Mường La",
@@ -105,30 +104,42 @@
     <style>
         /* Vertical Scrolling News Animation */
         @keyframes scrollUp {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-50%);
+            }
         }
+
         .scrolling-news-animation {
             animation: scrollUp 15s linear infinite;
         }
+
         #scrolling-news-container:hover .scrolling-news-animation {
             animation-play-state: paused;
         }
+
         .news-item {
             padding: 12px 0;
             border-bottom: 1px solid #e5e7eb;
             cursor: pointer;
             transition: background-color 0.2s;
         }
+
         .news-item:hover {
             background-color: rgba(43, 140, 238, 0.05);
         }
+
         .dark .news-item {
             border-bottom-color: #374151;
         }
+
         .dark .news-item:hover {
             background-color: rgba(43, 140, 238, 0.1);
         }
+
         .news-category {
             font-size: 0.75rem;
             font-weight: 700;
@@ -137,18 +148,22 @@
             display: inline-block;
             margin-bottom: 4px;
         }
+
         .news-category.tin-tuc {
             background-color: #dbeafe;
             color: #1d4ed8;
         }
+
         .news-category.su-kien {
             background-color: #fee2e2;
             color: #dc2626;
         }
+
         .dark .news-category.tin-tuc {
             background-color: rgba(59, 130, 246, 0.2);
             color: #60a5fa;
         }
+
         .dark .news-category.su-kien {
             background-color: rgba(239, 68, 68, 0.2);
             color: #f87171;
@@ -167,7 +182,7 @@
             <div class="flex items-center gap-8">
                 <a href="/" class="flex items-center gap-3 text-text-main dark:text-white group">
                     <div class="relative">
-                        <img src="/public/logo_school.jpg" alt="Logo Truong Tieu hoc It Ong"
+                        <img src="/public/logo_school.jpg" alt="Logo Tin tuc Xa Muong La"
                             class="h-10 w-10 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/50 transition-all duration-300"
                             loading="lazy"
                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=IT+ONG&background=2b8cee&color=fff&size=40&rounded=true'">
@@ -177,7 +192,7 @@
                     <div class="hidden md:block">
                         <h2
                             class="text-lg font-bold leading-tight tracking-[-0.015em] group-hover:text-primary transition-colors">
-                            Trường Tiểu học Ít Ong</h2>
+                            Tin tức Xã Mường La</h2>
                         <p class="text-xs text-text-secondary dark:text-gray-400">Mường La, Sơn La</p>
                     </div>
                 </a>
@@ -1032,22 +1047,22 @@
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                
+
                 <!-- Navigation Arrows -->
-                <button id="featured-prev" 
+                <button id="featured-prev"
                     class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <span class="material-symbols-outlined">chevron_left</span>
                 </button>
-                <button id="featured-next" 
+                <button id="featured-next"
                     class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <span class="material-symbols-outlined">chevron_right</span>
                 </button>
-                
+
                 <!-- Slide Indicators -->
                 <div id="featured-indicators" class="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                     <!-- Dots will be injected here -->
                 </div>
-                
+
                 <div class="absolute bottom-0 left-0 p-6 flex flex-col gap-2">
                     <span id="featured-main-category"
                         class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-primary text-white text-xs font-bold w-fit mb-2">
@@ -1092,7 +1107,8 @@
         <!-- Banner Tỏa Sáng Thi Cấp Trường -->
         <div class="w-full mb-6">
             <a href="#" class="block hover:opacity-90 transition-opacity">
-                <img src="/public/toa_sang_banner.png" alt="Sẵn sàng học luyện - Tỏa sáng thi cấp trường" class="w-full h-auto rounded-xl shadow-md">
+                <img src="/public/toa_sang_banner.png" alt="Sẵn sàng học luyện - Tỏa sáng thi cấp trường"
+                    class="w-full h-auto rounded-xl shadow-md">
             </a>
         </div>
 
@@ -1319,7 +1335,8 @@
         <!-- Banner Tỏa Sáng Thi Cấp Trường trong Footer -->
         <div class="max-w-[1440px] mx-auto px-4 lg:px-10 pt-8">
             <a href="#" class="block hover:opacity-90 transition-opacity">
-                <img src="/public/toa_sang_banner.png" alt="Sẵn sàng học luyện - Tỏa sáng thi cấp trường" class="w-full h-auto rounded-xl shadow-md">
+                <img src="/public/toa_sang_banner.png" alt="Sẵn sàng học luyện - Tỏa sáng thi cấp trường"
+                    class="w-full h-auto rounded-xl shadow-md">
             </a>
         </div>
         <div class="max-w-[1440px] mx-auto px-4 lg:px-10 py-10">
@@ -1437,13 +1454,14 @@
             // Fetch and Populate Scrolling News
             try {
                 const scrollingResponse = await fetch('/api/articles');
-                const scrollingArticles = await scrollingResponse.json();
+                const scrollingArticlesRaw = await scrollingResponse.json();
+                const scrollingArticles = scrollingArticlesRaw.filter(a => a.status === 'published');
                 const scrollingList = document.getElementById('scrolling-news-list');
-                
+
                 if (scrollingArticles.length > 0 && scrollingList) {
                     // Take first 6 articles for scrolling
                     const newsItems = scrollingArticles.slice(0, 6);
-                    
+
                     // Create items twice for seamless loop
                     const createNewsItem = (article) => {
                         const categoryClass = article.category === 'su-kien' ? 'su-kien' : 'tin-tuc';
@@ -1455,7 +1473,7 @@
                             </div>
                         `;
                     };
-                    
+
                     // Duplicate items for seamless scrolling
                     const itemsHtml = newsItems.map(createNewsItem).join('');
                     scrollingList.innerHTML = itemsHtml + itemsHtml;
@@ -1466,7 +1484,8 @@
 
             try {
                 const response = await fetch('/api/articles');
-                const articles = await response.json();
+                const articlesRaw = await response.json();
+                const articles = articlesRaw.filter(a => a.status === 'published');
 
                 if (articles.length > 0) {
                     // Populate Featured Section
@@ -1477,46 +1496,46 @@
                     // Featured Slider Setup
                     const featuredArticles = articles.slice(0, 5); // Use first 5 for slider
                     let currentSlide = 0;
-                    
+
                     function showSlide(index) {
                         if (index < 0) index = featuredArticles.length - 1;
                         if (index >= featuredArticles.length) index = 0;
                         currentSlide = index;
-                        
+
                         const article = featuredArticles[currentSlide];
                         document.getElementById('featured-main-bg').src = article.image || 'https://via.placeholder.com/800x400';
                         document.getElementById('featured-main-title').innerText = article.title;
                         document.getElementById('featured-main-category').innerText = article.category || 'Tiêu điểm';
                         document.getElementById('featured-main').onclick = () => window.location.href = `/bai-viet/${article.slug || article._id}`;
-                        
+
                         // Update indicators
                         document.querySelectorAll('#featured-indicators button').forEach((dot, i) => {
                             dot.classList.toggle('bg-white', i === currentSlide);
                             dot.classList.toggle('bg-white/50', i !== currentSlide);
                         });
                     }
-                    
+
                     if (featuredArticles.length > 0) {
                         featuredSection.classList.remove('hidden');
-                        
+
                         // Create indicators
                         const indicators = document.getElementById('featured-indicators');
-                        indicators.innerHTML = featuredArticles.map((_, i) => 
+                        indicators.innerHTML = featuredArticles.map((_, i) =>
                             `<button class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'} hover:bg-white transition-colors" onclick="event.stopPropagation()"></button>`
                         ).join('');
-                        
+
                         // Add click handlers to indicators
                         indicators.querySelectorAll('button').forEach((dot, i) => {
                             dot.onclick = (e) => { e.stopPropagation(); showSlide(i); };
                         });
-                        
+
                         // Navigation buttons
                         document.getElementById('featured-prev').onclick = (e) => { e.stopPropagation(); showSlide(currentSlide - 1); };
                         document.getElementById('featured-next').onclick = (e) => { e.stopPropagation(); showSlide(currentSlide + 1); };
-                        
+
                         // Show first slide
                         showSlide(0);
-                        
+
                         // Auto-slide every 5 seconds
                         setInterval(() => showSlide(currentSlide + 1), 5000);
                     }

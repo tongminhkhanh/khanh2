@@ -8,7 +8,8 @@ const multer = require('multer');
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-require('dotenv').config();
+require('dotenv').config({ path: '.env.local' }); // Load .env.local first
+require('dotenv').config(); // Then load .env (won't override existing vars)
 
 const Subscription = require('./models/Subscription');
 const Article = require('./models/Article');
@@ -17,6 +18,7 @@ const Media = require('./models/Media');
 const StaticPage = require('./models/StaticPage'); // Import StaticPage model
 const Setting = require('./models/Setting'); // Import Setting model
 const Event = require('./models/Event'); // Import Event model
+const { generateArticle, analyzeImages, generateImageCaption, performSafetyCheck, suggestTopics, suggestTags } = require('./services/ai-content.service'); // AI Content Generator
 
 
 const app = express();
@@ -198,6 +200,10 @@ app.get('/admin-login', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin-login.html'));
 });
 
+app.get('/ai-writer', (req, res) => {
+    res.sendFile(path.join(__dirname, 'ai-writer.html'));
+});
+
 app.get('/bai-viet/:id', async (req, res) => {
     try {
         let article;
@@ -216,8 +222,8 @@ app.get('/bai-viet/:id', async (req, res) => {
         let html = fs.readFileSync(path.join(__dirname, 'article.html'), 'utf8');
 
         // Prepare meta content
-        const title = article.title + ' - Trường Tiểu học Ít Ong';
-        const description = article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : 'Bài viết từ Trường Tiểu học Ít Ong';
+        const title = article.title + ' - Tin tức Xã Mường La';
+        const description = article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 160) + '...' : 'Bài viết từ Tin tức Xã Mường La';
         const image = article.image || 'https://thitong.io.vn/public/logo_school.jpg';
         const url = `https://thitong.io.vn/bai-viet/${article.slug || article._id}`;
 
@@ -240,7 +246,7 @@ app.get('/bai-viet/:id', async (req, res) => {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="vi_VN" />
-    <meta property="og:site_name" content="Trường Tiểu học Ít Ong" />
+    <meta property="og:site_name" content="Tin tức Xã Mường La" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -259,12 +265,12 @@ app.get('/bai-viet/:id', async (req, res) => {
       "dateModified": "${article.updatedAt ? new Date(article.updatedAt).toISOString() : new Date(article.createdAt).toISOString()}",
       "author": {
         "@type": "Organization",
-        "name": "Trường Tiểu học Ít Ong",
+        "name": "Tin tức Xã Mường La",
         "url": "https://thitong.io.vn"
       },
       "publisher": {
         "@type": "Organization",
-        "name": "Trường Tiểu học Ít Ong",
+        "name": "Tin tức Xã Mường La",
         "logo": {
           "@type": "ImageObject",
           "url": "https://thitong.io.vn/public/logo_school.jpg"
@@ -405,8 +411,15 @@ app.delete('/api/media/:id', authenticateToken, async (req, res) => {
 // Article Routes
 app.get('/api/articles', async (req, res) => {
     try {
-        const { category } = req.query;
-        const filter = category ? { category } : {};
+        const { category, includeAll } = req.query;
+        // By default only show published articles, unless includeAll=true (for admin)
+        const filter = { status: 'published' };
+        if (includeAll === 'true') {
+            delete filter.status; // Admin can see all
+        }
+        if (category) {
+            filter.category = category;
+        }
         const articles = await Article.find(filter).sort({ createdAt: -1 });
         res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=59');
         res.json(articles);
@@ -522,19 +535,49 @@ app.post('/api/subscribe', async (req, res) => {
         return res.status(400).json({ success: false, message: 'Email is required' });
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ success: false, message: 'Email không hợp lệ' });
+    }
+
     try {
         const newSubscription = new Subscription({ email });
         await newSubscription.save();
         console.log(`New subscription saved: ${email}`);
-        res.json({ success: true, message: 'Thank you for subscribing!' });
+        res.json({ success: true, message: 'Đăng ký thành công! Cảm ơn bạn đã theo dõi.' });
     } catch (error) {
         if (error.code === 11000) {
-            return res.status(400).json({ success: false, message: 'Email already subscribed' });
+            return res.status(400).json({ success: false, message: 'Email này đã được đăng ký trước đó' });
         }
         console.error('Error saving subscription:', error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.status(500).json({ success: false, message: 'Lỗi server, vui lòng thử lại sau' });
     }
 });
+
+// Get all subscriptions (Admin only)
+app.get('/api/subscriptions', authenticateToken, authorizeRole(['admin']), async (req, res) => {
+    try {
+        const subscriptions = await Subscription.find().sort({ createdAt: -1 });
+        res.json(subscriptions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Delete subscription (Admin only)
+app.delete('/api/subscriptions/:id', authenticateToken, authorizeRole(['admin']), async (req, res) => {
+    try {
+        const subscription = await Subscription.findByIdAndDelete(req.params.id);
+        if (!subscription) {
+            return res.status(404).json({ message: 'Không tìm thấy subscriber' });
+        }
+        res.json({ message: 'Đã xóa subscriber thành công' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 // --- Static Page Routes ---
 
@@ -935,6 +978,286 @@ app.delete('/api/admin/users/:id', authenticateToken, authorizeRole(['admin']), 
 });
 
 // --- End User Management Routes ---
+
+// --- AI Content Generation Routes ---
+
+/**
+ * POST /api/ai/generate-article
+ * Preview: Sinh bài viết từ ghi chú thô, không lưu database
+ * Body: { rawNote: string }
+ * Response: { success, article: { title, sapo, content, category, tags } }
+ */
+app.post('/api/ai/generate-article', authenticateToken, async (req, res) => {
+    try {
+        const { rawNote } = req.body;
+
+        if (!rawNote) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp ghi chú thô (rawNote)'
+            });
+        }
+
+        const article = await generateArticle(rawNote);
+
+        res.json({
+            success: true,
+            article: article,
+            message: 'Tạo bài viết thành công! Bạn có thể chỉnh sửa và lưu nháp.'
+        });
+    } catch (error) {
+        console.error('AI Generate Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Không thể sinh bài viết. Vui lòng thử lại.'
+        });
+    }
+});
+
+/**
+ * POST /api/ai/generate-and-save
+ * Sinh bài viết và lưu trực tiếp dưới dạng draft
+ * Body: { rawNote: string }
+ * Response: { success, articleId, article, message }
+ */
+app.post('/api/ai/generate-and-save', authenticateToken, authorizeRole(['admin', 'editor']), async (req, res) => {
+    try {
+        const { rawNote } = req.body;
+
+        if (!rawNote) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp ghi chú thô (rawNote)'
+            });
+        }
+
+        // Generate article using AI
+        const generatedArticle = await generateArticle(rawNote);
+
+        // Combine sapo and content for full article
+        const fullContent = `<p class="sapo"><strong>${generatedArticle.sapo}</strong></p>\n${generatedArticle.content}`;
+
+        // Save to database as draft
+        const article = new Article({
+            title: generatedArticle.title,
+            content: fullContent,
+            category: generatedArticle.category,
+            status: 'draft',
+            tags: generatedArticle.tags,
+            author: req.user._id
+        });
+
+        const savedArticle = await article.save();
+
+        res.status(201).json({
+            success: true,
+            articleId: savedArticle._id,
+            article: savedArticle,
+            message: 'Đã tạo và lưu bài viết nháp thành công!'
+        });
+    } catch (error) {
+        console.error('AI Generate and Save Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Không thể sinh và lưu bài viết. Vui lòng thử lại.'
+        });
+    }
+});
+
+/**
+ * POST /api/ai/analyze-images
+ * Phân tích và chọn ảnh phù hợp với Gemini Vision
+ * Body: multipart/form-data với images[]
+ */
+app.post('/api/ai/analyze-images', authenticateToken, upload.array('images', 10), async (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng upload ít nhất 1 ảnh'
+            });
+        }
+
+        // Convert files to buffer format for analyzeImages
+        const imageBuffers = await Promise.all(req.files.map(async (file) => {
+            let buffer;
+            if (file.buffer) {
+                buffer = file.buffer;
+            } else if (file.path && file.path.includes('cloudinary')) {
+                // Fetch from Cloudinary URL
+                const response = await fetch(file.path);
+                buffer = Buffer.from(await response.arrayBuffer());
+            } else if (file.path) {
+                buffer = fs.readFileSync(file.path);
+            }
+            return {
+                buffer,
+                mimeType: file.mimetype,
+                filename: file.originalname
+            };
+        }));
+
+        const result = await analyzeImages(imageBuffers);
+
+        res.json({
+            success: true,
+            ...result,
+            uploadedCount: req.files.length
+        });
+    } catch (error) {
+        console.error('Image Analysis Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Không thể phân tích ảnh'
+        });
+    }
+});
+
+/**
+ * POST /api/ai/generate-article-v2
+ * Sinh bài viết với Safety Check + Optional Image Analysis
+ * Body: { rawNote: string, skipSafety?: boolean }
+ */
+app.post('/api/ai/generate-article-v2', authenticateToken, async (req, res) => {
+    try {
+        const { rawNote, skipSafety } = req.body;
+
+        if (!rawNote) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp ghi chú thô (rawNote)'
+            });
+        }
+
+        // Generate article
+        const article = await generateArticle(rawNote);
+
+        res.json({
+            success: true,
+            article,
+            message: 'Tạo bài viết thành công!'
+        });
+    } catch (error) {
+        console.error('AI Generate V2 Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Không thể sinh bài viết'
+        });
+    }
+});
+
+/**
+ * POST /api/ai/suggest-topics
+ * Gợi ý chủ đề bài viết từ Perplexity AI
+ * Body: { topic: string, context?: string }
+ * Response: { success, suggestions: [{ title, description, category }], sources: [] }
+ */
+app.post('/api/ai/suggest-topics', authenticateToken, async (req, res) => {
+    try {
+        const { topic, context } = req.body;
+
+        if (!topic || topic.trim().length < 2) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp chủ đề (ít nhất 2 ký tự)'
+            });
+        }
+
+        const result = await suggestTopics(topic, context || '');
+
+        res.json({
+            success: true,
+            suggestions: result.suggestions,
+            sources: result.sources,
+            message: `Đã tìm thấy ${result.suggestions.length} ý tưởng bài viết`
+        });
+    } catch (error) {
+        console.error('Suggest Topics Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Không thể gợi ý chủ đề. Vui lòng kiểm tra PERPLEXITY_API_KEY.'
+        });
+    }
+});
+
+/**
+ * POST /api/ai/suggest-tags
+ * Gợi ý tags từ tiêu đề/nội dung bài viết
+ * Body: { title: string, content?: string }
+ * Response: { success, tags: string[] }
+ */
+app.post('/api/ai/suggest-tags', authenticateToken, async (req, res) => {
+    try {
+        const { title, content } = req.body;
+
+        if (!title || title.trim().length < 5) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp tiêu đề (ít nhất 5 ký tự)'
+            });
+        }
+
+        const result = await suggestTags(title, content || '');
+
+        res.json({
+            success: true,
+            tags: result.tags,
+            message: `Đã gợi ý ${result.tags.length} tags`
+        });
+    } catch (error) {
+        console.error('Suggest Tags Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Không thể gợi ý tags. Vui lòng kiểm tra PERPLEXITY_API_KEY.'
+        });
+    }
+});
+
+/**
+ * POST /api/ai/caption
+ * Tạo caption cho một ảnh
+ * Body: multipart/form-data với image + optional context
+ */
+app.post('/api/ai/caption', authenticateToken, upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng upload ảnh'
+            });
+        }
+
+        let buffer;
+        if (req.file.buffer) {
+            buffer = req.file.buffer;
+        } else if (req.file.path && req.file.path.includes('cloudinary')) {
+            const response = await fetch(req.file.path);
+            buffer = Buffer.from(await response.arrayBuffer());
+        } else if (req.file.path) {
+            buffer = fs.readFileSync(req.file.path);
+        }
+
+        const caption = await generateImageCaption(
+            buffer,
+            req.file.mimetype,
+            req.body.context || ''
+        );
+
+        res.json({
+            success: true,
+            caption,
+            filename: req.file.originalname
+        });
+    } catch (error) {
+        console.error('Caption Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Không thể tạo caption'
+        });
+    }
+});
+
+// --- End AI Content Generation Routes ---
 
 
 // Start server
